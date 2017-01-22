@@ -44,35 +44,9 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
     private SharedPreferences sharedPreferences;
     private int retCode;
 
+    private JSONObject jsonObject;
+
     private String username,password;
-
-    Response.Listener<String> listener=new Response.Listener<String>() {
-        @Override
-        public void onResponse(String s) {
-            try {
-                JSONObject jsonObject=new JSONObject(s);
-                retCode=jsonObject.getInt("success");
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-
-            if(retCode==1){
-                Intent intent=new Intent(TechnicianLogin.this,TechnicianDashboard.class);
-                startActivity(intent);
-            }else {
-                Toast.makeText(TechnicianLogin.this,"Wrong username or password!",Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-    Response.ErrorListener errorListener=new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError volleyError) {
-            Log.e(TAG,volleyError.getMessage(),volleyError);
-        }
-    };
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,29 +67,6 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
             techUsername.setText(sharedPreferences.getString("username",null));
             techPassword.setText(sharedPreferences.getString("password",null));
         }
-
-
-
-
-
-
-    }
-
-    private void spinnerHandle() {
-        String prompt=technician.getText().toString();
-
-        SpannableString spannedString=new SpannableString(prompt);
-        spannedString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(TechnicianLogin.this, ManagerLogin.class);
-                startActivity(intent);
-                finish();
-            }
-        },0,prompt.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        technician.setText(spannedString);
-        technician.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void initialize() {
@@ -125,6 +76,7 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
         techUsername=(EditText)findViewById(R.id.techUsername);
         techPassword=(EditText)findViewById(R.id.techPassword);
     }
+
 
     @Override
     public void onClick(View view) {
@@ -140,7 +92,7 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
 
                 RequestQueue requestQueue= Volley.newRequestQueue(TechnicianLogin.this);
 
-                StringRequest stringRequest=new StringRequest(Request.Method.POST,"http://10.132.201.46/connectDB.php",listener,errorListener){
+                StringRequest stringRequest=new StringRequest(Request.Method.POST,"http://10.132.201.46/technicianScheduler/technicianLogIn.php",listener,errorListener){
                     protected Map<String,String> getParams() throws AuthFailureError {
                         Map<String,String> map=new HashMap<String, String>();
                         map.put("username",username);
@@ -164,4 +116,61 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
+
+    Response.Listener<String> listener=new Response.Listener<String>() {
+        @Override
+        public void onResponse(String s) {
+            try {
+                jsonObject=new JSONObject(s);
+                retCode=jsonObject.getInt("success");
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+
+            if(retCode==1){
+                Intent intent=new Intent(TechnicianLogin.this,TechnicianDashboard.class);
+                Bundle bundle=new Bundle();
+                try {
+                    bundle.putString("technicianName",jsonObject.getString("firstName"));   //Get the JSON data.
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }else {
+                Toast.makeText(TechnicianLogin.this,"Wrong username or password!",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    Response.ErrorListener errorListener=new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError volleyError) {
+            Toast.makeText(TechnicianLogin.this,"Database not connected",Toast.LENGTH_SHORT).show();
+            Log.e(TAG,volleyError.getMessage(),volleyError);
+        }
+    };
+
+    /**
+     * Handle the transfer between technician page and manager page.
+     */
+    private void spinnerHandle() {
+        String prompt=technician.getText().toString();
+
+        SpannableString spannedString=new SpannableString(prompt);
+        spannedString.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(TechnicianLogin.this, ManagerLogin.class);
+                startActivity(intent);
+                finish();
+            }
+        },0,prompt.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        technician.setText(spannedString);
+        technician.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+
 }
+

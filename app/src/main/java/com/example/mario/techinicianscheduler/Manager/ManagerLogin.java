@@ -46,32 +46,9 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
     private int retCode;
 
     private String username,password;
+    private JSONObject jsonObject;
+    private RequestQueue requestQueue;
 
-    Response.Listener<String> listener=new Response.Listener<String>() {
-        @Override
-        public void onResponse(String s) {
-            try {
-                JSONObject jsonObject=new JSONObject(s);
-                retCode=jsonObject.getInt("success");
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-
-            if(retCode==1){
-                Intent intent=new Intent(ManagerLogin.this,ManagerDashboard.class);
-                startActivity(intent);
-            }else {
-                Toast.makeText(ManagerLogin.this,"Wrong username or password!",Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-    Response.ErrorListener errorListener=new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError volleyError) {
-            Log.e(TAG,volleyError.getMessage(),volleyError);
-        }
-    };
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,12 +69,6 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
             managerUsername.setText(sharedPreferences.getString("username",null));
             managerPassword.setText(sharedPreferences.getString("password",null));
         }
-
-
-
-
-
-
     }
 
     private void initialize() {
@@ -119,25 +90,24 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(ManagerLogin.this,"Missing username or password",Toast.LENGTH_SHORT).show();
                     return;
                 }
+                requestQueue= Volley.newRequestQueue(ManagerLogin.this);
 
-                RequestQueue requestQueue= Volley.newRequestQueue(ManagerLogin.this);
-
-                StringRequest stringRequest=new StringRequest(Request.Method.POST,"http://10.132.201.46/connectDB.php",listener,errorListener){
-                    protected Map<String,String> getParams() throws AuthFailureError{
-                        Map<String,String> map=new HashMap<String, String>();
-                        map.put("username",username);
-                        map.put("password",password);
+                //Connect PHP File.
+                StringRequest stringRequest=new StringRequest(Request.Method.POST,"http://10.132.201.46/technicianScheduler/managerLogIn.php",listener,errorListener) {
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("username", username);
+                        map.put("password", password);
                         return map;
                     }
                 };
-
                 requestQueue.add(stringRequest);
+
+                //Store the data to be used in next log in.
                 SharedPreferences.Editor editor=sharedPreferences.edit();
                 editor.putString("username",username);
                 editor.putString("password",password);
                 editor.commit();
-
-
                 break;
             case R.id.managerSignUp:
                 Intent intent=new Intent(ManagerLogin.this, SignUp.class);
@@ -147,6 +117,46 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * Use Volley.
+     */
+    Response.Listener<String> listener=new Response.Listener<String>() {
+        @Override
+        public void onResponse(String s) {
+            try {
+                jsonObject=new JSONObject(s);
+                retCode=jsonObject.getInt("success");
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+
+            if(retCode==1){
+                Intent intent=new Intent(ManagerLogin.this,ManagerDashboard.class);
+                Bundle bundle=new Bundle();
+                try {
+                    bundle.putString("managerName",jsonObject.getString("firstName"));   //Get the JSON data.
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }else {
+                Toast.makeText(ManagerLogin.this,"Wrong username or password!",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    Response.ErrorListener errorListener=new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError volleyError) {
+            Toast.makeText(ManagerLogin.this,"Database not connected",Toast.LENGTH_SHORT).show();
+            Log.e(TAG,volleyError.getMessage(),volleyError);
+        }
+    };
+
+    /**
+     * Handle the transfer between technician page and manager page.
+     */
     public void spinnerHandle(){
         String prompt=technician.getText().toString();
         SpannableString spannedString=new SpannableString(prompt);
