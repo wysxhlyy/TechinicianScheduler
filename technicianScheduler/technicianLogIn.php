@@ -8,7 +8,7 @@ $con = mysqli_connect("localhost","root","","techSchedulerDB");
  $username = $_POST['username'];
  $password = $_POST['password'];
 
-$sql = "SELECT * FROM manager WHERE username='$username' AND password='$password' ";
+$sql = "SELECT * FROM technician WHERE username='$username' AND password='$password' ";
 
 $result=mysqli_query($con,$sql);
 
@@ -32,10 +32,13 @@ while ($row=mysqli_fetch_array($result)) {
 	$response["username"]=$row['username'];
 	$response["email"]=$row['email'];
 	$response["phone"]=$row['phone'];
-	$response["name"]=$row['name'];
+	$response["firstName"]=$row['firstName'];
+	$response["surname"]=$row['surname'];
+	$response["technicianId"]=$row['t_id'];
 }
 
 echo json_encode($response);
 //以json的形式返回给客户端
 
 mysqli_close($con);
+?>
