@@ -132,6 +132,7 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
                 Bundle bundle=new Bundle();
                 try {
                     bundle.putString("technicianName",jsonObject.getString("firstName"));   //Get the JSON data.
+                    bundle.putString("technicianId",jsonObject.getString("technicianId"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
