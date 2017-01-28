@@ -1,13 +1,15 @@
 package com.example.mario.techinicianscheduler.Manager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.mario.techinicianscheduler.R;
 
-public class ManagerDashboard extends AppCompatActivity {
+public class ManagerDashboard extends AppCompatActivity implements View.OnClickListener {
 
     private TextView username;
     private Bundle managerInfo;
@@ -25,6 +27,7 @@ public class ManagerDashboard extends AppCompatActivity {
         initialize();
 
         username.setText("Welcome Back: "+ managerInfo.getString("managerName"));
+        schedule.setOnClickListener(this);
 
     }
 
@@ -39,4 +42,13 @@ public class ManagerDashboard extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.schedule:
+                Intent intent=new Intent(ManagerDashboard.this,ScheduleStep1.class);
+                startActivity(intent);
+                break;
+        }
+    }
 }
