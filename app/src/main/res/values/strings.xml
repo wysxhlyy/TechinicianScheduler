@@ -3,4 +3,5 @@
     <string name="title_activity_technician_login">TechnicianLogin</string>
     <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
+    <string name="title_activity_technician_route">Map</string>
 </resources>

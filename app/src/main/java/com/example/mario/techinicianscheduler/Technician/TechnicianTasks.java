@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mario.techinicianscheduler.R;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +42,7 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
     private Button goRoute;
     private Button callManager;
 
+    private ArrayList<LatLng> recordPos;
 
 
     @Override
@@ -72,6 +74,7 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
         technicianId=getIntent().getExtras().getString("technicianId");
         goRoute=(Button)findViewById(R.id.goRoute);
         callManager=(Button)findViewById(R.id.callManager);
+        recordPos=new ArrayList<LatLng>();
     }
 
 
@@ -80,10 +83,15 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
         switch (view.getId()){
             case R.id.goRoute:
                 Intent intent=new Intent(TechnicianTasks.this,TechnicianRoute.class);
+                Bundle bundle=new Bundle();
+                bundle.putParcelableArrayList("recordPos",recordPos);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case R.id.callManager:
-                //Handle call manager
+                Intent intent2=new Intent(Intent.ACTION_DIAL,null);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent2);
                 break;
         }
     }
@@ -122,6 +130,7 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
                         map.put("id",i+"");
                         map.put("skillLevel",jsonObject.getString("skill_level"+i));
                         map.put("stationName",jsonObject.getString("stationName"+i));
+                        recordPos.add(new LatLng(Double.parseDouble(jsonObject.getString("latitude"+i)),Double.parseDouble(jsonObject.getString("longitude"+i))));
                         list.add(map);
                     }
                     dataAdapter=new SimpleAdapter(TechnicianTasks.this,list,R.layout.db_item_layout,new String[]{"id","skillLevel","stationName"},new int[]{R.id.value1,R.id.value2,R.id.value3});

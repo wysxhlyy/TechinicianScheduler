@@ -104,6 +104,7 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
                 requestQueue.add(stringRequest);
 
                 //Store the data to be used in next log in.
+
                 SharedPreferences.Editor editor=sharedPreferences.edit();
                 editor.putString("username",username);
                 editor.putString("password",password);
@@ -135,6 +136,10 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
                 Bundle bundle=new Bundle();
                 try {
                     bundle.putString("managerName",jsonObject.getString("firstName"));   //Get the JSON data.
+
+                    SharedPreferences.Editor editor=getSharedPreferences("managerSession",MODE_PRIVATE).edit();
+                    editor.putString("managerId",jsonObject.getString("m_id"));
+                    editor.commit();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
