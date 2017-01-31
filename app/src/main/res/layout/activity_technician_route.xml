@@ -28,12 +28,27 @@
         android:id="@+id/orderedList"
         />
 
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Improve"
-        android:id="@+id/improveSolution"
-        />
+        android:orientation="horizontal"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Improve"
+            android:id="@+id/improveSolution"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Route"
+            android:id="@+id/googleRoute"
+            />
+
+
+    </LinearLayout>
 
 
 </LinearLayout>

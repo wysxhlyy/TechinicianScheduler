@@ -1,23 +1,31 @@
 package com.example.mario.techinicianscheduler.Technician;
 
+import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mario.techinicianscheduler.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallback {
+public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener {
 
     private GoogleMap mMap;
     private ArrayList<LatLng> recordPos;
@@ -26,7 +34,12 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
     private float minimumDistance=100000000;
 
     private Button improve;
+    private Button route;
     private ArrayList<LatLng> orderedList;
+    private ProgressDialog progressDialog;
+    private List<Polyline> polylinePaths = new ArrayList<>();
+    private int routeCount=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +77,11 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
                 orderedListShow.setText(show);
 
                 mMap.clear();
-                for(int i=0;i<orderedList.size();i++){
+                mMap.addMarker(new MarkerOptions().position(startEnd).title("Home").icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+                for(int i=1;i<orderedList.size()-1;i++){
                     LatLng latLng=orderedList.get(i);
                     mMap.addMarker(new MarkerOptions().position(latLng).title("place"+i));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,12.0f));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,13.0f));
                 }
             }
         });
@@ -81,6 +95,24 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
         orderedListShow.setText(show);
 
 
+        route=(Button)findViewById(R.id.googleRoute);
+        route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMap.clear();
+                if(routeCount<orderedList.size()-1){
+                    try {
+                        new DirectionFinder(TechnicianRoute.this,orderedList.get(routeCount).latitude+","+orderedList.get(routeCount).longitude,orderedList.get(routeCount+1).latitude+","+orderedList.get(routeCount+1).longitude).execute();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    routeCount++;
+                }else {
+                    Toast.makeText(TechnicianRoute.this,"Congratulations! You have finished today's task",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
     }
 
@@ -186,11 +218,43 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        for(int i=0;i<orderedList.size();i++){
+        mMap.addMarker(new MarkerOptions().position(startEnd).title("Home").icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+        for(int i=1;i<orderedList.size()-1;i++){
             LatLng latLng=orderedList.get(i);
             mMap.addMarker(new MarkerOptions().position(latLng).title("place"+i));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,12.0f));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,13.0f));
+        }
+    }
+
+    @Override
+    public void onDirectionFinderStart() {
+        progressDialog=ProgressDialog.show(this,"Please wait.","Finding direction..",true);
+        if(polylinePaths!=null){
+            for(Polyline polyline:polylinePaths){
+                polyline.remove();
+            }
+        }
+    }
+
+    @Override
+    public void onDirectionFinderSuccess(List<DirectionFinder.Route> routes) {
+        progressDialog.dismiss();
+        polylinePaths=new ArrayList<>();
+
+        for(DirectionFinder.Route route:routes){
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation,16.0f));
+            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.start)).position(route.startLocation));
+            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.end)).position(route.endLocation));
+
+            PolylineOptions polylineOptions=new PolylineOptions().
+                    geodesic(true).color(Color.BLUE).width(15);
+
+            for (int i=0;i<route.points.size();i++){
+                polylineOptions.add(route.points.get(i));
+            }
+
+            polylinePaths.add(mMap.addPolyline(polylineOptions));
+
         }
     }
 }
