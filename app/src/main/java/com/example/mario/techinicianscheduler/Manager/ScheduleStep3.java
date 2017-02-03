@@ -64,7 +64,7 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
             String[] split=bundle.getString("task"+i).split(",");
             Log.d("string",bundle.getString("task"+i));
             Task t=new Task();
-            t.setSkillRequirement(split[0]);
+            t.setSkillRequirement(Integer.parseInt(split[0]));
             t.setStationId(split[1]);
             tasks.add(t);
         }
@@ -163,7 +163,7 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                     for(int i=1;i<taskNum+1;i++){
                         tasks.get(i-1).setPosition(new LatLng(Double.parseDouble(jsonObject.getString("stationLat"+i)),Double.parseDouble(jsonObject.getString("stationLong"+i))));
                         tasks.get(i-1).setStationName(jsonObject.getString("stationName"+i));
-                        tasks.get(i-1).setDuration("60");                                           //set Default duration
+                        tasks.get(i-1).setDuration(60);                                           //set Default duration
                         Log.d("latitude"+i,jsonObject.getString("stationLat"+i));
                     }
 
@@ -178,8 +178,8 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                         TechnicianInfo t=new TechnicianInfo();
                         t.setId(1);
                         t.setFirstName(jsonObject.getString("techName1"));
-                        t.setSkillLevel(jsonObject.getString("skillLevel1"));
-                        t.setWorkHour(jsonObject.getString("workHour1"));
+                        t.setSkillLevel(Integer.parseInt(jsonObject.getString("skillLevel1")));
+                        t.setWorkHour(jsonObject.getInt("workHour1"));
                         techs.add(t);
                     }
 
@@ -189,8 +189,8 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                         TechnicianInfo t=new TechnicianInfo();
                         t.setId(2);
                         t.setFirstName(jsonObject.getString("techName2"));
-                        t.setSkillLevel(jsonObject.getString("skillLevel2"));
-                        t.setWorkHour(jsonObject.getString("workHour2"));
+                        t.setSkillLevel(jsonObject.getInt("skillLevel2"));
+                        t.setWorkHour(jsonObject.getInt("workHour2"));
                         techs.add(t);
                     }
 
@@ -200,8 +200,8 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                         TechnicianInfo t=new TechnicianInfo();
                         t.setId(3);
                         t.setFirstName(jsonObject.getString("techName3"));
-                        t.setSkillLevel(jsonObject.getString("skillLevel3"));
-                        t.setWorkHour(jsonObject.getString("workHour3"));
+                        t.setSkillLevel(jsonObject.getInt("skillLevel3"));
+                        t.setWorkHour(jsonObject.getInt("workHour3"));
                         techs.add(t);
                     }
 
@@ -211,8 +211,8 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                         TechnicianInfo t=new TechnicianInfo();
                         t.setId(4);
                         t.setFirstName(jsonObject.getString("techName4"));
-                        t.setSkillLevel(jsonObject.getString("skillLevel4"));
-                        t.setWorkHour(jsonObject.getString("workHour4"));
+                        t.setSkillLevel(jsonObject.getInt("skillLevel4"));
+                        t.setWorkHour(jsonObject.getInt("workHour4"));
                         techs.add(t);
                     }
 
@@ -222,8 +222,8 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                         TechnicianInfo t=new TechnicianInfo();
                         t.setId(5);
                         t.setFirstName(jsonObject.getString("techName5"));
-                        t.setSkillLevel(jsonObject.getString("skillLevel5"));
-                        t.setWorkHour(jsonObject.getString("workHour5"));
+                        t.setSkillLevel(jsonObject.getInt("skillLevel5"));
+                        t.setWorkHour(jsonObject.getInt("workHour5"));
                         techs.add(t);
                     }
 

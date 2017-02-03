@@ -11,16 +11,16 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Task implements Parcelable {
     private int id;
-    private String skillRequirement;
-    private String duration;
+    private int skillRequirement;
+    private int duration;
     private LatLng position;
     private String stationName;
     private String stationId;
 
     public Task(Parcel in) {
         id = in.readInt();
-        skillRequirement = in.readString();
-        duration = in.readString();
+        skillRequirement = in.readInt();
+        duration = in.readInt();
         position = in.readParcelable(LatLng.class.getClassLoader());
         stationName = in.readString();
         stationId = in.readString();
@@ -50,19 +50,19 @@ public class Task implements Parcelable {
         this.id = id;
     }
 
-    public String getSkillRequirement() {
+    public int getSkillRequirement() {
         return skillRequirement;
     }
 
-    public void setSkillRequirement(String skill_requirement) {
+    public void setSkillRequirement(int skill_requirement) {
         this.skillRequirement = skill_requirement;
     }
 
-    public String getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
@@ -98,8 +98,8 @@ public class Task implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
-        parcel.writeString(skillRequirement);
-        parcel.writeString(duration);
+        parcel.writeInt(skillRequirement);
+        parcel.writeInt(duration);
         parcel.writeParcelable(position, i);
         parcel.writeString(stationName);
         parcel.writeString(stationId);

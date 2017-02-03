@@ -14,8 +14,8 @@ public class TechnicianInfo implements Parcelable {
     private String phone;
     private String firstName;
     private String surname;
-    private String skillLevel;
-    private String workHour;
+    private int skillLevel;
+    private int workHour;
 
     public TechnicianInfo(Parcel in) {
         id = in.readInt();
@@ -24,8 +24,8 @@ public class TechnicianInfo implements Parcelable {
         phone = in.readString();
         firstName = in.readString();
         surname = in.readString();
-        skillLevel = in.readString();
-        workHour = in.readString();
+        skillLevel = in.readInt();
+        workHour = in.readInt();
     }
 
     public TechnicianInfo() {
@@ -40,8 +40,8 @@ public class TechnicianInfo implements Parcelable {
         dest.writeString(phone);
         dest.writeString(firstName);
         dest.writeString(surname);
-        dest.writeString(skillLevel);
-        dest.writeString(workHour);
+        dest.writeInt(skillLevel);
+        dest.writeInt(workHour);
     }
 
     @Override
@@ -109,19 +109,19 @@ public class TechnicianInfo implements Parcelable {
         this.surname = surname;
     }
 
-    public String getSkillLevel() {
+    public int getSkillLevel() {
         return skillLevel;
     }
 
-    public void setSkillLevel(String skillLevel) {
+    public void setSkillLevel(int skillLevel) {
         this.skillLevel = skillLevel;
     }
 
-    public String getWorkHour() {
+    public int getWorkHour() {
         return workHour;
     }
 
-    public void setWorkHour(String workHour) {
+    public void setWorkHour(int workHour) {
         this.workHour = workHour;
     }
 }
