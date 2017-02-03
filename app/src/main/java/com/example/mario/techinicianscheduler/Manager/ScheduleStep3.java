@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.mario.techinicianscheduler.DBHelper;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.Task;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
@@ -38,16 +39,16 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
     private CheckBox cb5;
 
     private Bundle planInfo;
-    private int chosenCount=1;
     private Button editTech;
     private Button generate;
 
     private int retCode;
     private static final String TAG = ManagerLogin.class.getSimpleName();
     private JSONObject jsonObject;
-    private int techNum;
+    private int techNum=0;
     private Map<String,String> technician=new HashMap<>();
     private ArrayList<TechnicianInfo> techs;
+    private ArrayList<TechnicianInfo> chosenTechs;
     private ArrayList<Task> tasks;
     private int taskNum=0;
 
@@ -70,7 +71,7 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
 
 
         RequestQueue requestQueue= Volley.newRequestQueue(ScheduleStep3.this);
-        StringRequest stringRequest=new StringRequest(Request.Method.POST,"http://10.132.201.46/technicianScheduler/getAvailableTech.php",listener,errorListener){
+        StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+"getAvailableTech.php",listener,errorListener){
             protected Map<String,String> getParams() throws AuthFailureError {
                 Map<String,String> map=new HashMap<String, String>();
                 map.put("managerId",getSharedPreferences("managerSession",MODE_PRIVATE).getString("managerId",null));
@@ -104,6 +105,7 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
         cb5=(CheckBox)findViewById(R.id.cb5);
         techs=new ArrayList<>();
         tasks=new ArrayList<>();
+        chosenTechs=new ArrayList<>();
 
         editTech=(Button)findViewById(R.id.editTech);
         generate=(Button)findViewById(R.id.generate);
@@ -114,10 +116,8 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
         if(isChecked){
             for(int i=0;i<techs.size();i++){
                 if(techs.get(i).getFirstName().equals(compoundButton.getText().toString())){
-                    planInfo.putString("chosenTech"+chosenCount,techs.get(i).getFirstName());
-                    planInfo.putString("chosenTechLevel"+chosenCount,techs.get(i).getSkillLevel());
-                    planInfo.putString("chosenTechWorkHour"+chosenCount,techs.get(i).getWorkHour());
-                    chosenCount++;
+                    chosenTechs.add(techs.get(i));
+                    techNum++;
                 }
             }
         }
@@ -132,14 +132,12 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                 break;
             case R.id.generate:
                 Intent intent2=new Intent(ScheduleStep3.this,ScheduleResult.class);
-                planInfo.putInt("chosenTechNum",chosenCount-1);
-                for(int i=1;i<chosenCount;i++){
-                    try {
-                        planInfo.putString("skillLevel"+chosenCount,jsonObject.getString("skillLevel"+i));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
+
+                planInfo.putInt("numOfTask",taskNum);
+                planInfo.putInt("numOfChosenTech",techNum);
+
+                planInfo.putParcelableArrayList("addedTask",tasks);
+                planInfo.putParcelableArrayList("chosenTech",chosenTechs);
 
                 intent2.putExtras(planInfo);
                 startActivity(intent2);
@@ -163,8 +161,10 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                     techNum=Integer.parseInt(jsonObject.getString("techNum"))-1;
 
                     for(int i=1;i<taskNum+1;i++){
-                        tasks.get(i-1).setPosition(new LatLng(Double.parseDouble(jsonObject.getString("managerLat"+i)),Double.parseDouble(jsonObject.getString("managerLong"+i))));
-                        Log.d("latitude"+i,jsonObject.getString("managerLat"+i));
+                        tasks.get(i-1).setPosition(new LatLng(Double.parseDouble(jsonObject.getString("stationLat"+i)),Double.parseDouble(jsonObject.getString("stationLong"+i))));
+                        tasks.get(i-1).setStationName(jsonObject.getString("stationName"+i));
+                        tasks.get(i-1).setDuration("60");                                           //set Default duration
+                        Log.d("latitude"+i,jsonObject.getString("stationLat"+i));
                     }
 
 

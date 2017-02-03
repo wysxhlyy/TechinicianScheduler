@@ -145,7 +145,7 @@ public class SignUp extends AppCompatActivity {
     private void createNewManager() {
         requestQueue= Volley.newRequestQueue(SignUp.this);
 
-        StringRequest stringRequest=new StringRequest(Request.Method.POST,"http://10.132.201.46/technicianScheduler/createManager.php",listener,errorListener){
+        StringRequest stringRequest=new StringRequest(Request.Method.POST,DBHelper.DB_ADDRESS+"createManager.php",listener,errorListener){
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("username", username.getText().toString());

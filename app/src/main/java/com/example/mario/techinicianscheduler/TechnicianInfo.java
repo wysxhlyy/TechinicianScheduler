@@ -1,10 +1,13 @@
 package com.example.mario.techinicianscheduler;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by mario on 2017/2/1.
  */
 
-public class TechnicianInfo {
+public class TechnicianInfo implements Parcelable {
     private int id;
     private String username;
     private String email;
@@ -13,6 +16,50 @@ public class TechnicianInfo {
     private String surname;
     private String skillLevel;
     private String workHour;
+
+    public TechnicianInfo(Parcel in) {
+        id = in.readInt();
+        username = in.readString();
+        email = in.readString();
+        phone = in.readString();
+        firstName = in.readString();
+        surname = in.readString();
+        skillLevel = in.readString();
+        workHour = in.readString();
+    }
+
+    public TechnicianInfo() {
+
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(username);
+        dest.writeString(email);
+        dest.writeString(phone);
+        dest.writeString(firstName);
+        dest.writeString(surname);
+        dest.writeString(skillLevel);
+        dest.writeString(workHour);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<TechnicianInfo> CREATOR = new Creator<TechnicianInfo>() {
+        @Override
+        public TechnicianInfo createFromParcel(Parcel in) {
+            return new TechnicianInfo(in);
+        }
+
+        @Override
+        public TechnicianInfo[] newArray(int size) {
+            return new TechnicianInfo[size];
+        }
+    };
 
     public int getId() {
         return id;

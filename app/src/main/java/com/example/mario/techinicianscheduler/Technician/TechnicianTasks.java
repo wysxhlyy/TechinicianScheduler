@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.mario.techinicianscheduler.DBHelper;
 import com.example.mario.techinicianscheduler.R;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -54,7 +55,7 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
 
         requestQueue= Volley.newRequestQueue(TechnicianTasks.this);
 
-        StringRequest stringRequest=new StringRequest(Request.Method.POST,"http://10.132.201.46/technicianScheduler/getWorkArrangement.php",listener,errorListener){
+        StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+"getWorkArrangement.php",listener,errorListener){
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("technicianId", technicianId);
