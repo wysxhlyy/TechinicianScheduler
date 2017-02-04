@@ -66,6 +66,8 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
             Task t=new Task();
             t.setSkillRequirement(Integer.parseInt(split[0]));
             t.setStationId(split[1]);
+            t.setDuration(Integer.parseInt(split[2]));
+            t.setId(i);
             tasks.add(t);
         }
 
@@ -163,7 +165,6 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                     for(int i=1;i<taskNum+1;i++){
                         tasks.get(i-1).setPosition(new LatLng(Double.parseDouble(jsonObject.getString("stationLat"+i)),Double.parseDouble(jsonObject.getString("stationLong"+i))));
                         tasks.get(i-1).setStationName(jsonObject.getString("stationName"+i));
-                        tasks.get(i-1).setDuration(60);                                           //set Default duration
                         Log.d("latitude"+i,jsonObject.getString("stationLat"+i));
                     }
 

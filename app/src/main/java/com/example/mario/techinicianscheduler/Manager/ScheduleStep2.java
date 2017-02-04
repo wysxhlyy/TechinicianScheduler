@@ -21,6 +21,9 @@ public class ScheduleStep2 extends AppCompatActivity implements View.OnClickList
     private EditText stationId4;
     private EditText skillLevel5;
     private EditText stationId5;
+    private EditText duration1;
+    private EditText duration2;
+    private EditText duration3;
 
     private Button addTaskBtn;
     private Button next2;
@@ -55,6 +58,9 @@ public class ScheduleStep2 extends AppCompatActivity implements View.OnClickList
         stationId3=(EditText)findViewById(R.id.stationId3);
         stationId4=(EditText)findViewById(R.id.stationId4);
         stationId5=(EditText)findViewById(R.id.stationId5);
+        duration1=(EditText)findViewById(R.id.duration1);
+        duration2=(EditText)findViewById(R.id.duration2);
+        duration3=(EditText)findViewById(R.id.duration3);
         addTaskBtn=(Button)findViewById(R.id.addTaskBtn);
         next2=(Button)findViewById(R.id.next2);
         tasks=new Bundle();
@@ -78,19 +84,19 @@ public class ScheduleStep2 extends AppCompatActivity implements View.OnClickList
     private void getTaskData() {
         if(skillLevel1.getText().toString()==null||stationId1.getText().toString()==null){
         }else {
-            tasks.putString("task"+taskCount,skillLevel1.getText().toString()+","+stationId1.getText().toString());
+            tasks.putString("task"+taskCount,skillLevel1.getText().toString()+","+stationId1.getText().toString()+","+duration1.getText().toString());
             taskCount++;
         }
 
         if(skillLevel2.getText().toString()==null||stationId2.getText().toString()==null){
         }else {
-            tasks.putString("task"+taskCount,skillLevel2.getText().toString()+","+stationId2.getText().toString());
+            tasks.putString("task"+taskCount,skillLevel2.getText().toString()+","+stationId2.getText().toString()+","+duration2.getText().toString());
             taskCount++;
         }
 
         if(skillLevel3.getText().toString()==null||stationId3.getText().toString()==null){
         }else {
-            tasks.putString("task"+taskCount,skillLevel3.getText().toString()+","+stationId3.getText().toString());
+            tasks.putString("task"+taskCount,skillLevel3.getText().toString()+","+stationId3.getText().toString()+","+duration3.getText().toString());
             taskCount++;
         }
     }

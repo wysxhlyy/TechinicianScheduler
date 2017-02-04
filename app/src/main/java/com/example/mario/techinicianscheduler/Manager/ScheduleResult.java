@@ -4,6 +4,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.mario.techinicianscheduler.R;
@@ -17,6 +19,8 @@ import java.util.Map;
 
 public class ScheduleResult extends AppCompatActivity {
 
+    private static int UNASSIGNEDTASKPENALTY =100;
+
     private TextView getPlanInfo;
     private String showData="";
     private ArrayList<TechnicianInfo> chosenTechs;
@@ -26,9 +30,15 @@ public class ScheduleResult extends AppCompatActivity {
     private ArrayList<Task> sortedTask;
     private ArrayList<TechnicianInfo> sortedTech;
     private LatLng startEnd=new LatLng(37.331629,-121.8923151);
+    private ArrayList<Task> unassignedTask;
+    private Double initialCost;
+    private Double improveCost=10000000.0;
 
+    private Button hillClimbing;
 
-    private Map<Task,TechnicianInfo> scheduleResult;
+    private Map<Task,TechnicianInfo> initialResult;
+    private Map<Task,TechnicianInfo> improveResult;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,41 +60,123 @@ public class ScheduleResult extends AppCompatActivity {
 
 
         basicSchedule();
-        calculateCost(scheduleResult);      //calculate the cost of initial schedule (before hill climbing)
+        initialCost=calculateCost(initialResult);      //calculate the cost of initial schedule (before hill climbing)
+        //improveCost=calculateCost(improveResult);
+
+
+        hillClimbing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hillClimbing();
+                showScheduleInfo();
+            }
+        });
 
         showScheduleInfo();
 
     }
 
+    private void hillClimbing() {
+        for(int i=0;i<initialResult.size()-1;i++){
+            for(int j=i+1;j<initialResult.size();j++){
+                ArrayList<Task> tasks=new ArrayList<>();
+                tasks.addAll(initialResult.keySet());
+                ArrayList<TechnicianInfo> techs=new ArrayList<>();
+                techs.addAll(initialResult.values());
+
+                if(tasks.get(i).getSkillRequirement()<=techs.get(j).getSkillLevel()&&tasks.get(j).getSkillRequirement()<=techs.get(i).getSkillLevel()){   //如果两者可以交换
+                    Map<Task,TechnicianInfo> newResult=new HashMap<>();
+                    newResult.putAll(initialResult);
+                    newResult.remove(techs.get(i));
+                    newResult.remove(techs.get(j));
+                    newResult.put(tasks.get(i),techs.get(j));
+                    newResult.put(tasks.get(j),techs.get(i));
+
+                    Double cost= calculateCost(newResult);
+                    if(cost<improveCost){
+                        improveCost=cost;
+                        Log.d("improved",improveCost+"");
+                        improveResult.putAll(newResult);
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Calculate the cost after the schedule.
      */
-    private void calculateCost(Map<Task,TechnicianInfo> schedule) {
+    private Double calculateCost(Map<Task,TechnicianInfo> schedule) {
+        ArrayList<Task> availableTask= new ArrayList<>();
+        unassignedTask.addAll(sortedTask);
+        availableTask.addAll(schedule.keySet());
 
+        double cost=0;
+
+        for(int j=0;j<sortedTech.size();j++) {
+            ArrayList<Task> assignedTask = new ArrayList<>();
+            if (schedule.containsValue(sortedTech.get(j))) {  //There already exist some task assigned to the technician j.
+                for (int k = 0; k < schedule.size(); k++) {
+                    if (schedule.get(availableTask.get(k)) == sortedTech.get(j)) {
+                        cost += calculateDur(availableTask.get(k).getSkillRequirement(), sortedTech.get(j).getSkillLevel(),availableTask.get(k).getDuration());    //calculate estimate time which is the sum of all the assigned task for this specific technician.
+                        assignedTask.add(availableTask.get(k));
+                        unassignedTask.remove(availableTask.get(k));
+                    }
+                }
+
+                if(assignedTask.size()>=1){
+                    float dist = calculateTravelTime(assignedTask);
+                    cost += (dist / 1000) * 2;  //assume drive speed is 30km/h.
+                }
+            }
+        }
+
+        if(!unassignedTask.isEmpty()){
+            cost+=UNASSIGNEDTASKPENALTY*unassignedTask.size();
+            Log.d("unassigned Task:",unassignedTask.size()+"");
+        }
+
+        return cost;
     }
 
     /**
      * Test
      */
     private void showScheduleInfo() {
-        showData+="number of tasks:"+numOfTasks+", number of technicians:"+chosenTechNum+"\n\n";
+        showData="";
+        showData+="number of tasks:"+numOfTasks+", number of technicians:"+chosenTechNum+"\n";
 
         for(int i=0;i<sortedTask.size();i++){
             Task t=sortedTask.get(i);
-            showData+="task"+i+":\n task skill requirement: "+t.getSkillRequirement()+", station Name: "+t.getStationName() + ", task position: "+t.getPosition().latitude+","+t.getPosition().longitude+", task Duration: "+t.getDuration()+"\n\n";
+            showData+="task"+i+":\n task skill requirement: "+t.getSkillRequirement()+", station Name: "+t.getStationName() + ", task position: "+t.getPosition().latitude+","+t.getPosition().longitude+", task Duration: "+t.getDuration()+"\n";
         }
 
         for(int i=0;i<sortedTech.size();i++){
             TechnicianInfo t=sortedTech.get(i);
-            showData+="technician"+i+":\n technician name: "+t.getFirstName()+", technician Skill"+t.getSkillLevel()+", technician work hour:"+t.getWorkHour()+"\n\n";
+            showData+="technician"+i+":\n technician name: "+t.getFirstName()+", technician Skill"+t.getSkillLevel()+", technician work hour:"+t.getWorkHour()+"\n";
         }
+
+
+        ArrayList<Task> availableTask= new ArrayList<>();
+        availableTask.addAll(initialResult.keySet());
+
+        for(int i=0;i<availableTask.size();i++){
+            showData+="task"+availableTask.get(i).getSkillRequirement()+":"+initialResult.get(availableTask.get(i)).getFirstName()+"\n";
+        }
+
+        showData+="cost:"+initialCost.shortValue();
+
+        if(!improveResult.isEmpty()){
+            ArrayList<Task> improved=new ArrayList<>();
+            improved.addAll(improveResult.keySet());
+            for(int j=0;j<improved.size();j++){
+                showData+="task"+improved.get(j).getSkillRequirement()+":"+improveResult.get(improved.get(j)).getFirstName()+"\n";
+            }
+        }
+
+
 
         getPlanInfo.setText(showData);
-
-
-        for(int i=0;i<sortedTask.size();i++){
-            Log.d("technicianSchedule",scheduleResult.get(sortedTask.get(i)).getFirstName());
-        }
 
     }
 
@@ -93,9 +185,12 @@ public class ScheduleResult extends AppCompatActivity {
         chosenTechs=new ArrayList<>();
         tasks=new ArrayList<>();
         getPlanInfo=(TextView)findViewById(R.id.getPlanInfo);
-        scheduleResult=new HashMap<>();
+        initialResult=new HashMap<>();
+        improveResult=new HashMap<>();
         sortedTask=new ArrayList<>();
         sortedTech=new ArrayList<>();
+        unassignedTask=new ArrayList<>();
+        hillClimbing=(Button)findViewById(R.id.hillClimbing);
     }
 
     private void basicSchedule(){
@@ -109,9 +204,9 @@ public class ScheduleResult extends AppCompatActivity {
 
                 if(sortedTask.get(i).getSkillRequirement()<=sortedTech.get(j).getSkillLevel()){     //if the estimate working duration < working hour,then assign this task to the technician.
 
-                    if(scheduleResult.containsValue(sortedTech.get(j))){  //There already exist some task assigned to the technician j.
+                    if(initialResult.containsValue(sortedTech.get(j))){  //There already exist some task assigned to the technician j.
                         for(int k=0;k<i;k++){
-                            if(scheduleResult.get(sortedTask.get(k))==sortedTech.get(j)){
+                            if(initialResult.get(sortedTask.get(k))==sortedTech.get(j)){
                                 estimateDur+=calculateDur(sortedTask.get(k).getSkillRequirement(),sortedTech.get(j).getSkillLevel(),sortedTask.get(k).getDuration());    //calculate estimate time which is the sum of all the assigned task for this specific technician.
                                 assignedTask.add(sortedTask.get(k));
                             }
@@ -134,7 +229,7 @@ public class ScheduleResult extends AppCompatActivity {
 
 
                     if(estimateDur<sortedTech.get(j).getWorkHour()){
-                        scheduleResult.put(sortedTask.get(i),sortedTech.get(j));
+                        initialResult.put(sortedTask.get(i),sortedTech.get(j));
                         break;
                     }
                 }
