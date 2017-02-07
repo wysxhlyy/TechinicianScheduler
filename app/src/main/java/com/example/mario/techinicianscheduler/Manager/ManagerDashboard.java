@@ -72,7 +72,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         requestQueue.add(stringRequest);
 
         manageTask.setOnClickListener(this);
-        manageTask.setOnClickListener(this);
+        manageTech.setOnClickListener(this);
 
 
 
@@ -160,6 +160,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                             t.setFirstName(jsonObject.getString("techName"+i));
                             t.setSkillLevel(Integer.parseInt(jsonObject.getString("skillLevel"+i)));
                             t.setWorkHour(jsonObject.getInt("workHour"+i));
+                            t.setSurname(jsonObject.getString("surname"+i));
                             techs.add(t);
                         }
                     }

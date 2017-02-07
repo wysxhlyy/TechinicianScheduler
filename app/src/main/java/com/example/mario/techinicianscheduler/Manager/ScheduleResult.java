@@ -46,9 +46,9 @@ public class ScheduleResult extends AppCompatActivity {
         initialize();
 
 
-        Bundle managetInfo=getIntent().getExtras();
-        chosenTechs= managetInfo.getParcelableArrayList("chosenTech");
-        chosentasks=managetInfo.getParcelableArrayList("chosenTask");
+        Bundle managerInfo=getIntent().getExtras();
+        chosenTechs= managerInfo.getParcelableArrayList("chosenTech");
+        chosentasks=managerInfo.getParcelableArrayList("chosenTask");
 
 
         sortTaskBySkill();
@@ -161,7 +161,7 @@ public class ScheduleResult extends AppCompatActivity {
      */
     private void showScheduleInfo() {
         showData="";
-        showData+="number of tasks:"+chosentasks.size()+", number of technicians:"+chosenTechs.size()+"\n";
+        showData+="number of tasks:"+sortedTask.size()+", number of technicians:"+sortedTech.size()+"\n";
 
         for(int i=0;i<sortedTask.size();i++){
             Task t=sortedTask.get(i);

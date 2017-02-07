@@ -17,7 +17,11 @@ public class TechnicianInfo implements Parcelable {
     private int skillLevel;
     private int workHour;
 
-    public TechnicianInfo(Parcel in) {
+    public TechnicianInfo(){
+
+    }
+
+    protected TechnicianInfo(Parcel in) {
         id = in.readInt();
         username = in.readString();
         email = in.readString();
@@ -26,10 +30,6 @@ public class TechnicianInfo implements Parcelable {
         surname = in.readString();
         skillLevel = in.readInt();
         workHour = in.readInt();
-    }
-
-    public TechnicianInfo() {
-
     }
 
     @Override
