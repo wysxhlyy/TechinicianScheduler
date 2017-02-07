@@ -60,14 +60,15 @@ public class ScheduleResult extends AppCompatActivity {
 
 
         basicSchedule();
-        initialCost=calculateCost(initialResult);      //calculate the cost of initial schedule (before hill climbing)
+        initialCost=calculateCost(initialResult);
+            //calculate the cost of initial schedule (before hill climbing)
         //improveCost=calculateCost(improveResult);
 
 
         hillClimbing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hillClimbing();
+                hillClimbing(initialResult);
                 showScheduleInfo();
             }
         });
@@ -76,30 +77,48 @@ public class ScheduleResult extends AppCompatActivity {
 
     }
 
-    private void hillClimbing() {
-        for(int i=0;i<initialResult.size()-1;i++){
-            for(int j=i+1;j<initialResult.size();j++){
-                ArrayList<Task> tasks=new ArrayList<>();
-                tasks.addAll(initialResult.keySet());
-                ArrayList<TechnicianInfo> techs=new ArrayList<>();
-                techs.addAll(initialResult.values());
+    /**
+     * 找两个random的数，互换位置上的
+     */
+    private void hillClimbing(Map<Task,TechnicianInfo> schedule) {
+        double originCost=calculateCost(schedule);
+        ArrayList<Task> tasks=new ArrayList<>();
+        tasks.addAll(schedule.keySet());
+        ArrayList<TechnicianInfo> techs=new ArrayList<>();
+        techs.addAll(schedule.values());
 
-                if(tasks.get(i).getSkillRequirement()<=techs.get(j).getSkillLevel()&&tasks.get(j).getSkillRequirement()<=techs.get(i).getSkillLevel()){   //如果两者可以交换
-                    Map<Task,TechnicianInfo> newResult=new HashMap<>();
-                    newResult.putAll(initialResult);
-                    newResult.remove(techs.get(i));
-                    newResult.remove(techs.get(j));
-                    newResult.put(tasks.get(i),techs.get(j));
-                    newResult.put(tasks.get(j),techs.get(i));
+        //generate random number i,j
 
-                    Double cost= calculateCost(newResult);
-                    if(cost<improveCost){
-                        improveCost=cost;
-                        Log.d("improved",improveCost+"");
-                        improveResult.putAll(newResult);
-                    }
-                }
+        int i= (int) Math.round(Math.random()*(tasks.size()-1));
+        int j= (int) Math.round(Math.random()*(tasks.size()-1));
+        int count=0;
+
+
+        while (i==j||tasks.get(i).getSkillRequirement()<=techs.get(j).getSkillLevel()&&tasks.get(j).getSkillRequirement()<=techs.get(i).getSkillLevel()){
+            i= (int) Math.round(Math.random()*(tasks.size()-1));
+            j= (int) Math.round(Math.random()*(tasks.size()-1));
+            if(count>=50){
+                break;
+                //停止hill climbing
+            }else {
+                count++;
             }
+        }
+
+          //如果两者可以交换
+        Map<Task,TechnicianInfo> newResult=new HashMap<>();
+        newResult.putAll(schedule);
+        newResult.remove(techs.get(i));
+        newResult.remove(techs.get(j));
+        newResult.put(tasks.get(i),techs.get(j));
+        newResult.put(tasks.get(j),techs.get(i));
+
+        double improvedcost= calculateCost(newResult);
+        Log.d("improved Cost","improvedCost: "+improveCost+", i:"+i+",j :"+j);
+        if(improvedcost<originCost){
+            hillClimbing(newResult);
+        }else {
+            hillClimbing(schedule);
         }
     }
 
@@ -110,10 +129,10 @@ public class ScheduleResult extends AppCompatActivity {
         ArrayList<Task> availableTask= new ArrayList<>();
         unassignedTask.addAll(sortedTask);
         availableTask.addAll(schedule.keySet());
-
-        double cost=0;
+        double maxCost=0;
 
         for(int j=0;j<sortedTech.size();j++) {
+            double cost=0;
             ArrayList<Task> assignedTask = new ArrayList<>();
             if (schedule.containsValue(sortedTech.get(j))) {  //There already exist some task assigned to the technician j.
                 for (int k = 0; k < schedule.size(); k++) {
@@ -129,14 +148,17 @@ public class ScheduleResult extends AppCompatActivity {
                     cost += (dist / 1000) * 2;  //assume drive speed is 30km/h.
                 }
             }
+
+            if(cost>maxCost){
+                maxCost=cost;
+            }
         }
 
         if(!unassignedTask.isEmpty()){
-            cost+=UNASSIGNEDTASKPENALTY*unassignedTask.size();
+            maxCost+=UNASSIGNEDTASKPENALTY*unassignedTask.size();
             Log.d("unassigned Task:",unassignedTask.size()+"");
         }
-
-        return cost;
+        return maxCost;
     }
 
     /**
