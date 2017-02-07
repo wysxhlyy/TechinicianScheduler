@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -18,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mario.techinicianscheduler.DBHelper;
+import com.example.mario.techinicianscheduler.MyListAdapter;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.Task;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
@@ -30,17 +33,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener, MyListAdapter.CheckedAllListener {
 
-    private CheckBox cb1;
-    private CheckBox cb2;
-    private CheckBox cb3;
-    private CheckBox cb4;
-    private CheckBox cb5;
+//    private CheckBox cb1;
+//    private CheckBox cb2;
+//    private CheckBox cb3;
+//    private CheckBox cb4;
+//    private CheckBox cb5;
 
     private Bundle planInfo;
     private Button editTech;
     private Button generate;
+
+    private CheckBox cbButtonAll;
+    private SparseBooleanArray isChecked;
+    boolean flag;
+    private MyListAdapter adapter;
+    private ListView availableTechs;
+    private SparseBooleanArray checkedTech;
 
     private int retCode;
     private static final String TAG = ManagerLogin.class.getSimpleName();
@@ -89,25 +99,31 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
 
         planInfo=getIntent().getExtras();
 
-        cb1.setOnCheckedChangeListener(this);
-        cb2.setOnCheckedChangeListener(this);
-        cb3.setOnCheckedChangeListener(this);
-        cb4.setOnCheckedChangeListener(this);
-        cb5.setOnCheckedChangeListener(this);
+        adapter.notifyDataSetChanged();
+        adapter.setCheckedAllListener(this);
+        availableTechs.setAdapter(adapter);
+        for(int i=0;i<techs.size();i++){
+            isChecked.put(i,true);
+            MyListAdapter.setIsSelected(isChecked);
+        }
+
+
         editTech.setOnClickListener(this);
         generate.setOnClickListener(this);
 
     }
 
     private void initialize() {
-        cb1=(CheckBox)findViewById(R.id.cb1);
-        cb2=(CheckBox)findViewById(R.id.cb2);
-        cb3=(CheckBox)findViewById(R.id.cb3);
-        cb4=(CheckBox)findViewById(R.id.cb4);
-        cb5=(CheckBox)findViewById(R.id.cb5);
         techs=new ArrayList<>();
         tasks=new ArrayList<>();
         chosenTechs=new ArrayList<>();
+
+        cbButtonAll=(CheckBox)findViewById(R.id.cb_all_button);
+        isChecked=new SparseBooleanArray();
+        adapter=new MyListAdapter(techs,this);
+        availableTechs=(ListView)findViewById(R.id.availableTechs);
+        checkedTech=new SparseBooleanArray();
+
 
         editTech=(Button)findViewById(R.id.editTech);
         generate=(Button)findViewById(R.id.generate);
@@ -134,6 +150,11 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                 break;
             case R.id.generate:
                 Intent intent2=new Intent(ScheduleStep3.this,ScheduleResult.class);
+                for(int i=0;i<techs.size();i++){
+                    if(checkedTech.valueAt(i)){
+                        chosenTechs.add(techs.get(i));
+                    }
+                }
 
                 planInfo.putInt("numOfTask",taskNum);
                 planInfo.putInt("numOfChosenTech",techNum);
@@ -173,58 +194,12 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                         Toast.makeText(ScheduleStep3.this,"Cannot find available technicians",Toast.LENGTH_SHORT).show();
                     }
 
-                    if(jsonObject.getString("techId1")!=null){
-                        cb1.setVisibility(View.VISIBLE);
-                        cb1.setText(jsonObject.getString("techName1"));
+                    for(int i=1;i<techNum+1;i++){
                         TechnicianInfo t=new TechnicianInfo();
-                        t.setId(1);
-                        t.setFirstName(jsonObject.getString("techName1"));
-                        t.setSkillLevel(Integer.parseInt(jsonObject.getString("skillLevel1")));
-                        t.setWorkHour(jsonObject.getInt("workHour1"));
-                        techs.add(t);
-                    }
-
-                    if(jsonObject.getString("techId2")!=null){
-                        cb2.setVisibility(View.VISIBLE);
-                        cb2.setText(jsonObject.getString("techName2"));
-                        TechnicianInfo t=new TechnicianInfo();
-                        t.setId(2);
-                        t.setFirstName(jsonObject.getString("techName2"));
-                        t.setSkillLevel(jsonObject.getInt("skillLevel2"));
-                        t.setWorkHour(jsonObject.getInt("workHour2"));
-                        techs.add(t);
-                    }
-
-                    if(jsonObject.getString("techId3")!=null){
-                        cb3.setVisibility(View.VISIBLE);
-                        cb3.setText(jsonObject.getString("techName3"));
-                        TechnicianInfo t=new TechnicianInfo();
-                        t.setId(3);
-                        t.setFirstName(jsonObject.getString("techName3"));
-                        t.setSkillLevel(jsonObject.getInt("skillLevel3"));
-                        t.setWorkHour(jsonObject.getInt("workHour3"));
-                        techs.add(t);
-                    }
-
-                    if(jsonObject.getString("techId4")!=null){
-                        cb4.setVisibility(View.VISIBLE);
-                        cb4.setText(jsonObject.getString("techName4"));
-                        TechnicianInfo t=new TechnicianInfo();
-                        t.setId(4);
-                        t.setFirstName(jsonObject.getString("techName4"));
-                        t.setSkillLevel(jsonObject.getInt("skillLevel4"));
-                        t.setWorkHour(jsonObject.getInt("workHour4"));
-                        techs.add(t);
-                    }
-
-                    if(jsonObject.getString("techId5")!=null){
-                        cb5.setVisibility(View.VISIBLE);
-                        cb5.setText(jsonObject.getString("techName5"));
-                        TechnicianInfo t=new TechnicianInfo();
-                        t.setId(5);
-                        t.setFirstName(jsonObject.getString("techName5"));
-                        t.setSkillLevel(jsonObject.getInt("skillLevel5"));
-                        t.setWorkHour(jsonObject.getInt("workHour5"));
+                        t.setId(i);
+                        t.setFirstName(jsonObject.getString("techName"+i));
+                        t.setSkillLevel(Integer.parseInt(jsonObject.getString("skillLevel"+i)));
+                        t.setWorkHour(jsonObject.getInt("workHour"+i));
                         techs.add(t);
                     }
 
@@ -246,4 +221,46 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
         }
     };
 
+    @Override
+    public void CheckAll(SparseBooleanArray checkall) {
+
+        if (checkall.indexOfValue(false) < 0) {
+                if (!cbButtonAll.isChecked()) {
+                    this.flag = false;
+                    cbButtonAll.setChecked(true);
+                }                                   //if all the checkbox is selected, the select all button should be set to true.
+            } else if (checkall.indexOfValue(false) >= 0 && checkall.indexOfValue(true) >= 0) {
+                if (cbButtonAll.isChecked()) {
+                    this.flag = true;
+                    cbButtonAll.setChecked(false);
+                }                                   //if some of the checkbox is true, some is false, the selct all button will be set to false.
+            }
+        checkedTech=checkall;
+    }
+
+    /**
+     * Handle the Select All checkbox
+     * @param v
+     */
+    public void allSelect(View v){
+        Log.d("click","clicked");
+        if(cbButtonAll.isChecked()){
+            flag=true;
+        }else {
+            flag=false;
+        }
+
+        if(flag){
+            for(int i=0;i<techs.size();i++){
+                isChecked.put(i,true);
+                MyListAdapter.setIsSelected(isChecked);
+            }
+        }else{
+            for(int i=0;i<techs.size();i++){
+                isChecked.put(i,false);
+                MyListAdapter.setIsSelected(isChecked);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
 }
