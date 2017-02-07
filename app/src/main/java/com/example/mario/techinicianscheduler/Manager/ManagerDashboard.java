@@ -71,6 +71,9 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
         requestQueue.add(stringRequest);
 
+        manageTask.setOnClickListener(this);
+        manageTask.setOnClickListener(this);
+
 
 
     }
@@ -100,6 +103,19 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
+            case R.id.manageTask:
+                Intent intent1=new Intent(ManagerDashboard.this,ManageTasks.class);
+                Bundle bundle1=new Bundle();
+                bundle1.putParcelableArrayList("availableTask",tasks);
+                intent1.putExtras(bundle1);
+                startActivity(intent1);
+                break;
+            case R.id.manageTech:
+                Intent intent2=new Intent(ManagerDashboard.this,ManageTechnicians.class);
+                Bundle bundle2=new Bundle();
+                bundle2.putParcelableArrayList("availableTechnician",techs);
+                intent2.putExtras(bundle2);
+                startActivity(intent2);
         }
     }
 
@@ -122,15 +138,14 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                         for(int i=1;i<taskNum+1;i++){
                             Task task=new Task();
                             task.setId(i);
+                            task.setName(jsonObject.getString("taskName"+i));
+                            task.setDescription(jsonObject.getString("taskDescription"+i));
                             task.setSkillRequirement(Integer.parseInt(jsonObject.getString("taskSkill"+i)));
                             task.setDuration(Integer.parseInt(jsonObject.getString("taskDuration"+i)));
-                            if(jsonObject.getString("taskStatus"+i).equals("false")){
-                                task.setFinished(false);
-                            }else {
-                                task.setFinished(true);
-                            }
+                            task.setFinished(jsonObject.getString("taskStatus"+i));
                             task.setStationName(jsonObject.getString("stationName"+i));
                             task.setPosition(new LatLng(Double.parseDouble(jsonObject.getString("stationLat"+i)),Double.parseDouble(jsonObject.getString("stationLong"+i))));
+
                             tasks.add(task);
                         }
                     }
@@ -153,9 +168,8 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }else {
-                Toast.makeText(ManagerDashboard.this,"Cannot find available technicians",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ManagerDashboard.this,"Cannot find relate information !",Toast.LENGTH_SHORT).show();
             }
         }
     };

@@ -16,15 +16,25 @@ public class Task implements Parcelable {
     private LatLng position;
     private String stationName;
     private String stationId;
-    private Boolean finished;
+    private String finished;
+    private String name;
+    private String description;
 
-    public Task(Parcel in) {
+
+    protected Task(Parcel in) {
         id = in.readInt();
         skillRequirement = in.readInt();
         duration = in.readInt();
         position = in.readParcelable(LatLng.class.getClassLoader());
         stationName = in.readString();
         stationId = in.readString();
+        finished = in.readString();
+        name = in.readString();
+        description = in.readString();
+    }
+
+    public Task(){
+
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>() {
@@ -39,10 +49,6 @@ public class Task implements Parcelable {
         }
     };
 
-    public Task() {
-
-    }
-
     public int getId() {
         return id;
     }
@@ -55,8 +61,8 @@ public class Task implements Parcelable {
         return skillRequirement;
     }
 
-    public void setSkillRequirement(int skill_requirement) {
-        this.skillRequirement = skill_requirement;
+    public void setSkillRequirement(int skillRequirement) {
+        this.skillRequirement = skillRequirement;
     }
 
     public int getDuration() {
@@ -91,6 +97,30 @@ public class Task implements Parcelable {
         this.stationId = stationId;
     }
 
+    public String getFinished() {
+        return finished;
+    }
+
+    public void setFinished(String finished) {
+        this.finished = finished;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -104,13 +134,8 @@ public class Task implements Parcelable {
         parcel.writeParcelable(position, i);
         parcel.writeString(stationName);
         parcel.writeString(stationId);
-    }
-
-    public Boolean getFinished() {
-        return finished;
-    }
-
-    public void setFinished(Boolean finished) {
-        this.finished = finished;
+        parcel.writeString(finished);
+        parcel.writeString(name);
+        parcel.writeString(description);
     }
 }

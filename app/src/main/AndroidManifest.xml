@@ -53,6 +53,7 @@
         <activity
             android:name=".Technician.TechnicianRoute"
             android:label="@string/title_activity_technician_route" />
+        <activity android:name=".Manager.ManageTasks"></activity>
     </application>
 
 </manifest>
