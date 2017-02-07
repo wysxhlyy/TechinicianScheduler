@@ -8,7 +8,6 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener, MyListAdapter.CheckedAllListener {
+public class ScheduleStep3 extends AppCompatActivity implements View.OnClickListener, MyListAdapter.CheckedAllListener {
 
 //    private CheckBox cb1;
 //    private CheckBox cb2;
@@ -62,6 +61,7 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
     private ArrayList<Task> tasks;
     private int taskNum=0;
 
+    private ArrayList<TechnicianInfo> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +69,8 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
         initialize();
 
         Bundle bundle=getIntent().getExtras();
+        planInfo=getIntent().getExtras();
+
         taskNum=bundle.getInt("numOfTasks");
         for(int i=1;i<4;i++){
             String[] split=bundle.getString("task"+i).split(",");
@@ -97,15 +99,21 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
 
         requestQueue.add(stringRequest);
 
-        planInfo=getIntent().getExtras();
 
-        adapter.notifyDataSetChanged();
+//        list = new ArrayList<>();
+//        for (int i = 0; i < 4; i++)
+//        {
+//            TechnicianInfo test = new TechnicianInfo();
+//            test.setFirstName("sister" + i);
+//            list.add(test);
+//        }
+//
+//        adapter = new MyListAdapter(list,this);
+
+        adapter=new MyListAdapter(techs,this);
         adapter.setCheckedAllListener(this);
         availableTechs.setAdapter(adapter);
-        for(int i=0;i<techs.size();i++){
-            isChecked.put(i,true);
-            MyListAdapter.setIsSelected(isChecked);
-        }
+
 
 
         editTech.setOnClickListener(this);
@@ -120,25 +128,12 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
 
         cbButtonAll=(CheckBox)findViewById(R.id.cb_all_button);
         isChecked=new SparseBooleanArray();
-        adapter=new MyListAdapter(techs,this);
         availableTechs=(ListView)findViewById(R.id.availableTechs);
         checkedTech=new SparseBooleanArray();
 
 
         editTech=(Button)findViewById(R.id.editTech);
         generate=(Button)findViewById(R.id.generate);
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        if(isChecked){
-            for(int i=0;i<techs.size();i++){
-                if(techs.get(i).getFirstName().equals(compoundButton.getText().toString())){
-                    chosenTechs.add(techs.get(i));
-                    techNum++;
-                }
-            }
-        }
     }
 
     @Override
@@ -153,6 +148,7 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                 for(int i=0;i<techs.size();i++){
                     if(checkedTech.valueAt(i)){
                         chosenTechs.add(techs.get(i));
+                        techNum++;
                     }
                 }
 
@@ -189,11 +185,9 @@ public class ScheduleStep3 extends AppCompatActivity implements CompoundButton.O
                         Log.d("latitude"+i,jsonObject.getString("stationLat"+i));
                     }
 
-
                     if(techNum==0){
                         Toast.makeText(ScheduleStep3.this,"Cannot find available technicians",Toast.LENGTH_SHORT).show();
                     }
-
                     for(int i=1;i<techNum+1;i++){
                         TechnicianInfo t=new TechnicianInfo();
                         t.setId(i);

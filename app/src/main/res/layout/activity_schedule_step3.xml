@@ -25,9 +25,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cb_all_button"
-        android:checked="false"
-        android:text="Select All"
+        android:layout_marginTop="20dp"
+        android:text="Select All the Technicians"
         android:gravity="center_vertical"
+        android:layout_marginLeft="10dp"
         android:onClick="allSelect"
         />
 
