@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.mario.techinicianscheduler.Manager.ScheduleStep3"
+    tools:context="com.example.mario.techinicianscheduler.Manager.chooseTechnician"
     android:orientation="vertical"
     >
 
@@ -21,6 +21,8 @@
         android:layout_gravity="center"
     />
 
+
+
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +32,16 @@
         android:gravity="center_vertical"
         android:layout_marginLeft="10dp"
         android:onClick="allSelect"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Skill Level                    name"
+        android:textColor="@color/myBlack"
+        android:textSize="20dp"
+        android:layout_marginLeft="80dp"
+
         />
 
     <ListView

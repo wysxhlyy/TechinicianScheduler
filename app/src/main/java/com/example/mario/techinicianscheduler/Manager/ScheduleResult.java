@@ -24,9 +24,7 @@ public class ScheduleResult extends AppCompatActivity {
     private TextView getPlanInfo;
     private String showData="";
     private ArrayList<TechnicianInfo> chosenTechs;
-    private ArrayList<Task> tasks;
-    private int numOfTasks;
-    private int chosenTechNum;
+    private ArrayList<Task> chosentasks;
     private ArrayList<Task> sortedTask;
     private ArrayList<TechnicianInfo> sortedTech;
     private LatLng startEnd=new LatLng(37.331629,-121.8923151);
@@ -48,16 +46,13 @@ public class ScheduleResult extends AppCompatActivity {
         initialize();
 
 
-        Bundle planInfo=getIntent().getExtras();
-        chosenTechs= planInfo.getParcelableArrayList("chosenTech");
-        tasks=planInfo.getParcelableArrayList("addedTask");
+        Bundle managetInfo=getIntent().getExtras();
+        chosenTechs= managetInfo.getParcelableArrayList("chosenTech");
+        chosentasks=managetInfo.getParcelableArrayList("chosenTask");
 
 
         sortTaskBySkill();
         sortTechnicianBySkill();
-        numOfTasks=planInfo.getInt("numOfTask");
-        chosenTechNum=planInfo.getInt("numOfChosenTech");
-
 
         basicSchedule();
         initialCost=calculateCost(initialResult);
@@ -166,7 +161,7 @@ public class ScheduleResult extends AppCompatActivity {
      */
     private void showScheduleInfo() {
         showData="";
-        showData+="number of tasks:"+numOfTasks+", number of technicians:"+chosenTechNum+"\n";
+        showData+="number of tasks:"+chosentasks.size()+", number of technicians:"+chosenTechs.size()+"\n";
 
         for(int i=0;i<sortedTask.size();i++){
             Task t=sortedTask.get(i);
@@ -205,7 +200,7 @@ public class ScheduleResult extends AppCompatActivity {
 
     private void initialize() {
         chosenTechs=new ArrayList<>();
-        tasks=new ArrayList<>();
+        chosentasks=new ArrayList<>();
         getPlanInfo=(TextView)findViewById(R.id.getPlanInfo);
         initialResult=new HashMap<>();
         improveResult=new HashMap<>();
@@ -291,17 +286,17 @@ public class ScheduleResult extends AppCompatActivity {
     private void sortTaskBySkill() {
         int minSkillRequire=100;
         int minCount=0;
-        if(tasks.size()>0){
-            for(int i=0;i<tasks.size();i++){
-                int skillRequire=tasks.get(i).getSkillRequirement();
+        if(chosentasks.size()>0){
+            for(int i=0;i<chosentasks.size();i++){
+                int skillRequire=chosentasks.get(i).getSkillRequirement();
                 if(skillRequire<=minSkillRequire){
                     minSkillRequire=skillRequire;
                     minCount=i;
                 }
             }
-            Task t=tasks.get(minCount);
+            Task t=chosentasks.get(minCount);
             sortedTask.add(t);
-            tasks.remove(minCount);
+            chosentasks.remove(minCount);
             sortTaskBySkill();
         }
     }

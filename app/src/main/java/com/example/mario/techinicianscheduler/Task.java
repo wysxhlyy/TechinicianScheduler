@@ -16,6 +16,7 @@ public class Task implements Parcelable {
     private LatLng position;
     private String stationName;
     private String stationId;
+    private Boolean finished;
 
     public Task(Parcel in) {
         id = in.readInt();
@@ -103,5 +104,13 @@ public class Task implements Parcelable {
         parcel.writeParcelable(position, i);
         parcel.writeString(stationName);
         parcel.writeString(stationId);
+    }
+
+    public Boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(Boolean finished) {
+        this.finished = finished;
     }
 }

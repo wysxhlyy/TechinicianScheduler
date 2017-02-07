@@ -38,15 +38,15 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
-        android:id="@+id/managerSettings"
+        android:text="manageTask"
+        android:id="@+id/manageTask"
         />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Quit"
-        android:id="@+id/managerQuit"
+        android:text="Settings"
+        android:id="@+id/managerSettings"
         />
 
 </LinearLayout>

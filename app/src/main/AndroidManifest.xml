@@ -33,9 +33,8 @@
         <activity android:name=".Settings" />
         <activity android:name=".Manager.ManageTechnicians" />
         <activity android:name=".Technician.TechnicianTasks" />
-        <activity android:name=".Manager.ScheduleStep1" />
-        <activity android:name=".Manager.ScheduleStep2" />
-        <activity android:name=".Manager.ScheduleStep3" />
+        <activity android:name=".Manager.chooseTask" />
+        <activity android:name=".Manager.chooseTechnician" />
         <activity android:name=".Manager.ScheduleResult" />
         <activity android:name=".DBHelper" />
         <activity android:name=".Technician.TechnicianLogin" />
@@ -53,7 +52,7 @@
 
         <activity
             android:name=".Technician.TechnicianRoute"
-            android:label="@string/title_activity_technician_route"></activity>
+            android:label="@string/title_activity_technician_route" />
     </application>
 
 </manifest>

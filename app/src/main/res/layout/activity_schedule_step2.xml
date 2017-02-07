@@ -8,211 +8,46 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.mario.techinicianscheduler.Manager.ScheduleStep2"
+    tools:context="com.example.mario.techinicianscheduler.Manager.chooseTask"
     android:orientation="vertical"
     >
 
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="100dp"
-        >
+        android:textColor="@color/myBlack"
+        android:text="Tasks"
+        android:textSize="30dp"
+        android:layout_gravity="center"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Skill Level"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="Station ID"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="Duration"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="40dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="task1"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/skillLevel1"
-            android:layout_marginLeft="70dp"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/stationId1"
-            android:layout_marginLeft="30dp"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/duration1"
-            android:layout_marginLeft="30dp"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        >
+        android:id="@+id/cb_all_button2"
+        android:layout_marginTop="20dp"
+        android:text="Select All the Tasks"
+        android:focusable="false"
+        android:gravity="center_vertical"
+        android:onClick="allSelectTask"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="task2"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/skillLevel2"
-            android:layout_marginLeft="70dp"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/stationId2"
-            android:layout_marginLeft="30dp"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/duration2"
-            android:layout_marginLeft="30dp"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        >
+        android:textSize="18dp"
+        android:layout_marginLeft="50dp"
+        android:textColor="@color/myBlack"
+        android:text="Task ID   Skill               Location"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="task3"
-            />
 
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/skillLevel3"
-            android:layout_marginLeft="70dp"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/stationId3"
-            android:layout_marginLeft="30dp"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/duration3"
-            android:layout_marginLeft="30dp"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <ListView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="task4"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/skillLevel4"
-            android:layout_marginLeft="70dp"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/stationId4"
-            android:layout_marginLeft="30dp"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/duration4"
-            android:layout_marginLeft="30dp"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="task5"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/skillLevel5"
-            android:layout_marginLeft="70dp"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/stationId5"
-            android:layout_marginLeft="30dp"
-            />
-
-        <EditText
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/duration5"
-            android:layout_marginLeft="30dp"
-            />
-
-    </LinearLayout>
+        android:layout_height="300dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/availableTasks"
+        ></ListView>
 
 
     <LinearLayout

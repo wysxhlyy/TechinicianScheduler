@@ -17,21 +17,21 @@ import java.util.List;
  * Created by mario on 2017/2/7.
  */
 
-public class MyListAdapter extends BaseAdapter {
-    List<TechnicianInfo> list = new ArrayList<TechnicianInfo>();
+public class TaskListAdapter extends BaseAdapter {
+    List<Task> list = new ArrayList<Task>();
     private static SparseBooleanArray isSelected;
     Context context;
-    HolderView holderView = null;
+    TaskListAdapter.HolderView holderView = null;
 
 
-    CheckedAllListener mListener;
+    TaskListAdapter.CheckedAllListener mListener;
 
-    public void setCheckedAllListener(CheckedAllListener listener) {
+    public void setCheckedAllListener(TaskListAdapter.CheckedAllListener listener) {
         mListener = listener;
     }
 
 
-    public MyListAdapter(List<TechnicianInfo> list, Context context) {
+    public TaskListAdapter(List<Task> list, Context context) {
         this.context = context;
         this.list = list;
         isSelected = new SparseBooleanArray();
@@ -57,7 +57,7 @@ public class MyListAdapter extends BaseAdapter {
     }
 
     public static void setIsSelected(SparseBooleanArray isSelected) {
-        MyListAdapter.isSelected = isSelected;
+        TaskListAdapter.isSelected = isSelected;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class MyListAdapter extends BaseAdapter {
     }
 
     @Override
-    public TechnicianInfo getItem(int position) {
+    public Task getItem(int position) {
         // TODO Auto-generated method stub
         return list.get(position);
     }
@@ -83,30 +83,34 @@ public class MyListAdapter extends BaseAdapter {
         // TODO Auto-generated method stub
         View view = convertView;
         if (view == null) {
-            holderView = new HolderView();
+            holderView = new TaskListAdapter.HolderView();
             //get the source file
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.listview_item, parent, false);
-            holderView.cb_button = (CheckBox)view.findViewById(R.id.cb_button);
-            holderView.tv_name = (TextView)view.findViewById(R.id.tv_name);
-            holderView.tech_skill=(TextView)view.findViewById(R.id.tech_skill);
+            view = inflater.inflate(R.layout.listview_task, parent, false);
+            holderView.cb_task = (CheckBox)view.findViewById(R.id.cb_task);
+            holderView.task_id = (TextView)view.findViewById(R.id.task_id);
+            holderView.task_skill=(TextView)view.findViewById(R.id.task_skill);
+            holderView.task_position=(TextView)view.findViewById(R.id.task_position);
+
             view.setTag(holderView);
 
         }
         else {
-            holderView = (HolderView)view.getTag();
+            holderView = (TaskListAdapter.HolderView)view.getTag();
         }
 
-        final TechnicianInfo item = getItem(position);
+        final Task item = getItem(position);
         if (item != null) {
-            holderView.tv_name.setText(item.getFirstName());                            //set Text for the checkbox;
-            holderView.cb_button.setChecked(isSelected.get(position));
-            holderView.tech_skill.setText(item.getSkillLevel()+"");
+            holderView.task_id.setText("task"+item.getId());                           //set Text for the checkbox;
+            holderView.task_skill.setText(item.getSkillRequirement()+"");
+            holderView.task_position.setText(item.getStationName());
+            holderView.cb_task.setChecked(isSelected.get(position));
+
         }
         /**
          * handle the onclick of each checkbox
          */
-        holderView.cb_button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holderView.cb_task.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -126,9 +130,10 @@ public class MyListAdapter extends BaseAdapter {
 
     class HolderView
     {
-        private CheckBox cb_button;
-        private TextView tv_name;
-        private TextView tech_skill;
+        private CheckBox cb_task;
+        private TextView task_id;
+        private TextView task_position;
+        private TextView task_skill;
     }
 
     /**
@@ -142,5 +147,4 @@ public class MyListAdapter extends BaseAdapter {
         void CheckAll(SparseBooleanArray checkall);
 
     }
-
 }
