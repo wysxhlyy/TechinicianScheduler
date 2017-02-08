@@ -28,7 +28,6 @@ public class ScheduleResult extends AppCompatActivity {
     private ArrayList<Task> sortedTask;
     private ArrayList<TechnicianInfo> sortedTech;
     private LatLng startEnd=new LatLng(37.331629,-121.8923151);
-    private ArrayList<Task> unassignedTask;
     private Double initialCost;
     private Double improveCost=10000000.0;
 
@@ -77,51 +76,96 @@ public class ScheduleResult extends AppCompatActivity {
      */
     private void hillClimbing(Map<Task,TechnicianInfo> schedule) {
         double originCost=calculateCost(schedule);
-        ArrayList<Task> tasks=new ArrayList<>();
-        tasks.addAll(schedule.keySet());
-        ArrayList<TechnicianInfo> techs=new ArrayList<>();
-        techs.addAll(schedule.values());
+        Map<Task,TechnicianInfo> newNeighbor=new HashMap<>();
 
-        //generate random number i,j
-
-        int i= (int) Math.round(Math.random()*(tasks.size()-1));
-        int j= (int) Math.round(Math.random()*(tasks.size()-1));
         int count=0;
+        boolean find=false;
 
-
-        while (i==j||tasks.get(i).getSkillRequirement()<=techs.get(j).getSkillLevel()&&tasks.get(j).getSkillRequirement()<=techs.get(i).getSkillLevel()){
-            i= (int) Math.round(Math.random()*(tasks.size()-1));
-            j= (int) Math.round(Math.random()*(tasks.size()-1));
-            if(count>=50){
+        while (count<500){
+            count++;
+            newNeighbor=swapToFindNeighbor(schedule);
+            if(calculateCost(newNeighbor)<=originCost){
+                find=true;
+                hillClimbing(newNeighbor);
                 break;
-                //停止hill climbing
-            }else {
-                count++;
             }
         }
 
-          //如果两者可以交换
-        Map<Task,TechnicianInfo> newResult=new HashMap<>();
-        newResult.putAll(schedule);
-        newResult.remove(techs.get(i));
-        newResult.remove(techs.get(j));
-        newResult.put(tasks.get(i),techs.get(j));
-        newResult.put(tasks.get(j),techs.get(i));
-
-        double improvedcost= calculateCost(newResult);
-        Log.d("improved Cost","improvedCost: "+improveCost+", i:"+i+",j :"+j);
-        if(improvedcost<originCost){
-            hillClimbing(newResult);
-        }else {
-            hillClimbing(schedule);
+        if(!find){
+            int count2=0;
+            while(count2<500){
+                count2++;
+                newNeighbor=assignToFindNeighbor(schedule);
+                if(calculateCost(newNeighbor)<=originCost){
+                    find=true;
+                    hillClimbing(newNeighbor);
+                    break;
+                }
+            }
         }
+
+        if(!find){
+            improveResult=schedule;
+        }
+
+
     }
+
+
+    private Map<Task,TechnicianInfo> swapToFindNeighbor(Map<Task,TechnicianInfo> originSchedule){
+        Map<Task,TechnicianInfo> neighbor=new HashMap<>();
+        ArrayList<Task> tasks=new ArrayList<>();
+        tasks.addAll(originSchedule.keySet());
+        ArrayList<TechnicianInfo> techs=new ArrayList<>();
+        techs.addAll(originSchedule.values());
+
+        int i= (int) Math.round(Math.random()*(originSchedule.size()-1));
+        int j= (int) Math.round(Math.random()*(originSchedule.size()-1));
+
+        if(i!=j&&techs.get(i)!=techs.get(j)&&tasks.get(i).getSkillRequirement()<=techs.get(j).getSkillLevel()&&tasks.get(j).getSkillRequirement()<=techs.get(i).getSkillLevel()){
+            Map<Task,TechnicianInfo> newResult=new HashMap<>();
+            newResult.putAll(originSchedule);
+            newResult.put(tasks.get(i),techs.get(j));
+            newResult.put(tasks.get(j),techs.get(i));
+            if(calculateWorkHour(newResult,techs.get(j))<=techs.get(j).getWorkHour()&&calculateWorkHour(newResult,techs.get(i))<=techs.get(i).getWorkHour()){
+                neighbor.putAll(newResult);
+            }
+        }
+
+        return neighbor;
+    }
+
+    private Map<Task,TechnicianInfo> assignToFindNeighbor(Map<Task,TechnicianInfo> originSchedule){
+        Map<Task,TechnicianInfo> neighbor=new HashMap<>();
+        ArrayList<Task> tasks=new ArrayList<>();
+        tasks.addAll(originSchedule.keySet());
+        ArrayList<TechnicianInfo> techs=new ArrayList<>();
+        techs.addAll(originSchedule.values());
+
+        int i= (int) Math.round(Math.random()*(originSchedule.size()-1));
+        int j= (int) Math.round(Math.random()*(originSchedule.size()-1));
+
+        if(i!=j&&techs.get(i)!=techs.get(j)&&tasks.get(i).getSkillRequirement()<=techs.get(j).getSkillLevel()){
+            Map<Task,TechnicianInfo> newResult=new HashMap<>();
+            newResult.putAll(originSchedule);
+            newResult.put(tasks.get(i),techs.get(j));
+            if(calculateWorkHour(newResult,techs.get(j))<=techs.get(j).getWorkHour()){
+                neighbor.putAll(newResult);
+            }
+        }
+        return neighbor;
+    }
+
+
+
+
 
     /**
      * Calculate the cost after the schedule.
      */
     private Double calculateCost(Map<Task,TechnicianInfo> schedule) {
         ArrayList<Task> availableTask= new ArrayList<>();
+        ArrayList<Task> unassignedTask=new ArrayList<>();
         unassignedTask.addAll(sortedTask);
         availableTask.addAll(schedule.keySet());
         double maxCost=0;
@@ -165,30 +209,34 @@ public class ScheduleResult extends AppCompatActivity {
 
         for(int i=0;i<sortedTask.size();i++){
             Task t=sortedTask.get(i);
-            showData+="task"+i+":\n task skill requirement: "+t.getSkillRequirement()+", station Name: "+t.getStationName() + ", task position: "+t.getPosition().latitude+","+t.getPosition().longitude+", task Duration: "+t.getDuration()+"\n";
+            showData+="task"+t.getId()+":\n skill req: "+t.getSkillRequirement()+",Duration: "+t.getDuration()+"\n";
         }
 
         for(int i=0;i<sortedTech.size();i++){
             TechnicianInfo t=sortedTech.get(i);
-            showData+="technician"+i+":\n technician name: "+t.getFirstName()+", technician Skill"+t.getSkillLevel()+", technician work hour:"+t.getWorkHour()+"\n";
+            showData+="technician"+t.getId()+":\n name: "+t.getFirstName()+",Skill level"+t.getSkillLevel()+",work hour:"+t.getWorkHour()+"\n";
         }
+
+        showData+="\n\n";
 
 
         ArrayList<Task> availableTask= new ArrayList<>();
         availableTask.addAll(initialResult.keySet());
 
         for(int i=0;i<availableTask.size();i++){
-            showData+="task"+availableTask.get(i).getSkillRequirement()+":"+initialResult.get(availableTask.get(i)).getFirstName()+"\n";
+            showData+="task"+availableTask.get(i).getId()+",skill:"+availableTask.get(i).getSkillRequirement()+":"+initialResult.get(availableTask.get(i)).getFirstName()+"\n";
         }
 
-        showData+="cost:"+initialCost.shortValue();
+        showData+="cost:"+initialCost.shortValue()+"\n";
 
         if(!improveResult.isEmpty()){
             ArrayList<Task> improved=new ArrayList<>();
             improved.addAll(improveResult.keySet());
             for(int j=0;j<improved.size();j++){
-                showData+="task"+improved.get(j).getSkillRequirement()+":"+improveResult.get(improved.get(j)).getFirstName()+"\n";
+                showData+="task"+improved.get(j).getId()+",skill:"+improved.get(j).getSkillRequirement()+":"+improveResult.get(improved.get(j)).getFirstName()+"\n";
             }
+            improveCost=calculateCost(improveResult);
+            showData+="cost:"+improveCost.shortValue()+"\n";
         }
 
 
@@ -206,7 +254,6 @@ public class ScheduleResult extends AppCompatActivity {
         improveResult=new HashMap<>();
         sortedTask=new ArrayList<>();
         sortedTech=new ArrayList<>();
-        unassignedTask=new ArrayList<>();
         hillClimbing=(Button)findViewById(R.id.hillClimbing);
     }
 
@@ -252,7 +299,27 @@ public class ScheduleResult extends AppCompatActivity {
                 }
             }
         }
+    }
 
+
+    private float calculateWorkHour(Map<Task,TechnicianInfo> schedule,TechnicianInfo tech){
+        ArrayList<Task> tasks=new ArrayList<>();
+        ArrayList<Task> scheduledTask=new ArrayList<>();
+        scheduledTask.addAll(schedule.keySet());
+        for(int i=0;i<schedule.size();i++){
+            if(schedule.get(scheduledTask.get(i))==tech){
+                tasks.add(scheduledTask.get(i));
+            }
+        }
+
+        float cost=0;
+        for(int i=0;i<tasks.size();i++){
+            cost+=calculateDur(tasks.get(i).getSkillRequirement(),tech.getSkillLevel(),tasks.get(i).getDuration());
+        }
+        float dist=calculateTravelTime(tasks);
+        cost+=(dist/1000)*2;
+
+        return cost;
 
     }
 
