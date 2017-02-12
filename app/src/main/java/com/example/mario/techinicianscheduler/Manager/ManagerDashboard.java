@@ -37,7 +37,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     private Button schedule;
     private Button manageTech;
     private Button manageTask;
-    private Button Settings;
+    private Button settings;
 
 
     private int retCode;
@@ -48,6 +48,8 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     private ArrayList<TechnicianInfo> techs;
     private ArrayList<Task> tasks;
     private int taskNum=0;
+
+    private static int ACTIVITY_MANAGER_SETTING=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
         manageTask.setOnClickListener(this);
         manageTech.setOnClickListener(this);
+        settings.setOnClickListener(this);
 
 
 
@@ -88,7 +91,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         schedule=(Button)findViewById(R.id.schedule);
         manageTech=(Button)findViewById(R.id.manageTech);
         manageTask=(Button)findViewById(R.id.manageTask);
-        Settings=(Button)findViewById(R.id.managerSettings);
+        settings=(Button)findViewById(R.id.managerSettings);
 
         techs=new ArrayList<>();
         tasks=new ArrayList<>();
@@ -120,9 +123,21 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 bundle2.putParcelableArrayList("availableTechnician",techs);
                 intent2.putExtras(bundle2);
                 startActivity(intent2);
+                break;
+            case R.id.managerSettings:
+                Intent intent3=new Intent(ManagerDashboard.this,ManagerSetting.class);
+                intent3.putExtras(managerInfo);
+                startActivityForResult(intent3,ACTIVITY_MANAGER_SETTING);
+                break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==ACTIVITY_MANAGER_SETTING){
+            recreate();
+        }
+    }
 
     Response.Listener<String> listener=new Response.Listener<String>() {
         @Override

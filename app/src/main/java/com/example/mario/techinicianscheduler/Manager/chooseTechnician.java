@@ -37,7 +37,7 @@ public class chooseTechnician extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedule_step3);
+        setContentView(R.layout.activity_schedule_chooseTech);
         initialize();
 
         managerInfo=getIntent().getExtras();

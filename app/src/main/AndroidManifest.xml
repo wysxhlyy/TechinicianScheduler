@@ -30,7 +30,6 @@
         <activity android:name=".Manager.ManagerDashboard" />
         <activity android:name=".Technician.TechnicianDashboard" />
         <activity android:name=".SignUp" />
-        <activity android:name=".Settings" />
         <activity android:name=".Manager.ManageTechnicians" />
         <activity android:name=".Technician.TechnicianTasks" />
         <activity android:name=".Manager.chooseTask" />
@@ -56,8 +55,10 @@
         <activity android:name=".Manager.ManageTasks" />
         <activity android:name=".Manager.HandleTask.CreateTask" />
         <activity android:name=".Manager.HandleTask.DisplayTask" />
-        <activity android:name=".Manager.HandleTechnician.CreateTechnician" />
-        <activity android:name=".Manager.HandleTechnician.DisplayTechnician"></activity>
+        <activity android:name=".Manager.HandleTechnician.AddTechnician" />
+        <activity android:name=".Manager.HandleTechnician.DisplayTechnician" />
+        <activity android:name=".Manager.ManagerSetting" />
+        <activity android:name=".Technician.TechnicianSetting"></activity>
     </application>
 
 </manifest>

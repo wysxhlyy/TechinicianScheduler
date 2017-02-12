@@ -110,6 +110,7 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
                 editor.putString("username",username);
                 editor.putString("password",password);
                 editor.commit();
+                finish();
                 break;
             case R.id.managerSignUp:
                 Intent intent=new Intent(ManagerLogin.this, SignUp.class);
@@ -137,6 +138,11 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
                 Bundle bundle=new Bundle();
                 try {
                     bundle.putString("managerName",jsonObject.getString("firstName"));   //Get the JSON data.
+                    bundle.putString("managerEmail",jsonObject.getString("email"));
+                    bundle.putString("managerPhone",jsonObject.getString("phone"));
+                    bundle.putString("managerSurname",jsonObject.getString("surname"));
+                    bundle.putString("managerPass",jsonObject.getString("password"));
+                    bundle.putString("managerId",jsonObject.getString("m_id"));
 
                     SharedPreferences.Editor editor=getSharedPreferences("managerSession",MODE_PRIVATE).edit();
                     editor.putString("managerId",jsonObject.getString("m_id"));
