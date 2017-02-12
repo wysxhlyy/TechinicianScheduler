@@ -56,7 +56,12 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
         initialize();
 
-        username.setText("Welcome Back: "+ managerInfo.getString("managerName"));
+        if(getIntent().getExtras()!=null){
+            managerInfo=getIntent().getExtras();
+            username.setText("Welcome Back: "+ managerInfo.getString("managerName"));
+        }
+
+
         schedule.setOnClickListener(this);
 
 
@@ -84,7 +89,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         manageTech=(Button)findViewById(R.id.manageTech);
         manageTask=(Button)findViewById(R.id.manageTask);
         Settings=(Button)findViewById(R.id.managerSettings);
-        managerInfo=getIntent().getExtras();
 
         techs=new ArrayList<>();
         tasks=new ArrayList<>();
@@ -164,6 +168,8 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                             techs.add(t);
                         }
                     }
+
+
 
 
                 } catch (JSONException e) {

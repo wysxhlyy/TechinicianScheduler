@@ -1,11 +1,14 @@
 package com.example.mario.techinicianscheduler.Manager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.example.mario.techinicianscheduler.Manager.HandleTask.CreateTask;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.Task;
 
@@ -20,6 +23,9 @@ public class ManageTasks extends AppCompatActivity {
     private ListView taskListView;
     private SimpleAdapter dataAdapter;
     private ArrayList<Task> existTasks;
+    private Bundle managerInfo;
+
+    private static final int ACTIVITY_CREATE_TASK=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +33,8 @@ public class ManageTasks extends AppCompatActivity {
         setContentView(R.layout.activity_manage_tasks);
         initialize();
 
-        existTasks=getIntent().getExtras().getParcelableArrayList("availableTask");
+        managerInfo=getIntent().getExtras();
+        existTasks=managerInfo.getParcelableArrayList("availableTask");
         List<Map<String,Object>> list=new ArrayList<>();
         Map<String,Object> map=new HashMap<>();
 
@@ -46,10 +53,23 @@ public class ManageTasks extends AppCompatActivity {
         dataAdapter=new SimpleAdapter(this,list,R.layout.db_item_layout,new String[]{"id","name","duration"},new int[]{R.id.value1,R.id.value2,R.id.value3});
         taskListView.setAdapter(dataAdapter);
 
+        addNewTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(ManageTasks.this, CreateTask.class);
+                intent.putExtras(managerInfo);
+                startActivityForResult(intent,ACTIVITY_CREATE_TASK);
+            }
+        });
+
     }
 
     private void initialize() {
         addNewTask=(Button)findViewById(R.id.addNewTask);
         taskListView=(ListView)findViewById(R.id.taskListView);
+    }
+
+    protected void onActivityResult(int requestCode,int resultCode,Intent data){
+        recreate();
     }
 }
