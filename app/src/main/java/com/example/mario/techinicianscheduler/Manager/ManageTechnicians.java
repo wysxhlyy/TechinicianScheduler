@@ -1,11 +1,14 @@
 package com.example.mario.techinicianscheduler.Manager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.example.mario.techinicianscheduler.Manager.HandleTechnician.AddTechnician;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
 
@@ -20,6 +23,7 @@ public class ManageTechnicians extends AppCompatActivity {
     private Button addNewTech;
     private SimpleAdapter dataAdapter;
     private ArrayList<TechnicianInfo> existTechs;
+    private Bundle managerInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +31,8 @@ public class ManageTechnicians extends AppCompatActivity {
         setContentView(R.layout.activity_manage_technicians);
         initialize();
 
-        existTechs=getIntent().getExtras().getParcelableArrayList("availableTechnician");
+        managerInfo=getIntent().getExtras();
+        existTechs=managerInfo.getParcelableArrayList("availableTechnician");
         List<Map<String,Object>> list=new ArrayList<>();
         Map<String,Object> map=new HashMap<>();
 
@@ -45,6 +50,15 @@ public class ManageTechnicians extends AppCompatActivity {
         }
         dataAdapter=new SimpleAdapter(this,list,R.layout.db_item_layout,new String[]{"id","name","skillLevel"},new int[]{R.id.value1,R.id.value2,R.id.value3});
         techListView.setAdapter(dataAdapter);
+
+        addNewTech.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(ManageTechnicians.this, AddTechnician.class);
+                intent.putExtras(managerInfo);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initialize() {

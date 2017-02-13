@@ -104,7 +104,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         switch (view.getId()){
             case R.id.schedule:
                 Intent intent=new Intent(ManagerDashboard.this,chooseTask.class);
-                Bundle bundle=new Bundle();
+                Bundle bundle= managerInfo;
                 bundle.putParcelableArrayList("availableTechnician",techs);
                 bundle.putParcelableArrayList("availableTask",tasks);
                 intent.putExtras(bundle);
@@ -112,14 +112,14 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.manageTask:
                 Intent intent1=new Intent(ManagerDashboard.this,ManageTasks.class);
-                Bundle bundle1=new Bundle();
+                Bundle bundle1=managerInfo;
                 bundle1.putParcelableArrayList("availableTask",tasks);
                 intent1.putExtras(bundle1);
                 startActivity(intent1);
                 break;
             case R.id.manageTech:
                 Intent intent2=new Intent(ManagerDashboard.this,ManageTechnicians.class);
-                Bundle bundle2=new Bundle();
+                Bundle bundle2=managerInfo;
                 bundle2.putParcelableArrayList("availableTechnician",techs);
                 intent2.putExtras(bundle2);
                 startActivity(intent2);
@@ -165,6 +165,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                             task.setStationName(jsonObject.getString("stationName"+i));
                             task.setPosition(new LatLng(Double.parseDouble(jsonObject.getString("stationLat"+i)),Double.parseDouble(jsonObject.getString("stationLong"+i))));
 
+                            Log.d("task Name",task.getStationName());
                             tasks.add(task);
                         }
                     }

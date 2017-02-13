@@ -37,7 +37,7 @@ public class chooseTask extends AppCompatActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedule_chooseTask);
+        setContentView(R.layout.activity_schedule_choosetask);
 
         initialize();
         managerInfo=getIntent().getExtras();
@@ -56,6 +56,7 @@ public class chooseTask extends AppCompatActivity implements View.OnClickListene
         addTaskBtn.setOnClickListener(this);
         next2.setOnClickListener(this);
     }
+
 
     private void initialize() {
         tasks=new ArrayList<>();
