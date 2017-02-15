@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.example.mario.techinicianscheduler.Manager.HandleTechnician.AddTechnician;
+import com.example.mario.techinicianscheduler.Manager.HandleTechnician.DisplayTechnician;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
 
@@ -55,6 +57,20 @@ public class ManageTechnicians extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(ManageTechnicians.this, AddTechnician.class);
+                intent.putExtras(managerInfo);
+                startActivity(intent);
+            }
+        });
+
+        displayTech();
+    }
+
+    private void displayTech() {
+        techListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int myItemInt, long l) {
+                Intent intent=new Intent(ManageTechnicians.this, DisplayTechnician.class);
+                managerInfo.putInt("selectedTech",myItemInt);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
             }

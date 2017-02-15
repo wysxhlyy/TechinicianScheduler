@@ -77,11 +77,19 @@ public class chooseTask extends AppCompatActivity implements View.OnClickListene
                 break;
             case R.id.next2:
                 Intent intent=new Intent(chooseTask.this,chooseTechnician.class);
-                for(int i=0;i<tasks.size();i++){
-                    if(checkedTask.valueAt(i)){
+
+                if(cbButtonAll.isChecked()){
+                    for(int i=0;i<tasks.size();i++){
                         chosenTasks.add(tasks.get(i));
                     }
+                }else {
+                    for(int i=0;i<tasks.size();i++){
+                        if(checkedTask.valueAt(i)){
+                            chosenTasks.add(tasks.get(i));
+                        }
+                    }
                 }
+
                 managerInfo.putParcelableArrayList("chosenTask",chosenTasks);
                 intent.putExtras(managerInfo);
                 startActivity(intent);

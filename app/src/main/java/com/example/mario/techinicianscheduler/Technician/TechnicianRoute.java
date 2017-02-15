@@ -39,6 +39,7 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
     private ProgressDialog progressDialog;
     private List<Polyline> polylinePaths = new ArrayList<>();
     private int routeCount=0;
+    private Bundle techInfo;
 
 
     @Override
@@ -50,14 +51,13 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);//start map service
 
-        Bundle bundle=getIntent().getExtras();
-        recordPos=bundle.getParcelableArrayList("recordPos");
+        techInfo=getIntent().getExtras();
+        recordPos=techInfo.getParcelableArrayList("recordPos");
         orderedList=new ArrayList<LatLng>();
 
 
 
-       findShortestOrder();
-
+        findShortestOrder();
         routePlan();
 
         orderedListShow=(TextView)findViewById(R.id.orderedList);
@@ -67,6 +67,7 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
         improve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                routeCount=0;
                 kopt(orderedList);
 
                 String show="";
@@ -88,9 +89,11 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
 
 
         String show="";
-        for(int i=0;i<orderedList.size();i++){
+        show+="start:"+startEnd.latitude+","+startEnd.longitude+"\n";
+        for(int i=1;i<orderedList.size()-1;i++){
             show+="place"+i+":"+orderedList.get(i).latitude+","+orderedList.get(i).longitude+"\n";
         }
+        show+="End:"+startEnd.latitude+","+startEnd.longitude+"\n";
         show+="total Distance:"+calculateDistance(orderedList);
         orderedListShow.setText(show);
 

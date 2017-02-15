@@ -20,7 +20,6 @@ public class chooseTechnician extends AppCompatActivity implements View.OnClickL
 
 
     private Bundle managerInfo;
-    private Button editTech;
     private Button generate;
 
     private CheckBox cbButtonAll;
@@ -51,8 +50,6 @@ public class chooseTechnician extends AppCompatActivity implements View.OnClickL
         availableTechs.setDivider(null);
 
 
-
-        editTech.setOnClickListener(this);
         generate.setOnClickListener(this);
 
     }
@@ -67,22 +64,23 @@ public class chooseTechnician extends AppCompatActivity implements View.OnClickL
         checkedTech=new SparseBooleanArray();
 
 
-        editTech=(Button)findViewById(R.id.editTech);
         generate=(Button)findViewById(R.id.generate);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.editTech:
-                Intent intent=new Intent(chooseTechnician.this,ManageTechnicians.class);
-                startActivity(intent);
-                break;
             case R.id.generate:
                 Intent intent2=new Intent(chooseTechnician.this,ScheduleResult.class);
-                for(int i=0;i<techs.size();i++){
-                    if(checkedTech.valueAt(i)){
+                if(cbButtonAll.isChecked()){
+                    for(int i=0;i<techs.size();i++){
                         chosenTechs.add(techs.get(i));
+                    }
+                }else {
+                    for(int i=0;i<techs.size();i++){
+                        if(checkedTech.valueAt(i)){
+                            chosenTechs.add(techs.get(i));
+                        }
                     }
                 }
 

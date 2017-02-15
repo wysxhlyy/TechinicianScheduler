@@ -2,6 +2,7 @@ package com.example.mario.techinicianscheduler.Manager;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,9 +35,11 @@ public class ScheduleResult extends AppCompatActivity {
     private Double initialCost;
     private Double improveCost=10000000.0;
     private Double minimumCost=10000.0;
+    private Bundle managerInfo;
 
     private Button hillClimbing;
     private Button guidedLocalSearch;
+    private Button back;
 
     private Map<Task,TechnicianInfo> initialResult;
     private Map<Task,TechnicianInfo> improveResult;
@@ -54,7 +57,7 @@ public class ScheduleResult extends AppCompatActivity {
         initialize();
 
 
-        Bundle managerInfo=getIntent().getExtras();
+        managerInfo=getIntent().getExtras();
         chosenTechs= managerInfo.getParcelableArrayList("chosenTech");
         chosentasks=managerInfo.getParcelableArrayList("chosenTask");
 
@@ -86,6 +89,16 @@ public class ScheduleResult extends AppCompatActivity {
             }
         });
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(ScheduleResult.this,ManagerDashboard.class);
+                intent.putExtras(managerInfo);
+                startActivity(intent);
+            }
+        });
+
+
         showScheduleInfo();
 
     }
@@ -103,6 +116,7 @@ public class ScheduleResult extends AppCompatActivity {
         GLSresult=new HashMap<>();
         hillClimbing=(Button)findViewById(R.id.hillClimbing);
         guidedLocalSearch=(Button)findViewById(R.id.guidedLoacalSearch);
+        back=(Button)findViewById(R.id.backDashboard);
         penalty=new ArrayList<Integer>();
         penalty.add(0,0);
         penalty.add(1,0);
@@ -184,7 +198,7 @@ public class ScheduleResult extends AppCompatActivity {
 
         boolean find=false;
 
-        Log.d("schedule length: ",schedule.size()+"schedule exists: "+!schedule.isEmpty());
+        Log.d("schedule length: ",schedule.size()+"");
         newNeighbor.clear();
         newNeighbor=swapToFindNeighbor(schedule);
 

@@ -39,6 +39,7 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
     private Button login;
     private Button signup;
     private TextView technician;
+    private Bundle techInfo;
 
     private EditText techUsername;
     private EditText techPassword;
@@ -76,6 +77,7 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
         technician=(TextView) findViewById(R.id.goManager);
         techUsername=(EditText)findViewById(R.id.techUsername);
         techPassword=(EditText)findViewById(R.id.techPassword);
+        techInfo=new Bundle();
     }
 
 
@@ -130,14 +132,21 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
 
             if(retCode==1){
                 Intent intent=new Intent(TechnicianLogin.this,TechnicianDashboard.class);
-                Bundle bundle=new Bundle();
                 try {
-                    bundle.putString("technicianName",jsonObject.getString("firstName"));   //Get the JSON data.
-                    bundle.putString("technicianId",jsonObject.getString("technicianId"));
+                    techInfo.putInt("techId",jsonObject.getInt("technicianId"));
+                    techInfo.putString("username",jsonObject.getString("username"));
+                    techInfo.putString("password",jsonObject.getString("password"));
+                    techInfo.putString("email",jsonObject.getString("email"));
+                    techInfo.putString("phone",jsonObject.getString("phone"));
+                    techInfo.putString("firstName",jsonObject.getString("firstName"));
+                    techInfo.putString("surname",jsonObject.getString("surname"));
+                    techInfo.putString("skillLevel",jsonObject.getString("skillLevel"));
+                    techInfo.putString("workHour",jsonObject.getString("workHour"));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                intent.putExtras(bundle);
+                intent.putExtras(techInfo);
                 startActivity(intent);
             }else {
                 Toast.makeText(TechnicianLogin.this,"Wrong username or password!",Toast.LENGTH_SHORT).show();

@@ -156,7 +156,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                     if(taskNum!=0){
                         for(int i=1;i<taskNum+1;i++){
                             Task task=new Task();
-                            task.setId(i);
+                            task.setId(Integer.parseInt(jsonObject.getString("taskId"+i)));
                             task.setName(jsonObject.getString("taskName"+i));
                             task.setDescription(jsonObject.getString("taskDescription"+i));
                             task.setSkillRequirement(Integer.parseInt(jsonObject.getString("taskSkill"+i)));
@@ -176,7 +176,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                     if(techNum!=0){
                         for(int i=1;i<techNum+1;i++){
                             TechnicianInfo t=new TechnicianInfo();
-                            t.setId(i);
+                            t.setId(Integer.parseInt(jsonObject.getString("techId"+i)));
                             t.setFirstName(jsonObject.getString("techName"+i));
                             t.setSkillLevel(Integer.parseInt(jsonObject.getString("skillLevel"+i)));
                             t.setWorkHour(jsonObject.getInt("workHour"+i));

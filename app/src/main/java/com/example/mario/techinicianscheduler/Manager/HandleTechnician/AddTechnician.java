@@ -3,7 +3,6 @@ package com.example.mario.techinicianscheduler.Manager.HandleTechnician;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -60,8 +59,6 @@ public class AddTechnician extends AppCompatActivity {
                         return map;
                     }
                 };
-
-                Log.d("test","I am here");
 
                 requestQueue.add(stringRequest);
 
