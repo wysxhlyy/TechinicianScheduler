@@ -60,6 +60,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
 
         workArrangement.setOnClickListener(this);
         route.setOnClickListener(this);
+        techSettings.setOnClickListener(this);
     }
 
     private void getWorkArrangement() {
@@ -103,6 +104,11 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
                 techInfo.putParcelableArrayList("recordPos",recordPos);
                 intent1.putExtras(techInfo);
                 startActivity(intent1);
+                break;
+            case R.id.techSettings:
+                Intent intent2=new Intent(TechnicianDashboard.this,TechnicianSetting.class);
+                intent2.putExtras(techInfo);
+                startActivity(intent2);
                 break;
 
         }

@@ -11,11 +11,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.mario.techinicianscheduler.DBHelper;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.Task;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
 import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +52,7 @@ public class ScheduleResult extends AppCompatActivity {
     private Button hillClimbing;
     private Button guidedLocalSearch;
     private Button back;
+    private Button confirm;
 
     private Map<Task,TechnicianInfo> initialResult;
     private Map<Task,TechnicianInfo> improveResult;
@@ -47,6 +60,9 @@ public class ScheduleResult extends AppCompatActivity {
     private Map<Task,TechnicianInfo> localOptima;
 
     private ArrayList<Integer> penalty;
+
+    private JSONObject jsonObject;
+    private int retCode;
 
 
     @Override
@@ -98,6 +114,35 @@ public class ScheduleResult extends AppCompatActivity {
             }
         });
 
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                RequestQueue requestQueue= Volley.newRequestQueue(ScheduleResult.this);
+
+                StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+ "schedule.php",listener,errorListener){
+                    protected Map<String,String> getParams() throws AuthFailureError {
+                        Map<String,String> map=new HashMap<String, String>();
+
+                        ArrayList<Task> tasks=new ArrayList<>();
+                        tasks.addAll(GLSresult.keySet());
+                        ArrayList<TechnicianInfo> techs=new ArrayList<>();
+                        techs.addAll(GLSresult.values());
+
+                        map.put("scheduleSize",GLSresult.size()+"");
+                        for(int i=0;i<GLSresult.size();i++){
+                            map.put("taskId"+i,tasks.get(i).getId()+"");
+                            map.put("techId"+i,techs.get(i).getId()+"");
+                        }
+                        return map;
+                    }
+                };
+
+                requestQueue.add(stringRequest);
+
+            }
+        });
+
 
         showScheduleInfo();
 
@@ -117,6 +162,7 @@ public class ScheduleResult extends AppCompatActivity {
         hillClimbing=(Button)findViewById(R.id.hillClimbing);
         guidedLocalSearch=(Button)findViewById(R.id.guidedLoacalSearch);
         back=(Button)findViewById(R.id.backDashboard);
+        confirm=(Button)findViewById(R.id.confirmSchedule);
         penalty=new ArrayList<Integer>();
         penalty.add(0,0);
         penalty.add(1,0);
@@ -612,6 +658,29 @@ public class ScheduleResult extends AppCompatActivity {
         }
     }
 
+    Response.Listener<String> listener=new Response.Listener<String>() {
+        @Override
+        public void onResponse(String s) {
+            try {
+                jsonObject=new JSONObject(s);
+                retCode=jsonObject.getInt("success");
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+            if(retCode==1){
+                Toast.makeText(ScheduleResult.this,"Distribute the tasks successfully!",Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    };
+
+    Response.ErrorListener errorListener=new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError volleyError) {
+            Toast.makeText(ScheduleResult.this,"Database not connected",Toast.LENGTH_SHORT).show();
+
+        }
+    };
 
 
 }

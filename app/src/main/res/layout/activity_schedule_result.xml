@@ -20,25 +20,43 @@
 
         />
 
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/hillClimbing"
-        android:text="Hill climbing"
-        />
+        android:orientation="horizontal"
+        >
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/guidedLoacalSearch"
-        android:text="GLS"
-        />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/hillClimbing"
+            android:text="HC"
+            />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/backDashboard"
-        android:text="Dashboard"
-        />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guidedLoacalSearch"
+            android:text="GLS"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="confirm"
+            android:id="@+id/confirmSchedule"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/backDashboard"
+            android:text="Cancel"
+            />
+
+    </LinearLayout>
+
+
+
 
 </LinearLayout>
