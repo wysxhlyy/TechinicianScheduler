@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class ScheduleResult extends AppCompatActivity {
 
-    private static int UNASSIGNEDTASKPENALTY =100;
+    private static int UNASSIGNEDTASKPENALTY =1000;
 
     private TextView getPlanInfo;
     private String showData="";
@@ -306,6 +306,20 @@ public class ScheduleResult extends AppCompatActivity {
         }
 
         if(!find){
+            Log.d("Test",sortedTask.size()+","+schedule.size());
+            if (schedule.size()<sortedTask.size()){
+                Log.d("Test","Enter");
+                newNeighbor=addUnassignedToFindNeighbor(schedule);
+                if(newNeighbor!=null){
+                    if(calculateCost(newNeighbor)<=originCost){
+                        find=true;
+                        hillClimbing(newNeighbor);
+                    }
+                }
+            }
+        }
+
+        if(!find){
             improveResult=schedule;
         }
     }
@@ -322,7 +336,8 @@ public class ScheduleResult extends AppCompatActivity {
         Boolean find=false;
 
 
-        for(int k=0;k<100;k++){
+        for(int k=0;k<5;k++){
+
             int i= (int) Math.round(Math.random()*(originSchedule.size()-1));
             int j= (int) Math.round(Math.random()*(originSchedule.size()-1));
 
@@ -379,6 +394,52 @@ public class ScheduleResult extends AppCompatActivity {
     }
 
 
+    private Map<Task,TechnicianInfo> addUnassignedToFindNeighbor(Map<Task,TechnicianInfo> originSchedule){
+        Map<Task,TechnicianInfo> neighbor=new HashMap<>();
+        ArrayList<Task> tasks=new ArrayList<>();
+        tasks.addAll(originSchedule.keySet());
+        ArrayList<TechnicianInfo> techs=new ArrayList<>();
+        techs.addAll(sortedTech);
+
+        ArrayList<Task> unassignedTask=new ArrayList<>();
+        unassignedTask.addAll(sortedTask);
+
+        for(int i=0;i<tasks.size();i++){
+            unassignedTask.remove(tasks.get(i));
+        }
+        Boolean find=false;
+
+        for(int k=0;k<100;k++){
+            int i= (int) Math.round(Math.random()*(unassignedTask.size()-1));
+            int j= (int) Math.round(Math.random()*(techs.size()-1));
+
+            for(int m=0;m<unassignedTask.size();m++){
+                Log.d("Test",unassignedTask.get(m).getName()+":"+unassignedTask.get(m).getDuration()+". i="+i+",j="+j);
+            }
+
+            if(unassignedTask.get(i).getSkillRequirement()<=techs.get(j).getSkillLevel()){
+                Map<Task,TechnicianInfo> newResult=new HashMap<>();
+                newResult.putAll(originSchedule);
+                newResult.put(unassignedTask.get(i),techs.get(j));
+                Log.d("Test",calculateWorkHour(newResult,techs.get(j))+","+techs.get(j).getWorkHour());
+                if(calculateWorkHour(newResult,techs.get(j))<=techs.get(j).getWorkHour()){
+                    neighbor.putAll(newResult);
+                    Log.d("Test","Found");
+                    find=true;
+                    break;
+                }
+            }
+        }
+
+
+        if(find){
+            return neighbor;
+        }else {
+            return null;
+        }
+    }
+
+
 
 
 
@@ -405,10 +466,7 @@ public class ScheduleResult extends AppCompatActivity {
                     }
                 }
 
-                if(assignedTask.size()>=1){
-                    float dist = calculateTravelTime(assignedTask);
-                    cost += (dist / 1000) * 10;  //assume drive speed is 6km/h.
-                }
+
             }
 
 //            if(cost>maxCost){
@@ -583,13 +641,16 @@ public class ScheduleResult extends AppCompatActivity {
                 tasks.add(scheduledTask.get(i));
             }
         }
-
         float cost=0;
-        for(int i=0;i<tasks.size();i++){
-            cost+=calculateDur(tasks.get(i).getSkillRequirement(),tech.getSkillLevel(),tasks.get(i).getDuration());
-        }
-        float dist=calculateTravelTime(tasks);
-        cost+=(dist/1000)*2;
+
+
+            for(int i=0;i<tasks.size();i++){
+                cost+=calculateDur(tasks.get(i).getSkillRequirement(),tech.getSkillLevel(),tasks.get(i).getDuration());
+            }
+            float dist=calculateTravelTime(tasks);
+            cost+=(dist/1000)*2;
+
+
 
         return cost;
 
@@ -606,9 +667,12 @@ public class ScheduleResult extends AppCompatActivity {
             }
         float[] baseToStart=new float[1];
         float[] endToBase=new float[1];
-        Location.distanceBetween(startEnd.latitude,startEnd.longitude,travelTasks.get(0).getPosition().latitude,travelTasks.get(0).getPosition().longitude,baseToStart);
-        Location.distanceBetween(startEnd.latitude,startEnd.longitude,travelTasks.get(travelTasks.size()-1).getPosition().latitude,travelTasks.get(travelTasks.size()-1).getPosition().longitude,endToBase);
-        total=total+baseToStart[0]+endToBase[0];
+        if(travelTasks.size()!=0){
+            Location.distanceBetween(startEnd.latitude,startEnd.longitude,travelTasks.get(0).getPosition().latitude,travelTasks.get(0).getPosition().longitude,baseToStart);
+            Location.distanceBetween(startEnd.latitude,startEnd.longitude,travelTasks.get(travelTasks.size()-1).getPosition().latitude,travelTasks.get(travelTasks.size()-1).getPosition().longitude,endToBase);
+            total=total+baseToStart[0]+endToBase[0];
+        }
+
 
         //Log.d("travel time:",(total/1000)*10+"");
 
