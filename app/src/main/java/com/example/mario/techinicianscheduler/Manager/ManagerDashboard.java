@@ -1,6 +1,9 @@
 package com.example.mario.techinicianscheduler.Manager;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mario.techinicianscheduler.DBHelper;
+import com.example.mario.techinicianscheduler.MainActivity;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.Task;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
@@ -38,6 +42,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     private Button manageTech;
     private Button manageTask;
     private Button settings;
+    private Button logOut;
 
 
     private int retCode;
@@ -66,22 +71,15 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
         schedule.setOnClickListener(this);
 
+        ManagerDashboard.CostTimeTask costTimeTask=new ManagerDashboard.CostTimeTask(ManagerDashboard.this);
+        costTimeTask.execute();
 
-        RequestQueue requestQueue= Volley.newRequestQueue(ManagerDashboard.this);
-        StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+"getAvailableTech.php",listener,errorListener){
-            protected Map<String,String> getParams() throws AuthFailureError {
-                Map<String,String> map=new HashMap<String, String>();
-                map.put("managerId",getSharedPreferences("managerSession",MODE_PRIVATE).getString("managerId",null));
-                return map;
-            }
-        };
-
-        requestQueue.add(stringRequest);
 
         manageTask.setOnClickListener(this);
         manageTech.setOnClickListener(this);
         settings.setOnClickListener(this);
 
+        logOut.setOnClickListener(this);
 
 
     }
@@ -92,10 +90,46 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         manageTech=(Button)findViewById(R.id.manageTech);
         manageTask=(Button)findViewById(R.id.manageTask);
         settings=(Button)findViewById(R.id.managerSettings);
+        logOut=(Button)findViewById(R.id.managerLogOut);
 
         techs=new ArrayList<>();
         tasks=new ArrayList<>();
 
+    }
+
+    private class CostTimeTask extends AsyncTask<String,Integer,String> {
+        private ProgressDialog dialog;
+
+
+        public CostTimeTask(Context context){
+            dialog=new ProgressDialog(context,0);
+
+            dialog.setMessage("Calculating...");
+            dialog.setCancelable(true);
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.show();
+        }
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            RequestQueue requestQueue= Volley.newRequestQueue(ManagerDashboard.this);
+            StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+"getAvailableTech.php",listener,errorListener){
+                protected Map<String,String> getParams() throws AuthFailureError {
+                    Map<String,String> map=new HashMap<String, String>();
+                    map.put("managerId",getSharedPreferences("managerSession",MODE_PRIVATE).getString("managerId",null));
+                    return map;
+                }
+            };
+
+            requestQueue.add(stringRequest);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            dialog.dismiss();
+        }
     }
 
 
@@ -129,6 +163,9 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 intent3.putExtras(managerInfo);
                 startActivityForResult(intent3,ACTIVITY_MANAGER_SETTING);
                 break;
+            case R.id.managerLogOut:
+                Intent intent4=new Intent(ManagerDashboard.this, MainActivity.class);
+                startActivity(intent4);
         }
     }
 

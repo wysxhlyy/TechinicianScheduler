@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class ScheduleResult extends AppCompatActivity {
 
-    private static int UNASSIGNEDTASKPENALTY =1000;
+    private static int UNASSIGNEDTASKPENALTY =3;
 
     private TextView getPlanInfo;
     private String showData="";
@@ -177,7 +177,6 @@ public class ScheduleResult extends AppCompatActivity {
         public CostTimeTask(Context context){
             dialog=new ProgressDialog(context,0);
 
-            dialog.setMessage("Calculating...");
             dialog.setCancelable(true);
             dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             dialog.show();
@@ -268,6 +267,22 @@ public class ScheduleResult extends AppCompatActivity {
         }
 
         if(!find){
+            if (schedule.size()<sortedTask.size()){
+                newNeighbor=addUnassignedToFindNeighbor(schedule);
+                if(newNeighbor!=null){
+                    ArrayList<Double> newCostResult = modifiedCost(newNeighbor);
+                    Log.d("Test",newCostResult.get(0)+","+originCostResult.get(0));
+                    if(newCostResult.get(0) <= originCostResult.get(0)){
+                        find=true;
+                        Log.d("Test","come");
+                        modifiedHillClimbing(newNeighbor);
+                    }
+                }
+            }
+        }
+
+
+        if(!find){
             Log.d("Alert: ","find local optima");
             localOptima=schedule;
         }
@@ -336,7 +351,7 @@ public class ScheduleResult extends AppCompatActivity {
         Boolean find=false;
 
 
-        for(int k=0;k<5;k++){
+        for(int k=0;k<100;k++){
 
             int i= (int) Math.round(Math.random()*(originSchedule.size()-1));
             int j= (int) Math.round(Math.random()*(originSchedule.size()-1));
@@ -409,19 +424,14 @@ public class ScheduleResult extends AppCompatActivity {
         }
         Boolean find=false;
 
-        for(int k=0;k<100;k++){
+        for(int k=0;k<10;k++){
             int i= (int) Math.round(Math.random()*(unassignedTask.size()-1));
             int j= (int) Math.round(Math.random()*(techs.size()-1));
-
-            for(int m=0;m<unassignedTask.size();m++){
-                Log.d("Test",unassignedTask.get(m).getName()+":"+unassignedTask.get(m).getDuration()+". i="+i+",j="+j);
-            }
 
             if(unassignedTask.get(i).getSkillRequirement()<=techs.get(j).getSkillLevel()){
                 Map<Task,TechnicianInfo> newResult=new HashMap<>();
                 newResult.putAll(originSchedule);
                 newResult.put(unassignedTask.get(i),techs.get(j));
-                Log.d("Test",calculateWorkHour(newResult,techs.get(j))+","+techs.get(j).getWorkHour());
                 if(calculateWorkHour(newResult,techs.get(j))<=techs.get(j).getWorkHour()){
                     neighbor.putAll(newResult);
                     Log.d("Test","Found");
@@ -475,7 +485,10 @@ public class ScheduleResult extends AppCompatActivity {
         }
 
         if(!unassignedTask.isEmpty()){
-            cost+=UNASSIGNEDTASKPENALTY*unassignedTask.size();
+            for(int i=0;i<unassignedTask.size();i++){
+                cost+=UNASSIGNEDTASKPENALTY*unassignedTask.get(i).getDuration();
+            }
+
             //Log.d("unassigned Task:",unassignedTask.size()+"");
         }
         return cost;
@@ -515,15 +528,13 @@ public class ScheduleResult extends AppCompatActivity {
                 }
             }
 
-//            if(cost>maxCost){
-//                maxCost=cost;
-//            }
         }
 
         if(!unassignedTask.isEmpty()){
-            cost+=UNASSIGNEDTASKPENALTY*unassignedTask.size();
-            unassignedTaskCost+=UNASSIGNEDTASKPENALTY*unassignedTask.size();
-            //Log.d("unassigned Task:",unassignedTask.size()+"");
+            for(int i=0;i<unassignedTask.size();i++){
+                cost+=UNASSIGNEDTASKPENALTY*unassignedTask.get(i).getDuration();
+                unassignedTaskCost+=UNASSIGNEDTASKPENALTY*unassignedTask.get(i).getDuration();
+            }
         }
 
 
@@ -563,7 +574,7 @@ public class ScheduleResult extends AppCompatActivity {
             ArrayList<Task> improved=new ArrayList<>();
             improved.addAll(improveResult.keySet());
             for(int j=0;j<improved.size();j++){
-                showData+="task"+improved.get(j).getId()+",skill:"+improved.get(j).getSkillRequirement()+",duration:"+improved.get(j).getDuration()+": "+improveResult.get(improved.get(j)).getFirstName()+", tech skill:"+improveResult.get(improved.get(j)).getSkillLevel()+", work hour:"+improveResult.get(availableTask.get(j)).getWorkHour()+"\n";
+                showData+="task"+improved.get(j).getId()+",skill:"+improved.get(j).getSkillRequirement()+",duration:"+improved.get(j).getDuration()+": "+improveResult.get(improved.get(j)).getFirstName()+", tech skill:"+improveResult.get(improved.get(j)).getSkillLevel()+", work hour:"+improveResult.get(improved.get(j)).getWorkHour()+"\n";
             }
             improveCost=calculateCost(improveResult);
             showData+="cost:"+improveCost.shortValue()+"\n";
@@ -573,7 +584,7 @@ public class ScheduleResult extends AppCompatActivity {
             ArrayList<Task> improved=new ArrayList<>();
             improved.addAll(GLSresult.keySet());
             for(int j=0;j<improved.size();j++){
-                showData+="task"+improved.get(j).getId()+",skill:"+improved.get(j).getSkillRequirement()+",duration:"+improved.get(j).getDuration()+": "+GLSresult.get(improved.get(j)).getFirstName()+", tech skill:"+GLSresult.get(improved.get(j)).getSkillLevel()+", work hour:"+GLSresult.get(availableTask.get(j)).getWorkHour()+"\n";
+                showData+="task"+improved.get(j).getId()+",skill:"+improved.get(j).getSkillRequirement()+",duration:"+improved.get(j).getDuration()+": "+GLSresult.get(improved.get(j)).getFirstName()+", tech skill:"+GLSresult.get(improved.get(j)).getSkillLevel()+", work hour:"+GLSresult.get(improved.get(j)).getWorkHour()+"\n";
             }
             Double finalCost=calculateCost(GLSresult);
             showData+="cost: "+minimumCost.shortValue()+"\n";

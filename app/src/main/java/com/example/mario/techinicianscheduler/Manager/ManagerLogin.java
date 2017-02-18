@@ -1,7 +1,10 @@
 package com.example.mario.techinicianscheduler.Manager;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
@@ -80,6 +83,47 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
         managerPassword=(EditText)findViewById(R.id.managerPassword);
     }
 
+    private class CostTimeTask extends AsyncTask<String,Integer,String> {
+        private ProgressDialog dialog;
+
+
+        public CostTimeTask(Context context){
+            dialog=new ProgressDialog(context,0);
+
+            dialog.setCancelable(true);
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.show();
+        }
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            requestQueue= Volley.newRequestQueue(ManagerLogin.this);
+
+            //Connect PHP File.
+            StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+"managerLogIn.php",listener,errorListener) {
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("username", username);
+                    map.put("password", password);
+                    return map;
+                }
+            };
+            requestQueue.add(stringRequest);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            dialog.dismiss();
+            SharedPreferences.Editor editor=sharedPreferences.edit();
+            editor.putString("username",username);
+            editor.putString("password",password);
+            editor.commit();
+            finish();
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -91,26 +135,11 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(ManagerLogin.this,"Missing username or password",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                requestQueue= Volley.newRequestQueue(ManagerLogin.this);
 
-                //Connect PHP File.
-                StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+"managerLogIn.php",listener,errorListener) {
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> map = new HashMap<String, String>();
-                        map.put("username", username);
-                        map.put("password", password);
-                        return map;
-                    }
-                };
-                requestQueue.add(stringRequest);
-
+                ManagerLogin.CostTimeTask costTimeTask=new ManagerLogin.CostTimeTask(ManagerLogin.this);
+                costTimeTask.execute();
                 //Store the data to be used in next log in.
 
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putString("username",username);
-                editor.putString("password",password);
-                editor.commit();
-                finish();
                 break;
             case R.id.managerSignUp:
                 Intent intent=new Intent(ManagerLogin.this, SignUp.class);

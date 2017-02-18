@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mario.techinicianscheduler.DBHelper;
+import com.example.mario.techinicianscheduler.MainActivity;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.Task;
 import com.google.android.gms.maps.model.LatLng;
@@ -61,6 +62,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
         workArrangement.setOnClickListener(this);
         route.setOnClickListener(this);
         techSettings.setOnClickListener(this);
+        techQuit.setOnClickListener(this);
     }
 
     private void getWorkArrangement() {
@@ -110,6 +112,9 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
                 intent2.putExtras(techInfo);
                 startActivity(intent2);
                 break;
+            case R.id.techQuit:
+                Intent intent3=new Intent(TechnicianDashboard.this, MainActivity.class);
+                startActivity(intent3);
 
         }
     }

@@ -54,17 +54,6 @@
     </ListView>
 
 
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit Technicians"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:paddingLeft="10dp"
-        android:id="@+id/editTech"
-        />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
