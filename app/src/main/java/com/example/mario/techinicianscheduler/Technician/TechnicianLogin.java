@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,9 +38,9 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
     private static final String TAG = ManagerLogin.class.getSimpleName();
 
     private Button login;
-    private Button signup;
     private TextView technician;
     private Bundle techInfo;
+    private ImageButton goManager;
 
     private EditText techUsername;
     private EditText techPassword;
@@ -57,7 +58,6 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
 
         initialize();
         login.setOnClickListener(this);
-        signup.setOnClickListener(this);
 
         spinnerHandle();
 
@@ -69,12 +69,14 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
             techUsername.setText(sharedPreferences.getString("username",null));
             techPassword.setText(sharedPreferences.getString("password",null));
         }
+
+        goManager.setOnClickListener(this);
     }
 
     private void initialize() {
         login=(Button)findViewById(R.id.techLogIn);
-        signup=(Button)findViewById(R.id.techSignUp);
-        technician=(TextView) findViewById(R.id.goManager);
+        goManager=(ImageButton)findViewById(R.id.goManager);
+        technician=(TextView) findViewById(R.id.goSignUp);
         techUsername=(EditText)findViewById(R.id.techUsername);
         techPassword=(EditText)findViewById(R.id.techPassword);
         techInfo=new Bundle();
@@ -112,10 +114,9 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
 
 
                 break;
-            case R.id.techSignUp:
-                Intent intent=new Intent(TechnicianLogin.this, SignUp.class);
+            case R.id.goManager:
+                Intent intent=new Intent(TechnicianLogin.this,ManagerLogin.class);
                 startActivity(intent);
-                finish();
                 break;
         }
     }
@@ -172,7 +173,7 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
         spannedString.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(TechnicianLogin.this, ManagerLogin.class);
+                Intent intent=new Intent(TechnicianLogin.this, SignUp.class);
                 startActivity(intent);
                 finish();
             }

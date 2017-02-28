@@ -381,13 +381,13 @@ public class ScheduleResult extends AppCompatActivity {
         ArrayList<Task> tasks=new ArrayList<>();
         tasks.addAll(originSchedule.keySet());
         ArrayList<TechnicianInfo> techs=new ArrayList<>();
-        techs.addAll(originSchedule.values());
+        techs.addAll(sortedTech);
 
         Boolean find=false;
 
         for(int k=0;k<100;k++){
             int i= (int) Math.round(Math.random()*(originSchedule.size()-1));
-            int j= (int) Math.round(Math.random()*(originSchedule.size()-1));
+            int j= (int) Math.round(Math.random()*(techs.size()-1));
 
             if(i!=j&&techs.get(i)!=techs.get(j)&&tasks.get(i).getSkillRequirement()<=techs.get(j).getSkillLevel()){
                 Map<Task,TechnicianInfo> newResult=new HashMap<>();

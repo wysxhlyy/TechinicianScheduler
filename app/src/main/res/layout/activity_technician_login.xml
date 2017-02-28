@@ -10,95 +10,124 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.mario.techinicianscheduler.Technician.TechnicianLogin"
     android:orientation="vertical"
+    android:background="@color/white"
     >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Technician Login"
+    <ImageButton
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/bicycle"
         android:layout_gravity="center"
-        android:textColor="@color/myBlack"
-        android:textSize="30dp"
+        android:layout_marginTop="80dp"
+        android:id="@+id/goManager"
         />
 
+
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="80dp"
+        android:orientation="vertical"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Username:"
+            android:text="USERNAME:"
+            android:textColor="@color/myGray"
             />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/techUsername"
             android:inputType="text"
+            android:textColor="@color/myBlack"
             />
+
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="80dp"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
         >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Password:"
+            android:text="PASSWORD:"
             />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/techPassword"
+            android:textColor="@color/myBlack"
             android:inputType="textPassword"
             />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_gravity="center"
         >
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:id="@+id/techLogIn"
-            android:text="Log In"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimary"
+            android:text="Sign In"
             />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/techSignUp"
-            android:text="Sign Up"
-            />
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/techSignUp"-->
+            <!--android:text="Sign Up"-->
+            <!--/>-->
 
 
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="If you are Manager,click here!"
-        android:textStyle="italic"
-        android:textColor="@color/lightBlue"
-        android:id="@+id/goManager"
-        />
+        android:layout_marginTop="20dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DON'T HAVE AN ACCOUNT? "
+            android:textColor="@color/myGray"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SIGN UP"
+            android:textColor="@color/myBlack"
+            android:id="@+id/goSignUp"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>
