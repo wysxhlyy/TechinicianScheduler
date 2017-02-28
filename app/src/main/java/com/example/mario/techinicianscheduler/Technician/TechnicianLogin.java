@@ -117,6 +117,7 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
             case R.id.goManager:
                 Intent intent=new Intent(TechnicianLogin.this,ManagerLogin.class);
                 startActivity(intent);
+                finish();
                 break;
         }
     }

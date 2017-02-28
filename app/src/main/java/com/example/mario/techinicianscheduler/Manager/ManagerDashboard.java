@@ -20,9 +20,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mario.techinicianscheduler.DBHelper;
-import com.example.mario.techinicianscheduler.MainActivity;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.Task;
+import com.example.mario.techinicianscheduler.Technician.TechnicianLogin;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -164,7 +164,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 startActivityForResult(intent3,ACTIVITY_MANAGER_SETTING);
                 break;
             case R.id.managerLogOut:
-                Intent intent4=new Intent(ManagerDashboard.this, MainActivity.class);
+                Intent intent4=new Intent(ManagerDashboard.this, TechnicianLogin.class);
                 startActivity(intent4);
         }
     }

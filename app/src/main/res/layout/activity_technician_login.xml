@@ -96,14 +96,6 @@
             android:text="Sign In"
             />
 
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/techSignUp"-->
-            <!--android:text="Sign Up"-->
-            <!--/>-->
-
-
     </LinearLayout>
 
     <LinearLayout

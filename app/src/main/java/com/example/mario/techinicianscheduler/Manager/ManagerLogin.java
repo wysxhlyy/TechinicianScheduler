@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +42,8 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
 
 
     private Button login;
-    private Button signup;
     private TextView technician;
+    private ImageButton goTechnician;
 
     private EditText managerUsername;
     private EditText managerPassword;
@@ -60,8 +61,8 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
 
         initialize();
         login.setOnClickListener(this);
-        signup.setOnClickListener(this);
         login.setOnClickListener(this);
+        goTechnician.setOnClickListener(this);
         spinnerHandle();
 
         //show the stored username and password
@@ -77,10 +78,10 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
 
     private void initialize() {
         login=(Button)findViewById(R.id.managerLogIn);
-        signup=(Button)findViewById(R.id.managerSignUp);
-        technician=(TextView) findViewById(R.id.goTechnician);
+        technician=(TextView) findViewById(R.id.managerGoSignUp);
         managerUsername=(EditText)findViewById(R.id.managerUsername);
         managerPassword=(EditText)findViewById(R.id.managerPassword);
+        goTechnician=(ImageButton)findViewById(R.id.goTechnician);
     }
 
     private class CostTimeTask extends AsyncTask<String,Integer,String> {
@@ -141,8 +142,8 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
                 //Store the data to be used in next log in.
 
                 break;
-            case R.id.managerSignUp:
-                Intent intent=new Intent(ManagerLogin.this, SignUp.class);
+            case R.id.goTechnician:
+                Intent intent=new Intent(ManagerLogin.this, TechnicianLogin.class);
                 startActivity(intent);
                 finish();
                 break;
@@ -204,7 +205,7 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
         spannedString.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(ManagerLogin.this, TechnicianLogin.class);
+                Intent intent=new Intent(ManagerLogin.this, SignUp.class);
                 startActivity(intent);
                 finish();
             }
