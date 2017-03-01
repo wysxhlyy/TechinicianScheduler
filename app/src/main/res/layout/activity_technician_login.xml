@@ -94,6 +94,8 @@
             android:textColor="@color/white"
             android:background="@color/colorPrimary"
             android:text="Sign In"
+            android:textAllCaps="false"
+            android:textSize="20dp"
             />
 
     </LinearLayout>

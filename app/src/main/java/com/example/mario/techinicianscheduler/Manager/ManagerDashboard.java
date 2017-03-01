@@ -7,8 +7,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mario.techinicianscheduler.DBHelper;
 import com.example.mario.techinicianscheduler.R;
+import com.example.mario.techinicianscheduler.ResideMenu.ResideMenu;
+import com.example.mario.techinicianscheduler.ResideMenu.ResideMenuItem;
 import com.example.mario.techinicianscheduler.Task;
 import com.example.mario.techinicianscheduler.Technician.TechnicianLogin;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
@@ -33,17 +36,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class ManagerDashboard extends AppCompatActivity implements View.OnClickListener {
 
     private TextView username;
+    private TextView managerDashNumTask;
+    private TextView manageTaskNum;
+    private TextView manageTechNum;
+    //private TextView sideBarName;
     private Bundle managerInfo;
-
-    private Button schedule;
-    private Button manageTech;
-    private Button manageTask;
-    private Button settings;
-    private Button logOut;
-
 
     private int retCode;
     private static final String TAG = ManagerLogin.class.getSimpleName();
@@ -53,6 +56,9 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     private ArrayList<TechnicianInfo> techs;
     private ArrayList<Task> tasks;
     private int taskNum=0;
+
+    private ResideMenu resideMenu;
+    private ImageButton menu;
 
     private static int ACTIVITY_MANAGER_SETTING=1;
 
@@ -65,36 +71,74 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
         if(getIntent().getExtras()!=null){
             managerInfo=getIntent().getExtras();
-            username.setText("Welcome Back: "+ managerInfo.getString("managerName"));
+            username.setText(managerInfo.getString("managerName"));
         }
 
 
-        schedule.setOnClickListener(this);
 
         ManagerDashboard.CostTimeTask costTimeTask=new ManagerDashboard.CostTimeTask(ManagerDashboard.this);
         costTimeTask.execute();
 
+        menu.setOnClickListener(this);
 
-        manageTask.setOnClickListener(this);
-        manageTech.setOnClickListener(this);
-        settings.setOnClickListener(this);
+        resideMenu=new ResideMenu(this);
+        resideMenu.setShadowVisible(true);
+        resideMenu.attachToActivity(this);
+        resideMenu.setScaleValue(0.6f);
+        resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
 
-        logOut.setOnClickListener(this);
 
+
+
+        String titles[]={"Schedule","Manage Tasks","Manage Technicians","Settings","Log out"};
+        int icon[]={R.drawable.schedule,R.drawable.tasks,R.drawable.technicians,R.drawable.settings,R.drawable.logout};
+
+        for(int i=0;i<titles.length;i++){
+            ResideMenuItem item=new ResideMenuItem(this,icon[i],titles[i]);
+            item.setId(i);
+            item.setOnClickListener(this);
+            resideMenu.addMenuItem(item,ResideMenu.DIRECTION_LEFT);
+        }
+
+        resideMenu.setMenuListener(menuListener);
 
     }
 
+    private ResideMenu.OnMenuListener menuListener=new ResideMenu.OnMenuListener() {
+        @Override
+        public void openMenu() {
+            resideMenu.setBackground(R.drawable.bg);
+            //sideBarName.setText(username.getText());
+
+        }
+
+        @Override
+        public void closeMenu() {
+            resideMenu.setBackground(R.drawable.white);
+        }
+    };
+
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        return resideMenu.dispatchTouchEvent(ev);
+    }
+
+
     private void initialize() {
         username=(TextView)findViewById(R.id.loggedManagerUsername);
-        schedule=(Button)findViewById(R.id.schedule);
-        manageTech=(Button)findViewById(R.id.manageTech);
-        manageTask=(Button)findViewById(R.id.manageTask);
-        settings=(Button)findViewById(R.id.managerSettings);
-        logOut=(Button)findViewById(R.id.managerLogOut);
+        managerDashNumTask=(TextView)findViewById(R.id.managerDashNumTask);
+        manageTaskNum=(TextView)findViewById(R.id.manageTaskNum);
+        manageTechNum=(TextView)findViewById(R.id.manageTechNum);
+        menu=(ImageButton)findViewById(R.id.startSideBar);
+        //sideBarName=(TextView)findViewById(R.id.sideBarName);
 
         techs=new ArrayList<>();
         tasks=new ArrayList<>();
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
 
+    }
+
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     private class CostTimeTask extends AsyncTask<String,Integer,String> {
@@ -129,6 +173,9 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         @Override
         protected void onPostExecute(String s) {
             dialog.dismiss();
+            managerDashNumTask.setText("You have "+tasks.size()+" tasks to manage today.");
+            manageTaskNum.setText(tasks.size()+"");
+            manageTechNum.setText(techs.size()+"");
         }
     }
 
@@ -136,7 +183,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.schedule:
+            case 0:
                 Intent intent=new Intent(ManagerDashboard.this,chooseTask.class);
                 Bundle bundle= managerInfo;
                 bundle.putParcelableArrayList("availableTechnician",techs);
@@ -144,28 +191,32 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case R.id.manageTask:
+            case 1:
                 Intent intent1=new Intent(ManagerDashboard.this,ManageTasks.class);
                 Bundle bundle1=managerInfo;
                 bundle1.putParcelableArrayList("availableTask",tasks);
                 intent1.putExtras(bundle1);
                 startActivity(intent1);
                 break;
-            case R.id.manageTech:
+            case 2:
                 Intent intent2=new Intent(ManagerDashboard.this,ManageTechnicians.class);
                 Bundle bundle2=managerInfo;
                 bundle2.putParcelableArrayList("availableTechnician",techs);
                 intent2.putExtras(bundle2);
                 startActivity(intent2);
                 break;
-            case R.id.managerSettings:
+            case 3:
                 Intent intent3=new Intent(ManagerDashboard.this,ManagerSetting.class);
                 intent3.putExtras(managerInfo);
                 startActivityForResult(intent3,ACTIVITY_MANAGER_SETTING);
                 break;
-            case R.id.managerLogOut:
+            case 4:
                 Intent intent4=new Intent(ManagerDashboard.this, TechnicianLogin.class);
                 startActivity(intent4);
+                break;
+            case R.id.startSideBar:
+                resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
+                break;
         }
     }
 

@@ -1,15 +1,23 @@
 package com.example.mario.techinicianscheduler;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -22,12 +30,16 @@ import com.android.volley.toolbox.Volley;
 import com.example.mario.techinicianscheduler.Manager.ManagerDashboard;
 import com.example.mario.techinicianscheduler.Manager.ManagerLogin;
 import com.example.mario.techinicianscheduler.Technician.TechnicianDashboard;
+import com.example.mario.techinicianscheduler.Technician.TechnicianLogin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * 添加表单验证功能
@@ -41,9 +53,13 @@ public class SignUp extends AppCompatActivity {
     private EditText phone;
     private EditText firstName;
     private EditText surname;
+    private ImageButton quitSignUp;
+    private ImageView showRole;
+    private TextView signUpTitle;
 
     private Spinner  role;
     private String chosenJob;
+    private TextView goSignIn;
 
     private Button signUp;
 
@@ -51,8 +67,6 @@ public class SignUp extends AppCompatActivity {
     private JSONObject jsonObject;
     private int retCode;
     private static final String TAG = ManagerLogin.class.getSimpleName();
-
-
 
 
     private static final String[] m_roles={"Manager","Techinician"};
@@ -106,7 +120,18 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
+//        Typeface typeface=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Satellite.ttf");
+//        signUpTitle.setTypeface(typeface);
 
+
+        quitSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        spinnerHandle();
 
     }
 
@@ -169,7 +194,7 @@ public class SignUp extends AppCompatActivity {
 
 
     private void chooseRole() {
-        adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,m_roles);
+        adapter=new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line,m_roles);
         role.setAdapter(adapter);
 
         role.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -177,6 +202,11 @@ public class SignUp extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
                 chosenJob=adapterView.getItemAtPosition(pos).toString();
                 Log.d("chosenJob",chosenJob);
+                if(chosenJob.equals("Manager")){
+                    showRole.setImageDrawable(getResources().getDrawable(R.drawable.manager4));
+                }else {
+                    showRole.setImageDrawable(getResources().getDrawable(R.drawable.bike));
+                }
             }
 
             @Override
@@ -195,5 +225,31 @@ public class SignUp extends AppCompatActivity {
         surname=(EditText)findViewById(R.id.surname);
         role=(Spinner)findViewById(R.id.job);
         signUp=(Button)findViewById(R.id.signUp);
+        goSignIn=(TextView)findViewById(R.id.goSignIn);
+        quitSignUp=(ImageButton)findViewById(R.id.quitSignUp);
+        showRole=(ImageView)findViewById(R.id.showRole);
+        signUpTitle=(TextView)findViewById(R.id.signUpTitle);
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
+    }
+
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+    public void spinnerHandle(){
+        String prompt=goSignIn.getText().toString();
+        SpannableString spannedString=new SpannableString(prompt);
+        spannedString.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(SignUp.this, TechnicianLogin.class);
+                startActivity(intent);
+                finish();
+            }
+        },0,prompt.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        goSignIn.setText(spannedString);
+        goSignIn.setMovementMethod(LinkMovementMethod.getInstance());
+
     }
 }

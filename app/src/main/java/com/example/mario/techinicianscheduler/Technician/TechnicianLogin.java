@@ -1,5 +1,6 @@
 package com.example.mario.techinicianscheduler.Technician;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,6 +34,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class TechnicianLogin extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = ManagerLogin.class.getSimpleName();
@@ -80,8 +84,13 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
         techUsername=(EditText)findViewById(R.id.techUsername);
         techPassword=(EditText)findViewById(R.id.techPassword);
         techInfo=new Bundle();
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
+
     }
 
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public void onClick(View view) {
@@ -176,7 +185,6 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
             public void onClick(View view) {
                 Intent intent=new Intent(TechnicianLogin.this, SignUp.class);
                 startActivity(intent);
-                finish();
             }
         },0,prompt.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 

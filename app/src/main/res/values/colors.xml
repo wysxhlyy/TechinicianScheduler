@@ -6,8 +6,9 @@
     <color name="myBlack">#000</color>
     <color name="lightBlue">#5cc3f7</color>
     <color name="myRed">#e62121</color>
-    <color name="myGray">#8e8e92</color>
+    <color name="myGray">#5f5f63</color>
     <color name="myLightGray">#c5c5c9</color>
     <color name="white">#ffffff</color>
+    <color name="myBlue">#86A2FF</color>
 
 </resources>

@@ -37,6 +37,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class ManagerLogin extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = ManagerLogin.class.getSimpleName();
 
@@ -82,6 +85,12 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
         managerUsername=(EditText)findViewById(R.id.managerUsername);
         managerPassword=(EditText)findViewById(R.id.managerPassword);
         goTechnician=(ImageButton)findViewById(R.id.goTechnician);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
+
+    }
+
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     private class CostTimeTask extends AsyncTask<String,Integer,String> {
@@ -207,7 +216,6 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
             public void onClick(View view) {
                 Intent intent=new Intent(ManagerLogin.this, SignUp.class);
                 startActivity(intent);
-                finish();
             }
         },0,prompt.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
