@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.mario.techinicianscheduler.MyListAdapter;
@@ -16,11 +16,14 @@ import com.example.mario.techinicianscheduler.TechnicianInfo;
 
 import java.util.ArrayList;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
 public class chooseTechnician extends AppCompatActivity implements View.OnClickListener, MyListAdapter.CheckedAllListener {
 
 
     private Bundle managerInfo;
-    private Button generate;
+    private ImageButton generate;
+    private ImageButton quit;
 
     private CheckBox cbButtonAll;
     private SparseBooleanArray isChecked;
@@ -48,6 +51,7 @@ public class chooseTechnician extends AppCompatActivity implements View.OnClickL
         adapter.setCheckedAllListener(this);
         availableTechs.setAdapter(adapter);
         availableTechs.setDivider(null);
+        quit.setOnClickListener(this);
 
 
         generate.setOnClickListener(this);
@@ -62,9 +66,10 @@ public class chooseTechnician extends AppCompatActivity implements View.OnClickL
         isChecked=new SparseBooleanArray();
         availableTechs=(ListView)findViewById(R.id.availableTechs);
         checkedTech=new SparseBooleanArray();
+        quit=(ImageButton)findViewById(R.id.quitChooseTech);
 
-
-        generate=(Button)findViewById(R.id.generate);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
+        generate=(ImageButton)findViewById(R.id.generate);
     }
 
     @Override
@@ -87,6 +92,12 @@ public class chooseTechnician extends AppCompatActivity implements View.OnClickL
                 managerInfo.putParcelableArrayList("chosenTech",chosenTechs);
                 intent2.putExtras(managerInfo);
                 startActivity(intent2);
+                break;
+            case R.id.quitChooseTech:
+                Intent intent=new Intent(chooseTechnician.this,ManagerDashboard.class);
+                intent.putExtras(managerInfo);
+                startActivity(intent);
+                finish();
                 break;
         }
     }

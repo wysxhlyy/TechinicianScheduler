@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.mario.techinicianscheduler.R;
@@ -16,10 +16,12 @@ import com.example.mario.techinicianscheduler.TaskListAdapter;
 
 import java.util.ArrayList;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
 public class chooseTask extends AppCompatActivity implements View.OnClickListener, TaskListAdapter.CheckedAllListener {
 
-    private Button addTaskBtn;
-    private Button next2;
+    private ImageButton next2;
+    private ImageButton quit;
 
     private CheckBox cbButtonAll;
     private SparseBooleanArray isChecked;
@@ -48,12 +50,11 @@ public class chooseTask extends AppCompatActivity implements View.OnClickListene
         adapter.setCheckedAllListener(this);
         availableTask.setAdapter(adapter);
         availableTask.setDivider(null);
-
+        quit.setOnClickListener(this);
 
 
         //根据numOfTasks展示task输入框
 
-        addTaskBtn.setOnClickListener(this);
         next2.setOnClickListener(this);
     }
 
@@ -61,20 +62,21 @@ public class chooseTask extends AppCompatActivity implements View.OnClickListene
     private void initialize() {
         tasks=new ArrayList<>();
         chosenTasks=new ArrayList<>();
-        addTaskBtn=(Button)findViewById(R.id.addTaskBtn);
-        next2=(Button)findViewById(R.id.next2);
+        next2=(ImageButton)findViewById(R.id.next2);
+        quit=(ImageButton)findViewById(R.id.quitChooseTask);
+
 
         cbButtonAll=(CheckBox)findViewById(R.id.cb_all_button2);
         isChecked=new SparseBooleanArray();
         availableTask=(ListView)findViewById(R.id.availableTasks);
         checkedTask=new SparseBooleanArray();
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
+
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.addTaskBtn:
-                break;
             case R.id.next2:
                 Intent intent=new Intent(chooseTask.this,chooseTechnician.class);
 
@@ -93,6 +95,12 @@ public class chooseTask extends AppCompatActivity implements View.OnClickListene
                 managerInfo.putParcelableArrayList("chosenTask",chosenTasks);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
+                break;
+            case R.id.quitChooseTask:
+                Intent intent1=new Intent(chooseTask.this,ManagerDashboard.class);
+                intent1.putExtras(managerInfo);
+                startActivity(intent1);
+                finish();
                 break;
         }
     }

@@ -90,6 +90,7 @@ public class MyListAdapter extends BaseAdapter {
             holderView.cb_button = (CheckBox)view.findViewById(R.id.cb_button);
             holderView.tv_name = (TextView)view.findViewById(R.id.tv_name);
             holderView.tech_skill=(TextView)view.findViewById(R.id.tech_skill);
+            holderView.tech_workHour=(TextView)view.findViewById(R.id.tech_workHour);
             view.setTag(holderView);
 
         }
@@ -101,7 +102,8 @@ public class MyListAdapter extends BaseAdapter {
         if (item != null) {
             holderView.tv_name.setText(item.getFirstName());                            //set Text for the checkbox;
             holderView.cb_button.setChecked(isSelected.get(position));
-            holderView.tech_skill.setText(item.getSkillLevel()+"");
+            holderView.tech_skill.setText("Skill Level:"+item.getSkillLevel());
+            holderView.tech_workHour.setText(item.getWorkHour()+"");
         }
         /**
          * handle the onclick of each checkbox
@@ -129,6 +131,7 @@ public class MyListAdapter extends BaseAdapter {
         private CheckBox cb_button;
         private TextView tv_name;
         private TextView tech_skill;
+        private TextView tech_workHour;
     }
 
     /**

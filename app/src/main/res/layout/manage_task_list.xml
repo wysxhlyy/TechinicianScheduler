@@ -16,14 +16,11 @@
 
         >
 
-        <CheckBox
-            android:id="@+id/cb_task"
-            android:checked="false"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@drawable/checkbox_selector"
-            android:clickable="true"
-            android:focusable="false"
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/bulletpoint"
+            android:layout_marginTop="5dp"
             />
 
 

@@ -88,9 +88,9 @@ public class TaskListAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.listview_task, parent, false);
             holderView.cb_task = (CheckBox)view.findViewById(R.id.cb_task);
-            holderView.task_id = (TextView)view.findViewById(R.id.task_id);
+            holderView.task_name = (TextView)view.findViewById(R.id.task_name);
             holderView.task_skill=(TextView)view.findViewById(R.id.task_skill);
-            holderView.task_position=(TextView)view.findViewById(R.id.task_position);
+            holderView.task_duration=(TextView)view.findViewById(R.id.task_duration);
 
             view.setTag(holderView);
 
@@ -101,9 +101,9 @@ public class TaskListAdapter extends BaseAdapter {
 
         final Task item = getItem(position);
         if (item != null) {
-            holderView.task_id.setText("task"+item.getId());                           //set Text for the checkbox;
-            holderView.task_skill.setText(item.getSkillRequirement()+"");
-            holderView.task_position.setText(item.getStationName());
+            holderView.task_name.setText(item.getName());                           //set Text for the checkbox;
+            holderView.task_skill.setText("Skill Requirement:"+item.getSkillRequirement());
+            holderView.task_duration.setText(item.getDuration()+"");
             holderView.cb_task.setChecked(isSelected.get(position));
 
         }
@@ -131,8 +131,8 @@ public class TaskListAdapter extends BaseAdapter {
     class HolderView
     {
         private CheckBox cb_task;
-        private TextView task_id;
-        private TextView task_position;
+        private TextView task_name;
+        private TextView task_duration;
         private TextView task_skill;
     }
 

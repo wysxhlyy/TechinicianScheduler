@@ -4,22 +4,48 @@
     android:id="@+id/activity_schedule_step3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.mario.techinicianscheduler.Manager.chooseTechnician"
     android:orientation="vertical"
     >
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/myBlack"
-        android:text="The Available technicians:"
-        android:textSize="30dp"
-        android:layout_gravity="center"
-    />
+        android:orientation="horizontal"
+        android:layout_gravity="left"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        >
+
+
+        <ImageButton
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/quit"
+            android:id="@+id/quitChooseTech"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/myBlack"
+            android:text="Choose Technician"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="85dp"
+            />
+
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/next"
+            android:id="@+id/generate"
+            android:layout_marginLeft="65dp"
+            />
+
+
+    </LinearLayout>
 
 
 
@@ -27,43 +53,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cb_all_button"
-        android:layout_marginTop="20dp"
-        android:text="Select All the Technicians"
+        android:layout_marginTop="25dp"
+        android:text="Select All"
         android:gravity="center_vertical"
-        android:layout_marginLeft="10dp"
-        android:onClick="allSelect"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Skill Level                    name"
-        android:textColor="@color/myBlack"
+        android:layout_marginLeft="15dp"
         android:textSize="20dp"
-        android:layout_marginLeft="80dp"
-
+        android:onClick="allSelect"
         />
 
     <ListView
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="550dp"
         android:id="@+id/availableTechs"
         >
 
     </ListView>
-
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="generate"
-        android:id="@+id/generate"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        />
-
-
 
 
 </LinearLayout>

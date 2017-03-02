@@ -81,6 +81,13 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
         menu.setOnClickListener(this);
 
+        handleResideMenu();
+
+
+    }
+
+
+    private void handleResideMenu(){
         resideMenu=new ResideMenu(this);
         resideMenu.setShadowVisible(true);
         resideMenu.attachToActivity(this);
@@ -90,8 +97,8 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
 
 
-        String titles[]={"Schedule","Manage Tasks","Manage Technicians","Settings","Log out"};
-        int icon[]={R.drawable.schedule,R.drawable.tasks,R.drawable.technicians,R.drawable.settings,R.drawable.logout};
+        String titles[]={"Home","Schedule","Manage Tasks","Manage Technicians","Settings","Log out"};
+        int icon[]={R.drawable.home,R.drawable.schedule,R.drawable.tasks,R.drawable.technicians,R.drawable.settings,R.drawable.logout};
 
         for(int i=0;i<titles.length;i++){
             ResideMenuItem item=new ResideMenuItem(this,icon[i],titles[i]);
@@ -101,17 +108,13 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         }
 
         resideMenu.setMenuListener(menuListener);
-
     }
 
     private ResideMenu.OnMenuListener menuListener=new ResideMenu.OnMenuListener() {
         @Override
         public void openMenu() {
             resideMenu.setBackground(R.drawable.bg);
-            //sideBarName.setText(username.getText());
-
         }
-
         @Override
         public void closeMenu() {
             resideMenu.setBackground(R.drawable.white);
@@ -184,6 +187,12 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()){
             case 0:
+                Intent intentt=new Intent(ManagerDashboard.this,ManagerDashboard.class);
+                intentt.putExtras(managerInfo);
+                startActivity(intentt);
+                finish();
+                break;
+            case 1:
                 Intent intent=new Intent(ManagerDashboard.this,chooseTask.class);
                 Bundle bundle= managerInfo;
                 bundle.putParcelableArrayList("availableTechnician",techs);
@@ -191,28 +200,31 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case 1:
+            case 2:
                 Intent intent1=new Intent(ManagerDashboard.this,ManageTasks.class);
                 Bundle bundle1=managerInfo;
                 bundle1.putParcelableArrayList("availableTask",tasks);
                 intent1.putExtras(bundle1);
                 startActivity(intent1);
+                finish();
                 break;
-            case 2:
+            case 3:
                 Intent intent2=new Intent(ManagerDashboard.this,ManageTechnicians.class);
                 Bundle bundle2=managerInfo;
                 bundle2.putParcelableArrayList("availableTechnician",techs);
                 intent2.putExtras(bundle2);
                 startActivity(intent2);
+                finish();
                 break;
-            case 3:
+            case 4:
                 Intent intent3=new Intent(ManagerDashboard.this,ManagerSetting.class);
                 intent3.putExtras(managerInfo);
                 startActivityForResult(intent3,ACTIVITY_MANAGER_SETTING);
                 break;
-            case 4:
+            case 5:
                 Intent intent4=new Intent(ManagerDashboard.this, TechnicianLogin.class);
                 startActivity(intent4);
+                finish();
                 break;
             case R.id.startSideBar:
                 resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
