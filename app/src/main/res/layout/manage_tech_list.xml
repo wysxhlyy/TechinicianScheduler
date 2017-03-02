@@ -39,7 +39,7 @@
                 android:layout_gravity="left"
                 android:textColor="@color/myBlack"
                 android:text="Task"
-                android:id="@+id/task_name"/>
+                android:id="@+id/tech_name"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
                 android:focusable="false"
                 android:layout_marginTop="1dp"
                 android:text="skill Requirement:3"
-                android:id="@+id/task_skill"/>
+                android:id="@+id/tech_skill"/>
 
 
         </LinearLayout>
@@ -62,7 +62,7 @@
             android:layout_marginLeft="50dp"
             android:textColor="@color/myBlack"
             android:focusable="false"
-            android:id="@+id/task_duration"/>
+            android:id="@+id/tech_workHour"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1px"
         android:background="@color/myLightGray"
         />
 

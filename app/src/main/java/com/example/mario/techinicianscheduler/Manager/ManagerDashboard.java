@@ -203,6 +203,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
             case 2:
                 Intent intent1=new Intent(ManagerDashboard.this,ManageTasks.class);
                 Bundle bundle1=managerInfo;
+                bundle1.putParcelableArrayList("availableTechnician",techs);
                 bundle1.putParcelableArrayList("availableTask",tasks);
                 intent1.putExtras(bundle1);
                 startActivity(intent1);
@@ -212,13 +213,17 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 Intent intent2=new Intent(ManagerDashboard.this,ManageTechnicians.class);
                 Bundle bundle2=managerInfo;
                 bundle2.putParcelableArrayList("availableTechnician",techs);
+                bundle2.putParcelableArrayList("availableTask",tasks);
                 intent2.putExtras(bundle2);
                 startActivity(intent2);
                 finish();
                 break;
             case 4:
                 Intent intent3=new Intent(ManagerDashboard.this,ManagerSetting.class);
-                intent3.putExtras(managerInfo);
+                Bundle bundle3=managerInfo;
+                bundle3.putParcelableArrayList("availableTechnician",techs);
+                bundle3.putParcelableArrayList("availableTask",tasks);
+                intent3.putExtras(bundle3);
                 startActivityForResult(intent3,ACTIVITY_MANAGER_SETTING);
                 break;
             case 5:
