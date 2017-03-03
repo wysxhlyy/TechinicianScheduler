@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -33,8 +34,9 @@ public class CreateTask extends AppCompatActivity {
     private AutoCompleteTextView stationName;
     private EditText description;
     private EditText duration;
-    private Button addTask;
+    private ImageButton addTask;
     private Bundle managerInfo;
+    private ImageButton quit;
 
     private JSONObject jsonObject;
     private RequestQueue requestQueue;
@@ -43,6 +45,7 @@ public class CreateTask extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_create_task);
         initialize();
 
@@ -83,6 +86,13 @@ public class CreateTask extends AppCompatActivity {
             }
         });
 
+        quit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
 
     private void initialize() {
@@ -90,9 +100,10 @@ public class CreateTask extends AppCompatActivity {
         skillReq=(EditText)findViewById(R.id.createTaskSkillReq);
         stationName=(AutoCompleteTextView)findViewById(R.id.createTaskStation);
         description=(EditText)findViewById(R.id.createTaskDescrip);
-        addTask=(Button)findViewById(R.id.createTaskSubmit);
+        addTask=(ImageButton)findViewById(R.id.createTaskSubmit);
         duration=(EditText)findViewById(R.id.createTaskDuration);
         managerInfo=getIntent().getExtras();
+        quit=(ImageButton)findViewById(R.id.quitCreateTask);
     }
 
     Response.Listener<String> listener=new Response.Listener<String>() {

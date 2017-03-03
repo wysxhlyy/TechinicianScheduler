@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -35,7 +37,7 @@ public class DisplayTask extends AppCompatActivity {
     private EditText editStationName;
     private EditText editDuration;
     private EditText editDescription;
-    private Button update;
+    private ImageButton update;
     private Button delete;
 
     private Bundle managerInfo;
@@ -51,6 +53,7 @@ public class DisplayTask extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_display_task);
         initialize();
 
@@ -127,7 +130,7 @@ public class DisplayTask extends AppCompatActivity {
         editDuration=(EditText)findViewById(R.id.editTaskDuration);
         editDescription=(EditText)findViewById(R.id.editTaskDescrip);
         managerInfo=getIntent().getExtras();
-        update=(Button)findViewById(R.id.editTaskSubmit);
+        update=(ImageButton)findViewById(R.id.editTaskSubmit);
         delete=(Button)findViewById(R.id.deleteTask);
     }
 
