@@ -11,5 +11,8 @@
     <color name="white">#ffffff</color>
     <color name="myBlue">#86A2FF</color>
     <color name="myLLightGray">#eeeef1</color>
+    <color name="myDarkGreen">#467973</color>
+    <color name="myGreen2">#3FA195</color>
+    <color name="myGreen3">#2DC1AF</color>
 
 </resources>

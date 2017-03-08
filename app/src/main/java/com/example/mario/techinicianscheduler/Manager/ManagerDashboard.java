@@ -83,7 +83,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
         handleResideMenu();
 
-
     }
 
 

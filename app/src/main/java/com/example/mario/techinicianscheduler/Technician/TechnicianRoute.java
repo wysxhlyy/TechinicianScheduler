@@ -1,16 +1,20 @@
 package com.example.mario.techinicianscheduler.Technician;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mario.techinicianscheduler.R;
+import com.example.mario.techinicianscheduler.ResideMenu.ResideMenu;
+import com.example.mario.techinicianscheduler.ResideMenu.ResideMenuItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,7 +29,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener {
+public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener, View.OnClickListener {
 
     private GoogleMap mMap;
     private ArrayList<LatLng> recordPos;
@@ -33,61 +37,66 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
     private TextView orderedListShow;
     private float minimumDistance=100000000;
 
-    private Button improve;
-    private Button route;
+    private ImageButton route;
+    private ImageButton menu;
     private ArrayList<LatLng> orderedList;
     private ProgressDialog progressDialog;
     private List<Polyline> polylinePaths = new ArrayList<>();
     private int routeCount=0;
     private Bundle techInfo;
 
+    private ResideMenu resideMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_technician_route);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);//start map service
+
+        initialize();
 
         techInfo=getIntent().getExtras();
         recordPos=techInfo.getParcelableArrayList("recordPos");
         orderedList=new ArrayList<LatLng>();
 
-
-
+        //showInfoForTest();
         findShortestOrder();
         routePlan();
 
-        orderedListShow=(TextView)findViewById(R.id.orderedList);
-        improve=(Button)findViewById(R.id.improveSolution);
         minimumDistance=calculateDistance(orderedList);
+        route.setOnClickListener(this);
+        menu.setOnClickListener(this);
 
-        improve.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                routeCount=0;
-                kopt(orderedList);
+        handleResideMenu();
 
-                String show="";
-                for(int i=0;i<orderedList.size();i++){
-                    show+="place"+i+":"+orderedList.get(i).latitude+","+orderedList.get(i).longitude+"\n";
-                }
-                show+="total Distance:"+calculateDistance(orderedList);
-                orderedListShow.setText(show);
+    }
 
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(startEnd).title("Home").icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
-                for(int i=1;i<orderedList.size()-1;i++){
-                    LatLng latLng=orderedList.get(i);
-                    mMap.addMarker(new MarkerOptions().position(latLng).title("place"+i));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,13.0f));
-                }
-            }
-        });
+    private void improve(){
+        routeCount=0;
+        kopt(orderedList);
+
+//      showInfoForTest();
+//      mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(startEnd).title("Home").icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+        for(int i=1;i<orderedList.size()-1;i++){
+            LatLng latLng=orderedList.get(i);
+            mMap.addMarker(new MarkerOptions().position(latLng).title("place"+i));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,13.0f));
+        }
+    }
 
 
+
+    private void initialize(){
+        orderedListShow=(TextView)findViewById(R.id.orderedList);
+        route=(ImageButton)findViewById(R.id.googleRoute);
+        menu=(ImageButton)findViewById(R.id.routeMenu);
+    }
+
+
+    private void showInfoForTest(){
         String show="";
         show+="start:"+startEnd.latitude+","+startEnd.longitude+"\n";
         for(int i=1;i<orderedList.size()-1;i++){
@@ -96,28 +105,47 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
         show+="End:"+startEnd.latitude+","+startEnd.longitude+"\n";
         show+="total Distance:"+calculateDistance(orderedList);
         orderedListShow.setText(show);
-
-
-        route=(Button)findViewById(R.id.googleRoute);
-        route.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mMap.clear();
-                if(routeCount<orderedList.size()-1){
-                    try {
-                        new DirectionFinder(TechnicianRoute.this,orderedList.get(routeCount).latitude+","+orderedList.get(routeCount).longitude,orderedList.get(routeCount+1).latitude+","+orderedList.get(routeCount+1).longitude).execute();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    routeCount++;
-                }else {
-                    Toast.makeText(TechnicianRoute.this,"Congratulations! You have finished today's task",Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
     }
+
+
+    private void handleResideMenu(){
+        resideMenu=new ResideMenu(this);
+        resideMenu.setShadowVisible(true);
+        resideMenu.attachToActivity(this);
+        resideMenu.setScaleValue(0.6f);
+        resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
+
+
+
+
+        String titles[]={"Work Arrangement","Route","Settings","Log out"};
+        int icon[]={R.drawable.schedule,R.drawable.route,R.drawable.settings,R.drawable.logout};
+
+        for(int i=0;i<titles.length;i++){
+            ResideMenuItem item=new ResideMenuItem(this,icon[i],titles[i]);
+            item.setId(i);
+            item.setOnClickListener(this);
+            resideMenu.addMenuItem(item,ResideMenu.DIRECTION_LEFT);
+        }
+
+        resideMenu.setMenuListener(menuListener);
+    }
+
+    private ResideMenu.OnMenuListener menuListener=new ResideMenu.OnMenuListener() {
+        @Override
+        public void openMenu() {
+            resideMenu.setBackground(R.drawable.bg);
+        }
+        @Override
+        public void closeMenu() {
+            resideMenu.setBackground(R.drawable.white);
+        }
+    };
+
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        return resideMenu.dispatchTouchEvent(ev);
+    }
+
 
     /**
      * Use 2-opt heuristic to improve the initial solution made by greedy search.
@@ -227,6 +255,9 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
             mMap.addMarker(new MarkerOptions().position(latLng).title("place"+i));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,13.0f));
         }
+
+        improve();
+
     }
 
     @Override
@@ -257,6 +288,48 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
             }
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
+
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case 0:
+                Intent intent=new Intent(TechnicianRoute.this,TechnicianTasks.class);
+                intent.putExtras(techInfo);
+                startActivity(intent);
+                break;
+            case 1:
+                Intent intent1=new Intent(TechnicianRoute.this,TechnicianRoute.class);
+                intent1.putExtras(techInfo);
+                startActivity(intent1);
+                break;
+            case 2:
+                Intent intent2=new Intent(TechnicianRoute.this,TechnicianSetting.class);
+                intent2.putExtras(techInfo);
+                startActivity(intent2);
+                break;
+            case 3:
+                Intent intent3=new Intent(TechnicianRoute.this, TechnicianLogin.class);
+                startActivity(intent3);
+                break;
+            case R.id.routeMenu:
+                resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
+                break;
+            case R.id.googleRoute:
+                mMap.clear();
+                if(routeCount<orderedList.size()-1){
+                    try {
+                        new DirectionFinder(TechnicianRoute.this,orderedList.get(routeCount).latitude+","+orderedList.get(routeCount).longitude,orderedList.get(routeCount+1).latitude+","+orderedList.get(routeCount+1).longitude).execute();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    routeCount++;
+                }else {
+                    Toast.makeText(TechnicianRoute.this,"Congratulations! You have finished today's task",Toast.LENGTH_SHORT).show();
+                }
+                break;
 
         }
     }
