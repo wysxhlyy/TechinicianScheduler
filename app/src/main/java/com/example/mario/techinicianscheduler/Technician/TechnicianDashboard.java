@@ -88,8 +88,8 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
 
 
 
-        String titles[]={"Work Arrangement","Route","Settings","Log out"};
-        int icon[]={R.drawable.schedule,R.drawable.route,R.drawable.settings,R.drawable.logout};
+        String titles[]={"Home","Work Arrangement","Route","Settings","Log out"};
+        int icon[]={R.drawable.home,R.drawable.schedule,R.drawable.route,R.drawable.settings,R.drawable.logout};
 
         for(int i=0;i<titles.length;i++){
             ResideMenuItem item=new ResideMenuItem(this,icon[i],titles[i]);
@@ -152,21 +152,27 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
         techInfo.putParcelableArrayList("recordPos",recordPos);
         switch (view.getId()){
             case 0:
+                Intent intent0=new Intent(TechnicianDashboard.this,TechnicianDashboard.class);
+                intent0.putExtras(techInfo);
+                startActivity(intent0);
+                finish();
+                break;
+            case 1:
                 Intent intent=new Intent(TechnicianDashboard.this,TechnicianTasks.class);
                 intent.putExtras(techInfo);
                 startActivity(intent);
                 break;
-            case 1:
+            case 2:
                 Intent intent1=new Intent(TechnicianDashboard.this,TechnicianRoute.class);
                 intent1.putExtras(techInfo);
                 startActivity(intent1);
                 break;
-            case 2:
+            case 3:
                 Intent intent2=new Intent(TechnicianDashboard.this,TechnicianSetting.class);
                 intent2.putExtras(techInfo);
                 startActivity(intent2);
                 break;
-            case 3:
+            case 4:
                 Intent intent3=new Intent(TechnicianDashboard.this, TechnicianLogin.class);
                 startActivity(intent3);
                 break;
