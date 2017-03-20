@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.example.mario.techinicianscheduler.Manager.HandleTask.CreateTask;
-import com.example.mario.techinicianscheduler.Manager.HandleTask.DisplayTask;
+import com.example.mario.techinicianscheduler.Manager.HandleTask.EditTask;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.ResideMenu.ResideMenu;
 import com.example.mario.techinicianscheduler.ResideMenu.ResideMenuItem;
@@ -58,7 +58,7 @@ public class ManageTasks extends AppCompatActivity implements View.OnClickListen
         dataAdapter=new SimpleAdapter(this,list,R.layout.manage_task_list,new String[]{"name","requirement","duration"},new int[]{R.id.task_name,R.id.task_skill,R.id.task_duration});
         taskListView.setAdapter(dataAdapter);
 
-        displayTask();
+        editTask();
 
         addNewTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,12 +124,12 @@ public class ManageTasks extends AppCompatActivity implements View.OnClickListen
 
 
 
-    private void displayTask() {
+    private void editTask() {
         taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int myItemInt, long l) {
-                Intent intent=new Intent(ManageTasks.this, DisplayTask.class);
-                managerInfo.putInt("selectedTask",myItemInt);
+                Intent intent=new Intent(ManageTasks.this, EditTask.class);
+                managerInfo.putInt("selectedTask",myItemInt+1);
                 intent.putExtras(managerInfo);
                 startActivityForResult(intent,ACTIVITY_DELETE_TASK);
             }

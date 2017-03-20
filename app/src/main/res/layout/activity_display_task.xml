@@ -1,85 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/activity_create_task"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context="com.example.mario.techinicianscheduler.Manager.HandleTask.CreateTask"
-android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mario.techinicianscheduler.Manager.HandleTask.DisplayTask"
+    android:orientation="vertical"
     >
 
-
-
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_gravity="left"
-    android:layout_marginTop="15dp"
-    android:layout_marginLeft="20dp"
-    >
-
-
-    <ImageButton
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@drawable/quit"
-        android:id="@+id/quitCreateTask"
-        />
-
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/myBlack"
-        android:text="Edit Task"
-        android:textSize="20dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="120dp"
-        />
-
-    <ImageButton
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:id="@+id/editTaskSubmit"
-        android:background="@drawable/update"
-        android:layout_marginLeft="125dp"
-        />
+        android:orientation="horizontal"
+        android:layout_gravity="left"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="20dp"
+        >
 
 
-</LinearLayout>
+        <ImageButton
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/quit"
+            android:id="@+id/quitDisplayTask"
+            />
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="280dp"
-    android:orientation="vertical"
-    android:background="@color/myLLightGray"
-    android:layout_marginTop="30dp"
-    >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/myBlack"
+            android:text="Edit Task"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="120dp"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:orientation="vertical"
+        android:background="@color/myLLightGray"
+        android:layout_marginTop="30dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            >
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="TITLE"
+                android:textSize="15dp"
+                />
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:paddingTop="5dp"
+                android:id="@+id/displayTaskName"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/myBlack"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DESCRIPTION"
+                android:textSize="15dp"
+
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:padding="2dp"
+                android:paddingTop="5dp"
+                android:id="@+id/displayTaskDescrip"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:maxLines="8"
+                android:textColor="@color/myBlack"
+                android:scrollbars="vertical"
+                />
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical"
         >
-
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="TITLE"
+            android:text="SKILL REQUIREMENT"
+            android:textSize="15dp"
+
             />
 
-
-
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editTaskName"
-            android:layout_marginTop="5dp"
+            android:padding="2dp"
+            android:paddingTop="5dp"
+            android:id="@+id/displayTaskSkillReq"
             android:textColor="@color/myBlack"
             />
 
@@ -88,110 +149,60 @@ android:orientation="vertical"
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="25dp"
+        android:orientation="vertical"
         >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DESCRIPTION"
+            android:text="LOCATION"
+            android:textSize="15dp"
+
             />
 
-        <EditText
+        <TextView
+            android:padding="2dp"
+            android:paddingTop="5dp"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:id="@+id/editTaskDescrip"
-            android:gravity="top"
-            android:inputType="textMultiLine"
-            android:maxLines="8"
-            android:scrollbars="vertical"
+            android:layout_height="wrap_content"
+            android:id="@+id/displayTaskStation"
+            android:textColor="@color/myBlack"
             />
 
     </LinearLayout>
 
-
-
-
-</LinearLayout>
-
-
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginTop="20dp"
-    android:orientation="vertical"
-    >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SKILL REQUIREMENT"
-        />
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editTaskSkillReq"
-        android:textColor="@color/myBlack"
-        />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="25dp"
+        android:orientation="vertical"
+        >
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ESTIMATE DURATION"
+            android:textSize="15dp"
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginTop="15dp"
-    android:orientation="vertical"
-    >
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="LOCATION"
-        />
+        <TextView
+            android:padding="2dp"
+            android:paddingTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/displayTaskDuration"
+            android:textColor="@color/myBlack"
+            />
 
-    <AutoCompleteTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTaskStation"
-        android:textColor="@color/myBlack"
-        />
+    </LinearLayout>
 
-</LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginTop="15dp"
-    android:orientation="vertical"
-    >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ESTIMATE DURATION"
-        />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTaskDuration"
-        android:textColor="@color/myBlack"
-        />
-
-</LinearLayout>
-
-<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -210,6 +221,6 @@ android:orientation="vertical"
             android:textAllCaps="false"
             android:background="@color/myRed"
             />
-</LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

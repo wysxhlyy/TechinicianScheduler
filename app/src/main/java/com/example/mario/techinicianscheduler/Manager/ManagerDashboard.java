@@ -175,9 +175,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         @Override
         protected void onPostExecute(String s) {
             dialog.dismiss();
-            managerDashNumTask.setText("You have "+tasks.size()+" tasks to manage today.");
-            manageTaskNum.setText(tasks.size()+"");
-            manageTechNum.setText(techs.size()+"");
+
         }
     }
 
@@ -289,6 +287,9 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                         }
                     }
 
+                    managerDashNumTask.setText("You have "+tasks.size()+" tasks to manage today.");
+                    manageTaskNum.setText(taskNum+"");
+                    manageTechNum.setText(techNum+"");
 
 
 

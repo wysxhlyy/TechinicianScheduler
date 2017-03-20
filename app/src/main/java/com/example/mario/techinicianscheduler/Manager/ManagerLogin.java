@@ -130,7 +130,6 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
             editor.putString("username",username);
             editor.putString("password",password);
             editor.commit();
-            finish();
         }
     }
 
