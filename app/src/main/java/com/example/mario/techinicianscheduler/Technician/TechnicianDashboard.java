@@ -1,11 +1,16 @@
 package com.example.mario.techinicianscheduler.Technician;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +33,28 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import su.levenetc.android.textsurface.Text;
+import su.levenetc.android.textsurface.TextBuilder;
+import su.levenetc.android.textsurface.TextSurface;
+import su.levenetc.android.textsurface.animations.Alpha;
+import su.levenetc.android.textsurface.animations.ChangeColor;
+import su.levenetc.android.textsurface.animations.Delay;
+import su.levenetc.android.textsurface.animations.Parallel;
+import su.levenetc.android.textsurface.animations.Rotate3D;
+import su.levenetc.android.textsurface.animations.Sequential;
+import su.levenetc.android.textsurface.animations.ShapeReveal;
+import su.levenetc.android.textsurface.animations.SideCut;
+import su.levenetc.android.textsurface.animations.Slide;
+import su.levenetc.android.textsurface.animations.TransSurface;
+import su.levenetc.android.textsurface.contants.Align;
+import su.levenetc.android.textsurface.contants.Pivot;
+import su.levenetc.android.textsurface.contants.Side;
+
+import static com.example.mario.techinicianscheduler.R.drawable.schedule;
 
 public class TechnicianDashboard extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,6 +64,9 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
     private TextView techTaskNum;
     private TextView techWorkHour;
     private TextView taskEstimateTime;
+
+    private TextView testText;
+    private LinearLayout layout;
 
 
     private int estimateDuration=0;
@@ -56,18 +84,22 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
 
     private ResideMenu resideMenu;
 
+    private Text textD;
+    private TextSurface textSurface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_technician_dashboard);
         initialize();
 
-        technicianId=techInfo.getInt("techId")+"";
+
+        technicianId = techInfo.getInt("techId") + "";
         loggedTechUsername.setText(techInfo.getString("firstName"));
-        Calendar c=Calendar.getInstance();
-        int year=c.get(Calendar.YEAR);
-        int month=c.get(Calendar.MONTH)+1;
-        int day=c.get(Calendar.DAY_OF_MONTH);
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
         techDate.setText(year + "/" + month + "/" + day);
 
 
@@ -76,7 +108,126 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
         techStartSideBar.setOnClickListener(this);
 
         handleResideMenu();
+
+        final Handler h = new Handler();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                h.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        layout.removeView(textSurface);
+                        testText.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        }).start();
+
+
     }
+    private void handleTextAnimation() {
+
+        final Typeface typeface=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Roboto-Black.ttf");
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setTypeface(typeface);
+        String[] weeks = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        Text t1 = TextBuilder
+                .create("Hello")
+                .setPaint(paint)
+                .setSize(66)
+                .setAlpha(0)
+                .setColor(Color.DKGRAY)
+                .setPosition(Align.SURFACE_CENTER).build();
+
+        Text t2 = TextBuilder
+                .create(techInfo.getString("firstName"))
+                .setPaint(paint)
+                .setSize(40)
+                .setAlpha(0)
+                .setColor(Color.parseColor("#50D2C2"))
+                .setPosition(Align.BOTTOM_OF, t1).build();
+
+        Text t3 = TextBuilder
+                .create("     Today is "+weeks[calendar.get(Calendar.DAY_OF_WEEK)-1])
+                .setPaint(paint)
+                .setSize(40)
+                .setAlpha(0)
+                .setColor(Color.DKGRAY)
+                .setPosition(Align.RIGHT_OF, t2).build();
+
+        Text t4 = TextBuilder
+                .create("you have "+taskSize+" tasks")
+                .setPaint(paint)
+                .setSize(35)
+                .setAlpha(0)
+                .setColor(Color.parseColor("#50D2C2"))
+                .setPosition(Align.BOTTOM_OF, t3).build();
+
+        Text t5 = TextBuilder
+                .create("Estimate Work Hour: ")
+                .setPaint(paint)
+                .setSize(20)
+                .setAlpha(0)
+                .setColor(Color.BLACK)
+                .setPosition(Align.BOTTOM_OF | Align.CENTER_OF, t4).build();
+
+        Text t6 = TextBuilder
+                .create(estimateDuration+" min")
+                .setPaint(paint)
+                .setSize(20)
+                .setAlpha(0)
+                .setColor(Color.BLACK)
+                .setPosition(Align.RIGHT_OF, t5).build();
+
+        Text t7 = TextBuilder
+                .create("Just Do it!!!")
+                .setPaint(paint)
+                .setSize(60)
+                .setAlpha(0)
+                .setColor(Color.BLACK)
+                .setPosition(Align.CENTER_OF, t6).build();
+
+
+
+        textSurface.play(
+                new Sequential(
+                        ShapeReveal.create(t1, 750, SideCut.show(Side.LEFT), false),
+                        new Parallel(ShapeReveal.create(t1, 600, SideCut.hide(Side.LEFT), false), new Sequential(Delay.duration(300), ShapeReveal.create(t1, 600, SideCut.show(Side.LEFT), false))),
+                        new Parallel(new TransSurface(500, t2, Pivot.CENTER), ShapeReveal.create(t2, 1300, SideCut.show(Side.LEFT), false)),
+                        Delay.duration(800),
+                        new Parallel(new TransSurface(750, t3, Pivot.CENTER), Slide.showFrom(Side.LEFT, t3, 750), ChangeColor.to(t3, 750, Color.BLACK)),
+                        Delay.duration(400),
+                        new Parallel(TransSurface.toCenter(t4, 800), Rotate3D.showFromSide(t4, 750, Pivot.TOP)),
+                        Delay.duration(500),
+                        new Parallel(TransSurface.toCenter(t5, 1000), Slide.showFrom(Side.TOP, t5, 500)),
+                        new Parallel(TransSurface.toCenter(t6, 1000), Slide.showFrom(Side.LEFT, t6, 500)),
+                        Delay.duration(100),
+                        new Parallel(Alpha.hide(t1,1500),Alpha.hide(t2,1500),Alpha.hide(t3, 1500),Alpha.hide(t4,1500),Alpha.hide(t5,1500),Alpha.hide(t6, 1500)),
+                        new Parallel(TransSurface.toCenter(t7, 500), Rotate3D.showFromSide(t7, 750, Pivot.TOP)),
+                        new Parallel(Alpha.hide(t7, 1500))
+                )
+        );
+
+
+    }
+
+
+
+
+
+
 
     private void handleResideMenu(){
         resideMenu=new ResideMenu(this);
@@ -89,7 +240,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
 
 
         String titles[]={"Home","Work Arrangement","Route","Settings","Log out"};
-        int icon[]={R.drawable.home,R.drawable.schedule,R.drawable.route,R.drawable.settings,R.drawable.logout};
+        int icon[]={R.drawable.home, schedule,R.drawable.route,R.drawable.settings,R.drawable.logout};
 
         for(int i=0;i<titles.length;i++){
             ResideMenuItem item=new ResideMenuItem(this,icon[i],titles[i]);
@@ -141,8 +292,9 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
         techWorkHour=(TextView)findViewById(R.id.techWorkHour);
         techTaskNum=(TextView)findViewById(R.id.techTaskNum);
         taskEstimateTime=(TextView)findViewById(R.id.techEstimateTaskDur);
-
-
+        textSurface=(TextSurface) findViewById(R.id.techTextSurface);
+        layout=(LinearLayout)findViewById(R.id.activity_technician_dashboard);
+        testText=(TextView)findViewById(R.id.testText);
     }
 
 
@@ -217,6 +369,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
                 techTaskNum.setText(taskSize+"");
                 techWorkHour.setText(techInfo.getString("workHour"));
                 taskEstimateTime.setText(estimateDuration+"");
+                handleTextAnimation();
 
             }else {
 

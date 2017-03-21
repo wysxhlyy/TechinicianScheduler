@@ -19,6 +19,9 @@ android {
     }
 }
 
+repositories{
+    maven{ url "https://jitpack.io"}
+}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -31,6 +34,7 @@ dependencies {
     compile 'junit:junit:4.12'
     compile 'com.google.android.gms:play-services:10.0.1'
     compile 'com.android.support:design:24.2.0'
+    compile 'com.github.elevenetc:textsurface:0.9.1'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.android.support.constraint:constraint-layout:+'
     testCompile 'junit:junit:4.12'
