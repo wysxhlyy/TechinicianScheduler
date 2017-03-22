@@ -27,7 +27,6 @@ import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.ResideMenu.ResideMenu;
 import com.example.mario.techinicianscheduler.ResideMenu.ResideMenuItem;
 import com.example.mario.techinicianscheduler.Task;
-import com.example.mario.techinicianscheduler.Technician.TechnicianLogin;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -252,7 +251,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 startActivityForResult(intent3,ACTIVITY_MANAGER_SETTING);
                 break;
             case 5:
-                Intent intent4=new Intent(ManagerDashboard.this, TechnicianLogin.class);
+                Intent intent4=new Intent(ManagerDashboard.this, ManagerLogin.class);
                 startActivity(intent4);
                 finish();
                 break;

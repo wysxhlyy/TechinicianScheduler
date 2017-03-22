@@ -90,7 +90,7 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
 
 
     private void initialize(){
-        orderedListShow=(TextView)findViewById(R.id.orderedList);
+        //orderedListShow=(TextView)findViewById(R.id.orderedList);
         route=(ImageButton)findViewById(R.id.googleRoute);
         menu=(ImageButton)findViewById(R.id.routeMenu);
     }

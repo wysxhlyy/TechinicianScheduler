@@ -1,15 +1,20 @@
 package com.example.mario.techinicianscheduler.Technician;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.mario.techinicianscheduler.Manager.HandleTask.DisplayTask;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.ResideMenu.ResideMenu;
@@ -23,7 +28,7 @@ import java.util.Map;
 
 public class TechnicianTasks extends AppCompatActivity implements View.OnClickListener{
 
-    private ListView taskList;
+    private SwipeMenuListView taskList;
     private Bundle techInfo;
 
     private ImageButton callManager;
@@ -47,8 +52,44 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
         workArrangementMenu.setOnClickListener(this);
         handleResideMenu();
 
+        handleSwipe();
+
         displayTask();
     }
+
+    private void handleSwipe() {
+        SwipeMenuCreator creator=new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                SwipeMenuItem finishItem = new SwipeMenuItem(
+                        getApplicationContext());
+                finishItem.setBackground(new ColorDrawable(Color.parseColor("#50D2C2")));
+                finishItem.setWidth(600);
+                finishItem.setTitle("Finish");
+                finishItem.setTitleSize(18);
+                finishItem.setTitleColor(Color.WHITE);
+                // add to menu
+                menu.addMenuItem(finishItem);
+            }
+        };
+        taskList.setMenuCreator(creator);
+
+
+        taskList.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index){
+                    case 0:
+                        arrangedTasks.get(position).setFinished("true");
+                        //添加删除线
+                        recreate();
+                        break;
+                }
+                return  false;
+            }
+        });
+    }
+
 
     private void displayTask() {
         taskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,7 +128,7 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
      * Initialize the components.
      */
     private void initialize() {
-        taskList=(ListView)findViewById(R.id.taskArrangement);
+        taskList=(SwipeMenuListView) findViewById(R.id.taskArrangement);
         callManager=(ImageButton)findViewById(R.id.callManager);
         techInfo=getIntent().getExtras();
         workArrangementMenu=(ImageButton)findViewById(R.id.workArrangementMenu);
