@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,7 +66,6 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
     private TextView techWorkHour;
     private TextView taskEstimateTime;
 
-    private TextView testText;
     private LinearLayout layout;
 
 
@@ -84,7 +84,8 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
 
     private ResideMenu resideMenu;
 
-    private Text textD;
+    private TextClock timeShow;
+    private Typeface typeface;
     private TextSurface textSurface;
 
     @Override
@@ -92,7 +93,6 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_technician_dashboard);
         initialize();
-
 
         technicianId = techInfo.getInt("techId") + "";
         loggedTechUsername.setText(techInfo.getString("firstName"));
@@ -116,7 +116,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
             public void run() {
 
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -124,17 +124,37 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
                     @Override
                     public void run() {
                         layout.removeView(textSurface);
-                        testText.setVisibility(View.VISIBLE);
+                        layout.addView(timeShow);
+                        h.removeCallbacks(this);
                     }
                 });
             }
         }).start();
 
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                h.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        timeShow.start();
+//                        ViewCompat.postOnAnimationDelayed(timeShow, this, 1000);
+//                    }
+//                });
+//            }
+//        }).start();
+
+        timeShow.setFormat24Hour("hh:mm:ss");
+        Typeface tf=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Satellite.ttf");
+        timeShow.setTypeface(tf);
+
 
     }
     private void handleTextAnimation() {
 
-        final Typeface typeface=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Roboto-Black.ttf");
+        typeface=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Roboto-Black.ttf");
 
         Paint paint = new Paint();
         paint.setAntiAlias(true);
@@ -206,16 +226,16 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
                         ShapeReveal.create(t1, 750, SideCut.show(Side.LEFT), false),
                         new Parallel(ShapeReveal.create(t1, 600, SideCut.hide(Side.LEFT), false), new Sequential(Delay.duration(300), ShapeReveal.create(t1, 600, SideCut.show(Side.LEFT), false))),
                         new Parallel(new TransSurface(500, t2, Pivot.CENTER), ShapeReveal.create(t2, 1300, SideCut.show(Side.LEFT), false)),
-                        Delay.duration(800),
-                        new Parallel(new TransSurface(750, t3, Pivot.CENTER), Slide.showFrom(Side.LEFT, t3, 750), ChangeColor.to(t3, 750, Color.BLACK)),
+                        Delay.duration(500),
+                        new Parallel(new TransSurface(600, t3, Pivot.CENTER), Slide.showFrom(Side.LEFT, t3, 600), ChangeColor.to(t3, 750, Color.BLACK)),
                         Delay.duration(400),
                         new Parallel(TransSurface.toCenter(t4, 800), Rotate3D.showFromSide(t4, 750, Pivot.TOP)),
                         Delay.duration(500),
-                        new Parallel(TransSurface.toCenter(t5, 1000), Slide.showFrom(Side.TOP, t5, 500)),
-                        new Parallel(TransSurface.toCenter(t6, 1000), Slide.showFrom(Side.LEFT, t6, 500)),
+                        new Parallel(TransSurface.toCenter(t5, 800), Slide.showFrom(Side.TOP, t5, 500)),
+                        new Parallel(TransSurface.toCenter(t6, 800), Slide.showFrom(Side.LEFT, t6, 500)),
                         Delay.duration(100),
                         new Parallel(Alpha.hide(t1,1500),Alpha.hide(t2,1500),Alpha.hide(t3, 1500),Alpha.hide(t4,1500),Alpha.hide(t5,1500),Alpha.hide(t6, 1500)),
-                        new Parallel(TransSurface.toCenter(t7, 500), Rotate3D.showFromSide(t7, 750, Pivot.TOP)),
+                        new Parallel(TransSurface.toCenter(t7, 500), Rotate3D.showFromSide(t7, 750, Pivot.LEFT)),
                         new Parallel(Alpha.hide(t7, 1500))
                 )
         );
@@ -294,7 +314,9 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
         taskEstimateTime=(TextView)findViewById(R.id.techEstimateTaskDur);
         textSurface=(TextSurface) findViewById(R.id.techTextSurface);
         layout=(LinearLayout)findViewById(R.id.activity_technician_dashboard);
-        testText=(TextView)findViewById(R.id.testText);
+        timeShow=(TextClock) findViewById(R.id.timeShow);
+        layout.removeView(timeShow);
+        //timeShow.setVisibility(View.INVISIBLE);
     }
 
 

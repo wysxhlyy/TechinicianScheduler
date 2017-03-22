@@ -196,12 +196,16 @@
 
     </su.levenetc.android.textsurface.TextSurface>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/testText"
-        android:text="hello"
-        android:visibility="invisible"
+    <TextClock
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/timeShow"
+        android:format24Hour="hh:mm:ss"
+        android:format12Hour="h:mm:ssaa"
+        android:textColor="@color/myDarkGreen"
+        android:textSize="70dp"
+        android:paddingTop="100dp"
+        android:textAlignment="center"
         />
 
 
