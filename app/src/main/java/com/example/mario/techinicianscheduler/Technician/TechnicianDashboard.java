@@ -109,6 +109,16 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
 
         handleResideMenu();
 
+        dynamicLayout();
+
+        //set the style of textclock
+        timeShow.setFormat24Hour("hh:mm:ss");
+        Typeface tf=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Satellite.ttf");
+        timeShow.setTypeface(tf);
+
+    }
+
+    private void dynamicLayout(){
         final Handler h = new Handler();
 
         new Thread(new Runnable() {
@@ -130,28 +140,12 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
                 });
             }
         }).start();
-
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                h.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        timeShow.start();
-//                        ViewCompat.postOnAnimationDelayed(timeShow, this, 1000);
-//                    }
-//                });
-//            }
-//        }).start();
-
-        timeShow.setFormat24Hour("hh:mm:ss");
-        Typeface tf=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Satellite.ttf");
-        timeShow.setTypeface(tf);
-
-
     }
+
+
+    /**
+     * Create the text animation when enter the dashboard.
+     */
     private void handleTextAnimation() {
 
         typeface=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Roboto-Black.ttf");
@@ -244,11 +238,9 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
     }
 
 
-
-
-
-
-
+    /**
+     * Handle the side menu.
+     */
     private void handleResideMenu(){
         resideMenu=new ResideMenu(this);
         resideMenu.setShadowVisible(true);

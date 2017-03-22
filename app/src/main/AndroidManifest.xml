@@ -18,7 +18,9 @@
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:largeHeap="true"
+        >
         <activity android:name=".Manager.ManagerLogin" />
         <activity android:name=".Manager.ManagerDashboard" />
         <activity android:name=".Technician.TechnicianDashboard" />

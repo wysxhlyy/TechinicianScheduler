@@ -37,5 +37,6 @@ dependencies {
     compile 'com.github.elevenetc:textsurface:0.9.1'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.android.support.constraint:constraint-layout:+'
+    compile 'me.relex:circleindicator:1.2.2@aar'
     testCompile 'junit:junit:4.12'
 }

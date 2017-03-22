@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -34,8 +36,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import me.relex.circleindicator.CircleIndicator;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -45,7 +49,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     private TextView managerDashNumTask;
     private TextView manageTaskNum;
     private TextView manageTechNum;
-    //private TextView sideBarName;
     private Bundle managerInfo;
 
     private int retCode;
@@ -61,6 +64,8 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     private ImageButton menu;
 
     private static int ACTIVITY_MANAGER_SETTING=1;
+    private ViewPager viewPager;
+    private CircleIndicator indicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +80,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         }
 
 
-
         ManagerDashboard.CostTimeTask costTimeTask=new ManagerDashboard.CostTimeTask(ManagerDashboard.this);
         costTimeTask.execute();
 
@@ -83,6 +87,29 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
         handleResideMenu();
 
+        handleIndicator();
+
+    }
+
+    private void handleIndicator() {
+
+        List<Fragment> list=new ArrayList<>();
+        MyFragment image1 = new MyFragment(R.drawable.bay1);
+        MyFragment image2 = new MyFragment(R.drawable.bay2);
+        MyFragment image3 = new MyFragment(R.drawable.bay3);
+        MyFragment image4 = new MyFragment(R.drawable.bay4);
+        MyFragment image5 = new MyFragment(R.drawable.bay5);
+
+        list.add(image1);
+        list.add(image2);
+        list.add(image3);
+        list.add(image4);
+        list.add(image5);
+        MyPageAdapter pageAdapter=new MyPageAdapter(getSupportFragmentManager(),list);
+
+
+        viewPager.setAdapter(pageAdapter);
+        indicator.setViewPager(viewPager);
     }
 
 
@@ -92,8 +119,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         resideMenu.attachToActivity(this);
         resideMenu.setScaleValue(0.6f);
         resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
-
-
 
 
         String titles[]={"Home","Schedule","Manage Tasks","Manage Technicians","Settings","Log out"};
@@ -107,6 +132,8 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         }
 
         resideMenu.setMenuListener(menuListener);
+        resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_LEFT);
+
     }
 
     private ResideMenu.OnMenuListener menuListener=new ResideMenu.OnMenuListener() {
@@ -131,7 +158,8 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         manageTaskNum=(TextView)findViewById(R.id.manageTaskNum);
         manageTechNum=(TextView)findViewById(R.id.manageTechNum);
         menu=(ImageButton)findViewById(R.id.startSideBar);
-        //sideBarName=(TextView)findViewById(R.id.sideBarName);
+        indicator=(CircleIndicator) findViewById(R.id.indicator);
+        viewPager=(ViewPager)findViewById(R.id.viewPager);
 
         techs=new ArrayList<>();
         tasks=new ArrayList<>();
