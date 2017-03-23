@@ -6,10 +6,14 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,11 +52,16 @@ public class ScheduleResult extends AppCompatActivity {
     private Double improveCost=10000000.0;
     private Double minimumCost=10000.0;
     private Bundle managerInfo;
+    private int findNeighborIteration=50;
+    private int GLSiteration=1000;
+
 
     private Button hillClimbing;
     private Button guidedLocalSearch;
-    private Button back;
-    private Button confirm;
+    private ImageButton back;
+    private ImageButton confirm;
+
+    private EditText showGLSResult;
 
     private Map<Task,TechnicianInfo> initialResult;
     private Map<Task,TechnicianInfo> improveResult;
@@ -62,7 +71,6 @@ public class ScheduleResult extends AppCompatActivity {
     private ArrayList<Integer> penalty;
 
     private JSONObject jsonObject;
-    private int retCode;
 
 
     @Override
@@ -74,6 +82,8 @@ public class ScheduleResult extends AppCompatActivity {
 
 
         managerInfo=getIntent().getExtras();
+//        chosentasks=managerInfo.getParcelableArrayList("availableTask");
+//        chosenTechs=managerInfo.getParcelableArrayList("availableTechnician");
         chosenTechs= managerInfo.getParcelableArrayList("chosenTech");
         chosentasks=managerInfo.getParcelableArrayList("chosenTask");
 
@@ -144,6 +154,7 @@ public class ScheduleResult extends AppCompatActivity {
         });
 
 
+        generateGLSResult();
         showScheduleInfo();
 
     }
@@ -152,7 +163,7 @@ public class ScheduleResult extends AppCompatActivity {
     private void initialize() {
         chosenTechs=new ArrayList<>();
         chosentasks=new ArrayList<>();
-        getPlanInfo=(TextView)findViewById(R.id.getPlanInfo);
+        //getPlanInfo=(TextView)findViewById(R.id.getPlanInfo);
         initialResult=new HashMap<>();
         improveResult=new HashMap<>();
         localOptima=new HashMap<>();
@@ -161,22 +172,31 @@ public class ScheduleResult extends AppCompatActivity {
         GLSresult=new HashMap<>();
         hillClimbing=(Button)findViewById(R.id.hillClimbing);
         guidedLocalSearch=(Button)findViewById(R.id.guidedLoacalSearch);
-        back=(Button)findViewById(R.id.backDashboard);
-        confirm=(Button)findViewById(R.id.confirmSchedule);
+        back=(ImageButton)findViewById(R.id.backDashboard);
+        confirm=(ImageButton)findViewById(R.id.confirmSchedule);
         penalty=new ArrayList<Integer>();
         penalty.add(0,0);
         penalty.add(1,0);
         penalty.add(2,0);
+
     }
 
 
+    private void generateGLSResult(){
+        CostTimeTask costTimeTask=new CostTimeTask(ScheduleResult.this);
+        costTimeTask.execute();
+    }
+
+
+    /**
+     * Use another thread to handle the Guided local search, because it will cost long time.
+     */
     private class CostTimeTask extends AsyncTask<String,Integer,String>{
         private ProgressDialog dialog;
 
 
         public CostTimeTask(Context context){
             dialog=new ProgressDialog(context,0);
-
             dialog.setCancelable(true);
             dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             dialog.show();
@@ -191,23 +211,26 @@ public class ScheduleResult extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            showScheduleInfo();
+            //showScheduleInfo();
             dialog.dismiss();
         }
     }
 
-
+    /**
+     * Guided local search: three features used.
+     * The iteration is set to 100.
+     */
     private void guidedLS(){
         int i=0;
 
-        while (i<100){
+        while (i<GLSiteration){
             modifiedHillClimbing(initialResult);
             ArrayList<Double> localOptimaCost=modifiedCost(localOptima);
 
             double util1=localOptimaCost.get(1)/(1+penalty.get(0));
             double util2=localOptimaCost.get(2)/(1+penalty.get(1));
             double util3=localOptimaCost.get(3)/(1+penalty.get(2));
-            Log.d("util:",util1+","+util2+","+util3);
+          //  Log.d("util:",util1+","+util2+","+util3);
 
             if(util1<=util2){
                 if(util2<=util3){
@@ -224,7 +247,7 @@ public class ScheduleResult extends AppCompatActivity {
             if(calculateCost(localOptima)<minimumCost){
                 minimumCost=calculateCost(localOptima);
                 GLSresult=localOptima;
-                Log.d("Alert:","Find minimum:"+minimumCost);
+                //Log.d("Alert:","Find minimum:"+minimumCost);
             }
 
             i++;
@@ -234,7 +257,7 @@ public class ScheduleResult extends AppCompatActivity {
 
 
     /**
-     * 需要异步
+     * Need asynchronism.
      * @param schedule
      */
     private void modifiedHillClimbing(Map<Task,TechnicianInfo> schedule) {
@@ -243,13 +266,13 @@ public class ScheduleResult extends AppCompatActivity {
 
         boolean find=false;
 
-        Log.d("schedule length: ",schedule.size()+"");
+        //Log.d("schedule length: ",schedule.size()+"");
         newNeighbor.clear();
         newNeighbor=swapToFindNeighbor(schedule);
 
         if(newNeighbor!=null){
             ArrayList<Double> newCostResult=modifiedCost(newNeighbor);
-            if(newCostResult.get(0)<=originCostResult.get(0)){
+            if(newCostResult.get(0)<originCostResult.get(0)){
                 modifiedHillClimbing(newNeighbor);
                 find=true;
             }
@@ -259,7 +282,7 @@ public class ScheduleResult extends AppCompatActivity {
             newNeighbor=assignToFindNeighbor(schedule);
             if(newNeighbor!=null) {
                 ArrayList<Double> newCostResult = modifiedCost(newNeighbor);
-                if (newCostResult.get(0) <= originCostResult.get(0)) {
+                if (newCostResult.get(0) < originCostResult.get(0)) {
                     modifiedHillClimbing(newNeighbor);
                     find=true;
                 }
@@ -271,10 +294,10 @@ public class ScheduleResult extends AppCompatActivity {
                 newNeighbor=addUnassignedToFindNeighbor(schedule);
                 if(newNeighbor!=null){
                     ArrayList<Double> newCostResult = modifiedCost(newNeighbor);
-                    Log.d("Test",newCostResult.get(0)+","+originCostResult.get(0));
-                    if(newCostResult.get(0) <= originCostResult.get(0)){
+                    // Log.d("Test",newCostResult.get(0)+","+originCostResult.get(0));
+                    if(newCostResult.get(0) < originCostResult.get(0)){
                         find=true;
-                        Log.d("Test","come");
+                        //Log.d("Test","come");
                         modifiedHillClimbing(newNeighbor);
                     }
                 }
@@ -283,16 +306,17 @@ public class ScheduleResult extends AppCompatActivity {
 
 
         if(!find){
-            Log.d("Alert: ","find local optima");
+            //Log.d("Alert: ","find local optima");
             localOptima=schedule;
         }
-
 
     }
 
 
+
     /**
-     * 找两个random的数，互换位置上的
+     * Handle the hill climbing, which will generate the initial solution.
+     * Three ways to find a neighborhood:1. swap the tasks. 2.assign one task to another technician. 3.add unassigned task to an available technician
      */
     private void hillClimbing(Map<Task,TechnicianInfo> schedule) {
         double originCost=calculateCost(schedule);
@@ -303,7 +327,7 @@ public class ScheduleResult extends AppCompatActivity {
 
         newNeighbor=swapToFindNeighbor(schedule);
         if(newNeighbor!=null){
-            if(calculateCost(newNeighbor)<=originCost){
+            if(calculateCost(newNeighbor)<originCost){
                 find=true;
                 hillClimbing(newNeighbor);
             }
@@ -313,7 +337,7 @@ public class ScheduleResult extends AppCompatActivity {
         if(!find){
             newNeighbor=assignToFindNeighbor(schedule);
             if(newNeighbor!=null){
-                if(calculateCost(newNeighbor)<=originCost){
+                if(calculateCost(newNeighbor)<originCost){
                     find=true;
                     hillClimbing(newNeighbor);
                 }
@@ -321,12 +345,12 @@ public class ScheduleResult extends AppCompatActivity {
         }
 
         if(!find){
-            Log.d("Test",sortedTask.size()+","+schedule.size());
+            //  Log.d("Test",sortedTask.size()+","+schedule.size());
             if (schedule.size()<sortedTask.size()){
-                Log.d("Test","Enter");
+                //    Log.d("Test","Enter");
                 newNeighbor=addUnassignedToFindNeighbor(schedule);
                 if(newNeighbor!=null){
-                    if(calculateCost(newNeighbor)<=originCost){
+                    if(calculateCost(newNeighbor)<originCost){
                         find=true;
                         hillClimbing(newNeighbor);
                     }
@@ -340,6 +364,11 @@ public class ScheduleResult extends AppCompatActivity {
     }
 
 
+    /**
+     * Swap two tasks in two technicians to generate a new neighbor in hill climbing and GLS
+     * @param originSchedule
+     * @return
+     */
     private Map<Task,TechnicianInfo> swapToFindNeighbor(Map<Task,TechnicianInfo> originSchedule){
         Map<Task,TechnicianInfo> neighbor=new HashMap<>();
 
@@ -351,7 +380,7 @@ public class ScheduleResult extends AppCompatActivity {
         Boolean find=false;
 
 
-        for(int k=0;k<100;k++){
+        for(int k=0;k<findNeighborIteration;k++){
 
             int i= (int) Math.round(Math.random()*(originSchedule.size()-1));
             int j= (int) Math.round(Math.random()*(originSchedule.size()-1));
@@ -376,6 +405,11 @@ public class ScheduleResult extends AppCompatActivity {
         }
     }
 
+    /**
+     * Assign the task from one technician to another technician to generate a new neighbor in GLS.
+     * @param originSchedule
+     * @return
+     */
     private Map<Task,TechnicianInfo> assignToFindNeighbor(Map<Task,TechnicianInfo> originSchedule){
         Map<Task,TechnicianInfo> neighbor=new HashMap<>();
         ArrayList<Task> tasks=new ArrayList<>();
@@ -385,11 +419,11 @@ public class ScheduleResult extends AppCompatActivity {
 
         Boolean find=false;
 
-        for(int k=0;k<100;k++){
+        for(int k=0;k<findNeighborIteration;k++){
             int i= (int) Math.round(Math.random()*(originSchedule.size()-1));
             int j= (int) Math.round(Math.random()*(techs.size()-1));
 
-            if(i!=j&&techs.get(i)!=techs.get(j)&&tasks.get(i).getSkillRequirement()<=techs.get(j).getSkillLevel()){
+            if(i!=j&&originSchedule.get(i)!=techs.get(j)&&tasks.get(i).getSkillRequirement()<=techs.get(j).getSkillLevel()){
                 Map<Task,TechnicianInfo> newResult=new HashMap<>();
                 newResult.putAll(originSchedule);
                 newResult.put(tasks.get(i),techs.get(j));
@@ -409,6 +443,11 @@ public class ScheduleResult extends AppCompatActivity {
     }
 
 
+    /**
+     * Add the unassigned task to an available technician to generate a new neighbor in GLS.
+     * @param originSchedule
+     * @return
+     */
     private Map<Task,TechnicianInfo> addUnassignedToFindNeighbor(Map<Task,TechnicianInfo> originSchedule){
         Map<Task,TechnicianInfo> neighbor=new HashMap<>();
         ArrayList<Task> tasks=new ArrayList<>();
@@ -424,7 +463,7 @@ public class ScheduleResult extends AppCompatActivity {
         }
         Boolean find=false;
 
-        for(int k=0;k<10;k++){
+        for(int k=0;k<findNeighborIteration;k++){
             int i= (int) Math.round(Math.random()*(unassignedTask.size()-1));
             int j= (int) Math.round(Math.random()*(techs.size()-1));
 
@@ -434,13 +473,12 @@ public class ScheduleResult extends AppCompatActivity {
                 newResult.put(unassignedTask.get(i),techs.get(j));
                 if(calculateWorkHour(newResult,techs.get(j))<=techs.get(j).getWorkHour()){
                     neighbor.putAll(newResult);
-                    Log.d("Test","Found");
+                    //  Log.d("Test","Found");
                     find=true;
                     break;
                 }
             }
         }
-
 
         if(find){
             return neighbor;
@@ -452,9 +490,8 @@ public class ScheduleResult extends AppCompatActivity {
 
 
 
-
     /**
-     * Calculate the cost after the schedule.(hill climbing)
+     * Calculate the cost for one schedule.(for hill climbing algorithm)
      */
     private Double calculateCost(Map<Task,TechnicianInfo> schedule) {
         ArrayList<Task> availableTask= new ArrayList<>();
@@ -476,6 +513,10 @@ public class ScheduleResult extends AppCompatActivity {
                     }
                 }
 
+                if(assignedTask.size()>=1){
+                    float dist = calculateTravelTime(assignedTask);
+                    cost += (dist / 1000) * 10;  //assume drive speed is 6km/h.
+                }
 
             }
 
@@ -495,6 +536,12 @@ public class ScheduleResult extends AppCompatActivity {
     }
 
 
+    /**
+     * Calculate the cost for one schedule. (for guided local search)
+     * The modified cost include the cost of penalty.
+     * @param schedule
+     * @return
+     */
     private ArrayList<Double> modifiedCost(Map<Task,TechnicianInfo> schedule){
         ArrayList<Task> availableTask= new ArrayList<>();
         ArrayList<Task> unassignedTask=new ArrayList<>();
@@ -550,54 +597,9 @@ public class ScheduleResult extends AppCompatActivity {
     }
 
 
-
-
-
-
     /**
-     * Test
+     * The very basic schedule, only meet the hard constraints but not concern the cost.
      */
-    private void showScheduleInfo() {
-        showData="";
-        showData+="number of tasks:"+sortedTask.size()+", number of technicians:"+sortedTech.size()+"\n\n";
-
-        ArrayList<Task> availableTask= new ArrayList<>();
-        availableTask.addAll(initialResult.keySet());
-
-        for(int i=0;i<availableTask.size();i++){
-            showData+="task"+availableTask.get(i).getId()+",skill:"+availableTask.get(i).getSkillRequirement()+",duration:"+availableTask.get(i).getDuration()+": "+initialResult.get(availableTask.get(i)).getFirstName()+", tech skill:"+initialResult.get(availableTask.get(i)).getSkillLevel()+", work hour:"+initialResult.get(availableTask.get(i)).getWorkHour()+"\n";
-        }
-
-        showData+="cost:"+initialCost.shortValue()+"\n";
-
-        if(!improveResult.isEmpty()){
-            ArrayList<Task> improved=new ArrayList<>();
-            improved.addAll(improveResult.keySet());
-            for(int j=0;j<improved.size();j++){
-                showData+="task"+improved.get(j).getId()+",skill:"+improved.get(j).getSkillRequirement()+",duration:"+improved.get(j).getDuration()+": "+improveResult.get(improved.get(j)).getFirstName()+", tech skill:"+improveResult.get(improved.get(j)).getSkillLevel()+", work hour:"+improveResult.get(improved.get(j)).getWorkHour()+"\n";
-            }
-            improveCost=calculateCost(improveResult);
-            showData+="cost:"+improveCost.shortValue()+"\n";
-        }
-
-        if(!GLSresult.isEmpty()){
-            ArrayList<Task> improved=new ArrayList<>();
-            improved.addAll(GLSresult.keySet());
-            for(int j=0;j<improved.size();j++){
-                showData+="task"+improved.get(j).getId()+",skill:"+improved.get(j).getSkillRequirement()+",duration:"+improved.get(j).getDuration()+": "+GLSresult.get(improved.get(j)).getFirstName()+", tech skill:"+GLSresult.get(improved.get(j)).getSkillLevel()+", work hour:"+GLSresult.get(improved.get(j)).getWorkHour()+"\n";
-            }
-            Double finalCost=calculateCost(GLSresult);
-            showData+="cost: "+minimumCost.shortValue()+"\n";
-        }
-
-
-
-
-        getPlanInfo.setText(showData);
-
-    }
-
-
     private void basicSchedule(){
         sortTaskBySkill();
         sortTechnicianBySkill();
@@ -616,20 +618,20 @@ public class ScheduleResult extends AppCompatActivity {
                                 assignedTask.add(sortedTask.get(k));
                             }
                         }
-                        Log.d("estimate pre:",estimateDur+"");
+                        //Log.d("estimate pre:",estimateDur+"");
                         estimateDur+=calculateDur(sortedTask.get(i).getSkillRequirement(),sortedTech.get(j).getSkillLevel(),sortedTask.get(i).getDuration());           //Add the new task being schedules.
                         assignedTask.add(sortedTask.get(i));
 
                         float dist=calculateTravelTime(assignedTask);
                         estimateDur+=(dist/1000)*2;  //assume drive speed is 30km/h.
-                        Log.d("estimateDurAlready:"+j,estimateDur+" ");
+                        //Log.d("estimateDurAlready:"+j,estimateDur+" ");
                     }else {
                         estimateDur+=calculateDur(sortedTask.get(i).getSkillRequirement(),sortedTech.get(j).getSkillLevel(),sortedTask.get(i).getDuration());           //Add the new task being schedules.
                         assignedTask.add(sortedTask.get(i));
 
                         float dist=calculateTravelTime(assignedTask);
                         estimateDur+=(dist/1000)*2;  //assume drive speed is 30km/h.
-                        Log.d("estimateDur:"+j,estimateDur+" ");
+                        //Log.d("estimateDur:"+j,estimateDur+" ");
                     }
 
 
@@ -643,6 +645,14 @@ public class ScheduleResult extends AppCompatActivity {
     }
 
 
+    /**
+     * Calculate the estimate work hour of an specific technician, while the technician already has some tasks to do.
+     * The ouput will be used to compare with the technician's work hour limit to dicide whether the technician is available to receive new tasks.
+     * The travel cost will be simulated.
+     * @param schedule
+     * @param tech
+     * @return
+     */
     private float calculateWorkHour(Map<Task,TechnicianInfo> schedule,TechnicianInfo tech){
         ArrayList<Task> tasks=new ArrayList<>();
         ArrayList<Task> scheduledTask=new ArrayList<>();
@@ -654,14 +664,11 @@ public class ScheduleResult extends AppCompatActivity {
         }
         float cost=0;
 
-
             for(int i=0;i<tasks.size();i++){
                 cost+=calculateDur(tasks.get(i).getSkillRequirement(),tech.getSkillLevel(),tasks.get(i).getDuration());
             }
             float dist=calculateTravelTime(tasks);
             cost+=(dist/1000)*2;
-
-
 
         return cost;
 
@@ -684,19 +691,30 @@ public class ScheduleResult extends AppCompatActivity {
             total=total+baseToStart[0]+endToBase[0];
         }
 
-
         //Log.d("travel time:",(total/1000)*10+"");
-
         return total;
     }
 
 
+    /**
+     * Calculate the real work time for a task when handled by a technician.
+     * The reason is that the work time of a task will be related to : task's estimate duration, technician's skill level, tasks's skill requirement.
+     * @param taskSkillReq
+     * @param techSkillLevel
+     * @param taskDuration
+     * @return
+     */
     private double calculateDur(int taskSkillReq,int techSkillLevel,int taskDuration ){
         double result=(double) taskSkillReq/(double) techSkillLevel;
 
         return result*taskDuration;
     }
 
+
+    /**
+     * Sort the task according to its skill requirement.
+     * Will be used in generating initial schedule.
+     */
     private void sortTaskBySkill() {
         int minSkillRequire=100;
         int minCount=0;
@@ -715,6 +733,11 @@ public class ScheduleResult extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Sort the technician according to its skill level.
+     * Will be used in generating initial schedule.
+     */
     private void sortTechnicianBySkill(){
         int minSkillLevel=100;
         int minCount=0;
@@ -733,6 +756,9 @@ public class ScheduleResult extends AppCompatActivity {
         }
     }
 
+    /**
+     * Insert the schedule result into database.
+     */
     Response.Listener<String> listener=new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {
@@ -757,5 +783,44 @@ public class ScheduleResult extends AppCompatActivity {
         }
     };
 
+
+    /**
+     * For test use. Print all the related data.
+     */
+    private void showScheduleInfo() {
+//        showData="";
+//        showData+="number of tasks:"+sortedTask.size()+", number of technicians:"+sortedTech.size()+"\n\n";
+//
+//        ArrayList<Task> availableTask= new ArrayList<>();
+//        availableTask.addAll(initialResult.keySet());
+//
+//        for(int i=0;i<availableTask.size();i++){
+//            showData+="task"+availableTask.get(i).getId()+",skill:"+availableTask.get(i).getSkillRequirement()+",duration:"+availableTask.get(i).getDuration()+": "+initialResult.get(availableTask.get(i)).getFirstName()+", tech skill:"+initialResult.get(availableTask.get(i)).getSkillLevel()+", work hour:"+initialResult.get(availableTask.get(i)).getWorkHour()+"\n";
+//        }
+
+        Log.d("test","Initial cost:"+initialCost.shortValue()+"\n"+"number of tasks:"+sortedTask.size()+", number of technicians:"+sortedTech.size()+"\n\n");
+
+        if(!improveResult.isEmpty()){
+            ArrayList<Task> improved=new ArrayList<>();
+            improved.addAll(improveResult.keySet());
+            for(int j=0;j<improved.size();j++){
+                showData+="task"+improved.get(j).getId()+",skill:"+improved.get(j).getSkillRequirement()+",duration:"+improved.get(j).getDuration()+": "+improveResult.get(improved.get(j)).getFirstName()+", tech skill:"+improveResult.get(improved.get(j)).getSkillLevel()+", work hour:"+improveResult.get(improved.get(j)).getWorkHour()+"\n";
+            }
+            improveCost=calculateCost(improveResult);
+            showData+="cost:"+improveCost.shortValue()+"\n";
+        }
+
+        if(!GLSresult.isEmpty()){
+            ArrayList<Task> improved=new ArrayList<>();
+            improved.addAll(GLSresult.keySet());
+            for(int j=0;j<improved.size();j++){
+                showData+="task"+improved.get(j).getId()+",skill:"+improved.get(j).getSkillRequirement()+",duration:"+improved.get(j).getDuration()+": "+GLSresult.get(improved.get(j)).getFirstName()+", tech skill:"+GLSresult.get(improved.get(j)).getSkillLevel()+", work hour:"+GLSresult.get(improved.get(j)).getWorkHour()+"\n";
+            }
+            Double finalCost=calculateCost(GLSresult);
+            showData+="cost: "+minimumCost.shortValue()+"\n";
+        }
+        getPlanInfo.setText(showData);
+
+    }
 
 }
