@@ -3,28 +3,20 @@ package com.example.mario.techinicianscheduler.Manager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.mario.techinicianscheduler.DBHelper;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.Task;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
@@ -41,12 +33,14 @@ public class ScheduleResult extends AppCompatActivity {
 
     private static int UNASSIGNEDTASKPENALTY =3;
 
-    private TextView getPlanInfo;
+
     private String showData="";
     private ArrayList<TechnicianInfo> chosenTechs;
     private ArrayList<Task> chosentasks;
     private ArrayList<Task> sortedTask;
     private ArrayList<TechnicianInfo> sortedTech;
+    private ArrayList<Task> allTask;
+    private ArrayList<TechnicianInfo> allTech;
     private LatLng startEnd=new LatLng(37.331629,-121.8923151);
     private Double initialCost;
     private Double improveCost=10000000.0;
@@ -59,18 +53,20 @@ public class ScheduleResult extends AppCompatActivity {
     private Button hillClimbing;
     private Button guidedLocalSearch;
     private ImageButton back;
-    private ImageButton confirm;
+    private ImageButton goListview;
 
-    private EditText showGLSResult;
+    private EditText editScheduleResult;
 
     private Map<Task,TechnicianInfo> initialResult;
     private Map<Task,TechnicianInfo> improveResult;
     private Map<Task,TechnicianInfo> GLSresult;
+    private Map<Task,TechnicianInfo> finalResult;
     private Map<Task,TechnicianInfo> localOptima;
 
     private ArrayList<Integer> penalty;
 
     private JSONObject jsonObject;
+    private int retCode;
 
 
     @Override
@@ -82,10 +78,11 @@ public class ScheduleResult extends AppCompatActivity {
 
 
         managerInfo=getIntent().getExtras();
-//        chosentasks=managerInfo.getParcelableArrayList("availableTask");
-//        chosenTechs=managerInfo.getParcelableArrayList("availableTechnician");
+
         chosenTechs= managerInfo.getParcelableArrayList("chosenTech");
         chosentasks=managerInfo.getParcelableArrayList("chosenTask");
+        allTech= managerInfo.getParcelableArrayList("availableTechnician");
+        allTask=managerInfo.getParcelableArrayList("availableTask");
 
 
         sortTaskBySkill();
@@ -93,27 +90,6 @@ public class ScheduleResult extends AppCompatActivity {
 
         basicSchedule();
         initialCost=calculateCost(initialResult);
-            //calculate the cost of initial schedule (before hill climbing)
-        //improveCost=calculateCost(improveResult);
-
-
-        hillClimbing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hillClimbing(initialResult);
-                showScheduleInfo();
-            }
-        });
-
-        guidedLocalSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CostTimeTask costTimeTask=new CostTimeTask(ScheduleResult.this);
-                costTimeTask.execute();
-               // guidedLS();
-                //showScheduleInfo();
-            }
-        });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,38 +100,53 @@ public class ScheduleResult extends AppCompatActivity {
             }
         });
 
-        confirm.setOnClickListener(new View.OnClickListener() {
+        goListview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                RequestQueue requestQueue= Volley.newRequestQueue(ScheduleResult.this);
+                handleEditedText();
 
-                StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+ "schedule.php",listener,errorListener){
-                    protected Map<String,String> getParams() throws AuthFailureError {
-                        Map<String,String> map=new HashMap<String, String>();
+                String showdata="";
+                ArrayList<Task> improved=new ArrayList<>();
+                improved.addAll(finalResult.keySet());
+                for(int j=0;j<improved.size();j++){
+                    int count=j+1;
+                    showdata+=improved.get(j).getName()+"  :  "+finalResult.get(improved.get(j)).getFirstName()+",\n\n";
+                }
+                //Double finalCost=calculateCost(GLSresult);
+                //showData+="cost: "+minimumCost.shortValue()+"\n";
+                Typeface tf=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Roboto-Black.ttf");
+                editScheduleResult.setTypeface(tf);
+                editScheduleResult.setText(showdata);
 
-                        ArrayList<Task> tasks=new ArrayList<>();
-                        tasks.addAll(GLSresult.keySet());
-                        ArrayList<TechnicianInfo> techs=new ArrayList<>();
-                        techs.addAll(GLSresult.values());
-
-                        map.put("scheduleSize",GLSresult.size()+"");
-                        for(int i=0;i<GLSresult.size();i++){
-                            map.put("taskId"+i,tasks.get(i).getId()+"");
-                            map.put("techId"+i,techs.get(i).getId()+"");
-                        }
-                        return map;
-                    }
-                };
-
-                requestQueue.add(stringRequest);
-
+//                RequestQueue requestQueue= Volley.newRequestQueue(ScheduleResult.this);
+//
+//                StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+ "schedule.php",listener,errorListener){
+//                    protected Map<String,String> getParams() throws AuthFailureError {
+//                        Map<String,String> map=new HashMap<String, String>();
+//
+//                        ArrayList<Task> tasks=new ArrayList<>();
+//                        tasks.addAll(GLSresult.keySet());
+//                        ArrayList<TechnicianInfo> techs=new ArrayList<>();
+//                        techs.addAll(GLSresult.values());
+//
+//                        map.put("scheduleSize",GLSresult.size()+"");
+//                        for(int i=0;i<GLSresult.size();i++){
+//                            map.put("taskId"+i,tasks.get(i).getId()+"");
+//                            map.put("techId"+i,techs.get(i).getId()+"");
+//                        }
+//                        return map;
+//                    }
+//                };
+//
+//                requestQueue.add(stringRequest);
+//
             }
         });
 
 
         generateGLSResult();
-        showScheduleInfo();
+        //showScheduleInfo();
 
     }
 
@@ -163,17 +154,18 @@ public class ScheduleResult extends AppCompatActivity {
     private void initialize() {
         chosenTechs=new ArrayList<>();
         chosentasks=new ArrayList<>();
-        //getPlanInfo=(TextView)findViewById(R.id.getPlanInfo);
         initialResult=new HashMap<>();
         improveResult=new HashMap<>();
         localOptima=new HashMap<>();
         sortedTask=new ArrayList<>();
         sortedTech=new ArrayList<>();
+        allTask=new ArrayList<>();
+        allTech=new ArrayList<>();
         GLSresult=new HashMap<>();
-        hillClimbing=(Button)findViewById(R.id.hillClimbing);
-        guidedLocalSearch=(Button)findViewById(R.id.guidedLoacalSearch);
+        finalResult=new HashMap<>();
         back=(ImageButton)findViewById(R.id.backDashboard);
-        confirm=(ImageButton)findViewById(R.id.confirmSchedule);
+        goListview=(ImageButton)findViewById(R.id.resultListView);
+        editScheduleResult=(EditText)findViewById(R.id.editScheduleResult);
         penalty=new ArrayList<Integer>();
         penalty.add(0,0);
         penalty.add(1,0);
@@ -211,7 +203,7 @@ public class ScheduleResult extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            //showScheduleInfo();
+            editGLSResult();
             dialog.dismiss();
         }
     }
@@ -230,7 +222,6 @@ public class ScheduleResult extends AppCompatActivity {
             double util1=localOptimaCost.get(1)/(1+penalty.get(0));
             double util2=localOptimaCost.get(2)/(1+penalty.get(1));
             double util3=localOptimaCost.get(3)/(1+penalty.get(2));
-          //  Log.d("util:",util1+","+util2+","+util3);
 
             if(util1<=util2){
                 if(util2<=util3){
@@ -247,7 +238,6 @@ public class ScheduleResult extends AppCompatActivity {
             if(calculateCost(localOptima)<minimumCost){
                 minimumCost=calculateCost(localOptima);
                 GLSresult=localOptima;
-                //Log.d("Alert:","Find minimum:"+minimumCost);
             }
 
             i++;
@@ -266,7 +256,6 @@ public class ScheduleResult extends AppCompatActivity {
 
         boolean find=false;
 
-        //Log.d("schedule length: ",schedule.size()+"");
         newNeighbor.clear();
         newNeighbor=swapToFindNeighbor(schedule);
 
@@ -294,10 +283,8 @@ public class ScheduleResult extends AppCompatActivity {
                 newNeighbor=addUnassignedToFindNeighbor(schedule);
                 if(newNeighbor!=null){
                     ArrayList<Double> newCostResult = modifiedCost(newNeighbor);
-                    // Log.d("Test",newCostResult.get(0)+","+originCostResult.get(0));
                     if(newCostResult.get(0) < originCostResult.get(0)){
                         find=true;
-                        //Log.d("Test","come");
                         modifiedHillClimbing(newNeighbor);
                     }
                 }
@@ -306,7 +293,6 @@ public class ScheduleResult extends AppCompatActivity {
 
 
         if(!find){
-            //Log.d("Alert: ","find local optima");
             localOptima=schedule;
         }
 
@@ -345,9 +331,7 @@ public class ScheduleResult extends AppCompatActivity {
         }
 
         if(!find){
-            //  Log.d("Test",sortedTask.size()+","+schedule.size());
             if (schedule.size()<sortedTask.size()){
-                //    Log.d("Test","Enter");
                 newNeighbor=addUnassignedToFindNeighbor(schedule);
                 if(newNeighbor!=null){
                     if(calculateCost(newNeighbor)<originCost){
@@ -498,7 +482,6 @@ public class ScheduleResult extends AppCompatActivity {
         ArrayList<Task> unassignedTask=new ArrayList<>();
         unassignedTask.addAll(sortedTask);
         availableTask.addAll(schedule.keySet());
-        //double maxCost=0;
         double cost=0;
 
 
@@ -520,17 +503,12 @@ public class ScheduleResult extends AppCompatActivity {
 
             }
 
-//            if(cost>maxCost){
-//                maxCost=cost;
-//            }
         }
 
         if(!unassignedTask.isEmpty()){
             for(int i=0;i<unassignedTask.size();i++){
                 cost+=UNASSIGNEDTASKPENALTY*unassignedTask.get(i).getDuration();
             }
-
-            //Log.d("unassigned Task:",unassignedTask.size()+"");
         }
         return cost;
     }
@@ -618,20 +596,17 @@ public class ScheduleResult extends AppCompatActivity {
                                 assignedTask.add(sortedTask.get(k));
                             }
                         }
-                        //Log.d("estimate pre:",estimateDur+"");
                         estimateDur+=calculateDur(sortedTask.get(i).getSkillRequirement(),sortedTech.get(j).getSkillLevel(),sortedTask.get(i).getDuration());           //Add the new task being schedules.
                         assignedTask.add(sortedTask.get(i));
 
                         float dist=calculateTravelTime(assignedTask);
                         estimateDur+=(dist/1000)*2;  //assume drive speed is 30km/h.
-                        //Log.d("estimateDurAlready:"+j,estimateDur+" ");
                     }else {
                         estimateDur+=calculateDur(sortedTask.get(i).getSkillRequirement(),sortedTech.get(j).getSkillLevel(),sortedTask.get(i).getDuration());           //Add the new task being schedules.
                         assignedTask.add(sortedTask.get(i));
 
                         float dist=calculateTravelTime(assignedTask);
                         estimateDur+=(dist/1000)*2;  //assume drive speed is 30km/h.
-                        //Log.d("estimateDur:"+j,estimateDur+" ");
                     }
 
 
@@ -783,6 +758,70 @@ public class ScheduleResult extends AppCompatActivity {
         }
     };
 
+    private void editGLSResult(){
+        ArrayList<Task> improved=new ArrayList<>();
+        improved.addAll(GLSresult.keySet());
+        for(int j=0;j<improved.size();j++){
+            int count=j+1;
+            showData+=improved.get(j).getName()+"  :  "+GLSresult.get(improved.get(j)).getFirstName()+",\n\n";
+        }
+        //Double finalCost=calculateCost(GLSresult);
+        //showData+="cost: "+minimumCost.shortValue()+"\n";
+        Typeface tf=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Roboto-Black.ttf");
+        editScheduleResult.setTypeface(tf);
+        editScheduleResult.setText(showData);
+    }
+
+    private void handleEditedText(){
+        String editedString=editScheduleResult.getText().toString();
+        Log.d("test",editedString);
+        String[] tasks=editedString.split(",");
+
+
+        for(int i=0;i<tasks.length-1;i++){
+            String taskTitle=tasks[i].split(":")[0].trim();
+            String firstName=tasks[i].split(":")[1].trim();
+            Log.d("test:",taskTitle+","+firstName);
+            int recordTask=100;
+            int recordTech=100;
+
+            for(int j=0;j<allTask.size();j++){
+                if(taskTitle.equals(allTask.get(j).getName())){
+                    recordTask=j;
+                    break;
+                }
+            }
+
+            for(int k=0;k<allTech.size();k++){
+                if(firstName.equals(allTech.get(k).getFirstName())){
+                    recordTech=k;
+                    break;
+                }
+            }
+
+            if(recordTask!=100&&recordTech!=100){
+                finalResult.put(allTask.get(recordTask),allTech.get(recordTech));
+            }else if(recordTask==100){
+                Toast.makeText(this,"Wrong task's information",Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this,"Wrong technician's information",Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * For test use. Print all the related data.
@@ -819,8 +858,32 @@ public class ScheduleResult extends AppCompatActivity {
             Double finalCost=calculateCost(GLSresult);
             showData+="cost: "+minimumCost.shortValue()+"\n";
         }
-        getPlanInfo.setText(showData);
 
+
+    }
+
+    /**
+     * Two button handle the start of hill climbing and GLS.
+     * For test use, compare the performance of hill climbing and GLS.
+     */
+    public void handleTwoButton(){
+        //        hillClimbing.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                hillClimbing(initialResult);
+//                showScheduleInfo();
+//            }
+//        });
+
+//        guidedLocalSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                CostTimeTask costTimeTask=new CostTimeTask(ScheduleResult.this);
+//                costTimeTask.execute();
+//               // guidedLS();
+//                //showScheduleInfo();
+//            }
+//        });
     }
 
 }
