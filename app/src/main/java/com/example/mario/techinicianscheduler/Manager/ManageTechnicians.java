@@ -147,7 +147,7 @@ public class ManageTechnicians extends AppCompatActivity implements View.OnClick
                 finish();
                 break;
             case 1:
-                Intent intent=new Intent(ManageTechnicians.this,chooseTask.class);
+                Intent intent=new Intent(ManageTechnicians.this,ChooseTask.class);
                 Bundle bundle= managerInfo;
                 intent.putExtras(bundle);
                 startActivity(intent);

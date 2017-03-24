@@ -26,8 +26,8 @@
         <activity android:name=".SignUp" />
         <activity android:name=".Manager.ManageTechnicians" />
         <activity android:name=".Technician.TechnicianTasks" />
-        <activity android:name=".Manager.chooseTask" />
-        <activity android:name=".Manager.chooseTechnician" />
+        <activity android:name=".Manager.ChooseTask" />
+        <activity android:name=".Manager.ChooseTechnician" />
         <activity android:name=".Manager.ScheduleResult" />
         <activity android:name=".Technician.TechnicianLogin">
             <intent-filter>

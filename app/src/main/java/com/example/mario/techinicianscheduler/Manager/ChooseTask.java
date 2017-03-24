@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-public class chooseTask extends AppCompatActivity implements View.OnClickListener, TaskListAdapter.CheckedAllListener {
+public class ChooseTask extends AppCompatActivity implements View.OnClickListener, TaskListAdapter.CheckedAllListener {
 
     private ImageButton next2;
     private ImageButton quit;
@@ -78,7 +78,7 @@ public class chooseTask extends AppCompatActivity implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.next2:
-                Intent intent=new Intent(chooseTask.this,chooseTechnician.class);
+                Intent intent=new Intent(ChooseTask.this,ChooseTechnician.class);
 
                 if(cbButtonAll.isChecked()){
                     for(int i=0;i<tasks.size();i++){
@@ -97,7 +97,7 @@ public class chooseTask extends AppCompatActivity implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.quitChooseTask:
-                Intent intent1=new Intent(chooseTask.this,ManagerDashboard.class);
+                Intent intent1=new Intent(ChooseTask.this,ManagerDashboard.class);
                 intent1.putExtras(managerInfo);
                 startActivity(intent1);
                 finish();

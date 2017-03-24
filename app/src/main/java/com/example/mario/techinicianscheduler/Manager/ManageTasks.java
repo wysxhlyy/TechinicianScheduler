@@ -153,7 +153,7 @@ public class ManageTasks extends AppCompatActivity implements View.OnClickListen
                 finish();
                 break;
             case 1:
-                Intent intent=new Intent(ManageTasks.this,chooseTask.class);
+                Intent intent=new Intent(ManageTasks.this,ChooseTask.class);
                 Bundle bundle= managerInfo;
                 intent.putExtras(bundle);
                 startActivity(intent);

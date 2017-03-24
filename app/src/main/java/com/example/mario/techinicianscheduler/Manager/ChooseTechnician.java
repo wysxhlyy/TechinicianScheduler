@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-public class chooseTechnician extends AppCompatActivity implements View.OnClickListener, MyListAdapter.CheckedAllListener {
+public class ChooseTechnician extends AppCompatActivity implements View.OnClickListener, MyListAdapter.CheckedAllListener {
 
 
     private Bundle managerInfo;
@@ -76,7 +76,7 @@ public class chooseTechnician extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.generate:
-                Intent intent2=new Intent(chooseTechnician.this,ScheduleResult.class);
+                Intent intent2=new Intent(ChooseTechnician.this,ScheduleResult.class);
                 if(cbButtonAll.isChecked()){
                     for(int i=0;i<techs.size();i++){
                         chosenTechs.add(techs.get(i));
@@ -94,7 +94,7 @@ public class chooseTechnician extends AppCompatActivity implements View.OnClickL
                 startActivity(intent2);
                 break;
             case R.id.quitChooseTech:
-                Intent intent=new Intent(chooseTechnician.this,ManagerDashboard.class);
+                Intent intent=new Intent(ChooseTechnician.this,ManagerDashboard.class);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
                 finish();

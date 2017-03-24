@@ -4,6 +4,8 @@
     android:id="@+id/activity_schedule_result"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
     tools:context="com.example.mario.techinicianscheduler.Manager.ScheduleResult"
     android:orientation="vertical"
     >
@@ -32,16 +34,16 @@
             android:text="Preview Result"
             android:textSize="20dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="95dp"
             />
 
 
         <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/next"
-            android:id="@+id/resultListView"
-            android:layout_marginLeft="80dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/list"
+            android:id="@+id/switchView"
+            android:layout_marginLeft="85dp"
             />
 
 
@@ -50,19 +52,41 @@
     
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="500dp"
         android:textColor="@color/myBlack"
         android:textSize="25dp"
         android:layout_marginTop="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="60dp"
         android:padding="15dp"
         android:id="@+id/editScheduleResult"
         android:background="@drawable/textview_bg"
         android:inputType="textMultiLine"
         android:gravity="start"
         />
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginTop="50dp"
+        android:id="@+id/editedResultList"
+        >
+
+    </ListView>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
+        android:id="@+id/confirmResult"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimary"
+        android:text="Confirm"
+        android:textAllCaps="false"
+        android:textSize="20dp"
+        />
+
+
 
 
     <!--<LinearLayout-->

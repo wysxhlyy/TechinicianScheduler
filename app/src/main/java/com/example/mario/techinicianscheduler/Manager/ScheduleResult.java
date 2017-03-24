@@ -13,10 +13,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.mario.techinicianscheduler.DBHelper;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.Task;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
@@ -27,6 +36,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ScheduleResult extends AppCompatActivity {
@@ -53,7 +63,7 @@ public class ScheduleResult extends AppCompatActivity {
     private Button hillClimbing;
     private Button guidedLocalSearch;
     private ImageButton back;
-    private ImageButton goListview;
+    private ImageButton switchView;
 
     private EditText editScheduleResult;
 
@@ -68,6 +78,11 @@ public class ScheduleResult extends AppCompatActivity {
     private JSONObject jsonObject;
     private int retCode;
 
+    private LinearLayout layout;
+    private ListView editedResultList;
+    private int editable=1;
+    private Button confirmResult;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +90,7 @@ public class ScheduleResult extends AppCompatActivity {
         setContentView(R.layout.activity_schedule_result);
 
         initialize();
+        layout.removeView(editedResultList);
 
 
         managerInfo=getIntent().getExtras();
@@ -83,6 +99,7 @@ public class ScheduleResult extends AppCompatActivity {
         chosentasks=managerInfo.getParcelableArrayList("chosenTask");
         allTech= managerInfo.getParcelableArrayList("availableTechnician");
         allTask=managerInfo.getParcelableArrayList("availableTask");
+
 
 
         sortTaskBySkill();
@@ -100,54 +117,113 @@ public class ScheduleResult extends AppCompatActivity {
             }
         });
 
-        goListview.setOnClickListener(new View.OnClickListener() {
+
+        switchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                handleEditedText();
+                if(editable==1){
+                    handleEditedText();
+                    handleListView();
+                    switchView.setBackgroundResource(R.drawable.edit);
 
-                String showdata="";
-                ArrayList<Task> improved=new ArrayList<>();
-                improved.addAll(finalResult.keySet());
-                for(int j=0;j<improved.size();j++){
-                    int count=j+1;
-                    showdata+=improved.get(j).getName()+"  :  "+finalResult.get(improved.get(j)).getFirstName()+",\n\n";
+                    layout.removeView(editScheduleResult);
+                    layout.removeView(confirmResult);
+                    layout.addView(editedResultList);
+                    layout.addView(confirmResult);
+                    editable=0;
+
+                }else{
+                    layout.removeView(editedResultList);
+                    layout.removeView(confirmResult);
+                    layout.addView(editScheduleResult);
+                    layout.addView(confirmResult);
+                    switchView.setBackgroundResource(R.drawable.list);
+
+
+                    showDataInEditText();
+                    editable=1;
                 }
-                //Double finalCost=calculateCost(GLSresult);
-                //showData+="cost: "+minimumCost.shortValue()+"\n";
-                Typeface tf=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Roboto-Black.ttf");
-                editScheduleResult.setTypeface(tf);
-                editScheduleResult.setText(showdata);
 
-//                RequestQueue requestQueue= Volley.newRequestQueue(ScheduleResult.this);
-//
-//                StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+ "schedule.php",listener,errorListener){
-//                    protected Map<String,String> getParams() throws AuthFailureError {
-//                        Map<String,String> map=new HashMap<String, String>();
-//
-//                        ArrayList<Task> tasks=new ArrayList<>();
-//                        tasks.addAll(GLSresult.keySet());
-//                        ArrayList<TechnicianInfo> techs=new ArrayList<>();
-//                        techs.addAll(GLSresult.values());
-//
-//                        map.put("scheduleSize",GLSresult.size()+"");
-//                        for(int i=0;i<GLSresult.size();i++){
-//                            map.put("taskId"+i,tasks.get(i).getId()+"");
-//                            map.put("techId"+i,techs.get(i).getId()+"");
-//                        }
-//                        return map;
-//                    }
-//                };
-//
-//                requestQueue.add(stringRequest);
-//
             }
         });
 
 
-        generateGLSResult();
-        //showScheduleInfo();
+        /**
+         * Insert the schedule result into database if the user have confirmed.
+         */
+        confirmResult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RequestQueue requestQueue= Volley.newRequestQueue(ScheduleResult.this);
 
+                StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+ "schedule.php",listener,errorListener){
+                    protected Map<String,String> getParams() throws AuthFailureError {
+                        Map<String,String> map=new HashMap<String, String>();
+
+                        ArrayList<Task> tasks=new ArrayList<>();
+                        tasks.addAll(finalResult.keySet());
+                        ArrayList<TechnicianInfo> techs=new ArrayList<>();
+                        techs.addAll(finalResult.values());
+
+                        map.put("scheduleSize",finalResult.size()+"");
+                        for(int i=0;i<finalResult.size();i++){
+                            map.put("taskId"+i,tasks.get(i).getId()+"");
+                            map.put("techId"+i,techs.get(i).getId()+"");
+                        }
+                        return map;
+                    }
+                };
+
+                requestQueue.add(stringRequest);
+            }
+        });
+
+        generateGLSResult();
+
+    }
+
+    /**
+     * The listview way of preview the schedule result.
+     */
+    private void handleListView() {
+        List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+        Map<String,Object> map=new HashMap<String,Object>();
+
+        map=new HashMap<String,Object>();
+        ArrayList<Task> finalTask=new ArrayList<>();
+        ArrayList<TechnicianInfo> finalTech=new ArrayList<>();
+        finalTask.addAll(finalResult.keySet());
+        finalTech.addAll(finalResult.values());
+
+        for(int i=0;i<finalResult.size();i++){
+            map=new HashMap<String,Object>();
+            map.put("taskName",finalTask.get(i).getName());
+            map.put("techFirstName",finalTech.get(i).getFirstName()+"");
+            list.add(map);
+        }
+
+        SimpleAdapter dataAdapter=new SimpleAdapter(ScheduleResult.this,list,R.layout.result_listview,new String[]{"taskName","techFirstName"},new int[]{R.id.result_task_name,R.id.result_tech_firstname});
+        editedResultList.setAdapter(dataAdapter);
+    }
+
+    /**
+     * Define the format of data shown in edittext.
+     */
+    private void showDataInEditText() {
+        String showdata="";
+        ArrayList<Task> improved=new ArrayList<>();
+        improved.addAll(finalResult.keySet());
+        for(int j=0;j<improved.size();j++){
+            int count=j+1;
+            showdata+=improved.get(j).getName()+"  :  "+finalResult.get(improved.get(j)).getFirstName()+",\n\n";
+        }
+        //Double finalCost=calculateCost(GLSresult);
+        //showData+="cost: "+minimumCost.shortValue()+"\n";
+        Typeface tf=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Roboto-Black.ttf");
+
+        editScheduleResult.setTypeface(tf);
+        editScheduleResult.setText(showdata);
     }
 
 
@@ -164,8 +240,11 @@ public class ScheduleResult extends AppCompatActivity {
         GLSresult=new HashMap<>();
         finalResult=new HashMap<>();
         back=(ImageButton)findViewById(R.id.backDashboard);
-        goListview=(ImageButton)findViewById(R.id.resultListView);
+        switchView=(ImageButton)findViewById(R.id.switchView);
         editScheduleResult=(EditText)findViewById(R.id.editScheduleResult);
+        editedResultList=(ListView)findViewById(R.id.editedResultList);
+        layout=(LinearLayout)findViewById(R.id.activity_schedule_result);
+        confirmResult=(Button)findViewById(R.id.confirmResult);
         penalty=new ArrayList<Integer>();
         penalty.add(0,0);
         penalty.add(1,0);

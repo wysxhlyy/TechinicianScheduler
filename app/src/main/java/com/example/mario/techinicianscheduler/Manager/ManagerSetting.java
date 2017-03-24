@@ -172,7 +172,7 @@ public class ManagerSetting extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case 1:
-                Intent intent=new Intent(ManagerSetting.this,chooseTask.class);
+                Intent intent=new Intent(ManagerSetting.this,ChooseTask.class);
                 Bundle bundle= managerInfo;
                 intent.putExtras(bundle);
                 startActivity(intent);

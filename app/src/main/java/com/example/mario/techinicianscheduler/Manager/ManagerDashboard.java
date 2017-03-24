@@ -217,7 +217,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
             case 1:
-                Intent intent=new Intent(ManagerDashboard.this,chooseTask.class);
+                Intent intent=new Intent(ManagerDashboard.this,ChooseTask.class);
                 Bundle bundle= managerInfo;
                 bundle.putParcelableArrayList("availableTechnician",techs);
                 bundle.putParcelableArrayList("availableTask",tasks);

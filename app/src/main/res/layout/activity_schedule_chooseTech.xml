@@ -4,7 +4,7 @@
     android:id="@+id/activity_schedule_step3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mario.techinicianscheduler.Manager.chooseTechnician"
+    tools:context="com.example.mario.techinicianscheduler.Manager.ChooseTechnician"
     android:orientation="vertical"
     >
 
