@@ -1,112 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_display_technician"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.mario.techinicianscheduler.Manager.HandleTechnician.DisplayTechnician"
-    android:orientation="vertical"
-    >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit Technician"
-        android:fontFamily="cursive"
-        android:textSize="30dp"
-        android:textColor="@color/myBlack"
-        android:textAlignment="center"
-        android:layout_gravity="center"
-        />
+    tools:context="com.example.mario.techinicianscheduler.Manager.HandleTechnician.DisplayTechnician"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_gravity="left"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="20dp"
         >
 
+
+        <ImageButton
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/quit"
+            android:id="@+id/quitEditTech"
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/myRed"
-            android:textSize="25dp"
-            android:fontFamily="monospace"
-            android:id="@+id/editTechName"
+            android:textColor="@color/myBlack"
+            android:text="Edit Technician"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="100dp"
             />
+
+        <ImageButton
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/editTechSubmit"
+            android:background="@drawable/update"
+            android:layout_marginLeft="85dp"
+            />
+
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/worker"
+        app:civ_border_width="2dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="70dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="You are editing the information of :"
+        android:textAlignment="center"
         android:layout_marginTop="30dp"
+        android:textColor="@color/myBlack"
+        android:textSize="20dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editedTechName"
+        android:textAlignment="center"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30dp"
+        android:fontFamily="monospace"
+        />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="60dp"
+        android:orientation="vertical"
         >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Skill level:"
+            android:text="SKILL LEVEL"
             />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editTechSkill"
+            android:textColor="@color/myBlack"
             />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
         >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Work hour:"
+            android:text="WORK HOUR"
             />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editTechWorkHour"
+            android:textColor="@color/myBlack"
             />
 
     </LinearLayout>
 
 
+
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
         >
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/editTechSubmit"
-            android:text="update"
-            />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:id="@+id/removeTech"
             android:layout_gravity="center"
-            android:text="Remove"
+            android:text="Delete"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:background="@color/myRed"
             />
-
     </LinearLayout>
 
 

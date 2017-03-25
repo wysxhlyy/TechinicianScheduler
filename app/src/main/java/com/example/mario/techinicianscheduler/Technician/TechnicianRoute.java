@@ -79,12 +79,23 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
 
 //      showInfoForTest();
 //      mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(startEnd).title("Home").icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+        mMap.addMarker(new MarkerOptions().position(startEnd).title("Home").icon(BitmapDescriptorFactory.fromResource(R.drawable.start))).showInfoWindow();
         for(int i=1;i<orderedList.size()-1;i++){
             LatLng latLng=orderedList.get(i);
             mMap.addMarker(new MarkerOptions().position(latLng).title("place"+i));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,13.0f));
         }
+
+        mMap.addPolyline(new PolylineOptions().add(startEnd,orderedList.get(1)).width(5).color(Color.BLUE));
+        for(int i=1;i<orderedList.size()-2;i++){
+            LatLng latLng1=orderedList.get(i);
+            LatLng latLng2=orderedList.get(i+1);
+            mMap.addPolyline(new PolylineOptions().add(latLng1,latLng2).width(5).color(Color.RED));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng1,13.0f));
+        }
+        mMap.addPolyline(new PolylineOptions().add(orderedList.get(orderedList.size()-2),startEnd).width(5).color(Color.BLUE));
+
+
     }
 
 
@@ -246,17 +257,22 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.addMarker(new MarkerOptions().position(startEnd).title("Home").icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
-        for(int i=1;i<orderedList.size()-1;i++){
-            LatLng latLng=orderedList.get(i);
-            mMap.addMarker(new MarkerOptions().position(latLng).title("place"+i));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,13.0f));
-        }
-
+//        mMap.addMarker(new MarkerOptions().position(startEnd).title("Home").icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+//        for(int i=1;i<orderedList.size()-1;i++){
+//            LatLng latLng=orderedList.get(i);
+//            mMap.addMarker(new MarkerOptions().position(latLng).title("place"+i));
+//            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,13.0f));
+//        }
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
         improve();
 
     }
 
+
+    /**
+     * Handle the progress Dialog while find the direction.
+     */
     @Override
     public void onDirectionFinderStart() {
         progressDialog=ProgressDialog.show(this,"Please wait.","Finding direction..",true);
@@ -267,6 +283,10 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
+    /**
+     * Handle the situation when successfully find the direction.
+     * @param routes
+     */
     @Override
     public void onDirectionFinderSuccess(List<DirectionFinder.Route> routes) {
         progressDialog.dismiss();

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -37,6 +38,8 @@ public class AddTechnician extends AppCompatActivity {
     private Bundle managerInfo;
     private RequestQueue requestQueue;
 
+    private ImageButton quit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,13 @@ public class AddTechnician extends AppCompatActivity {
             }
         });
 
+        quit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
 
 
     }
@@ -73,6 +83,7 @@ public class AddTechnician extends AppCompatActivity {
         managerInfo=getIntent().getExtras();
         addTechnicianUsername=(AutoCompleteTextView)findViewById(R.id.addTechUsername);
         addTech=(Button)findViewById(R.id.addTechBtn);
+        quit=(ImageButton)findViewById(R.id.quitAddTechnician);
     }
 
     private void setAutoComplete() {

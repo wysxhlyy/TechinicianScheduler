@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,8 +34,9 @@ public class DisplayTechnician extends AppCompatActivity {
     private EditText skillLevel;
     private EditText workHour;
     private TextView techName;
-    private Button update;
+    private ImageButton update;
     private Button remove;
+    private ImageButton quit;
     private int selectedId;
     private TechnicianInfo selectedTech;
     private ArrayList<TechnicianInfo> bindTech;
@@ -54,7 +56,7 @@ public class DisplayTechnician extends AppCompatActivity {
         managerInfo=getIntent().getExtras();
         selectedId=managerInfo.getInt("selectedTech");
         bindTech=managerInfo.getParcelableArrayList("availableTechnician");
-        selectedTech=bindTech.get(selectedId-1);
+        selectedTech=bindTech.get(selectedId);
         skillLevel.setText(selectedTech.getSkillLevel()+"");
         workHour.setText(selectedTech.getWorkHour()+"");
         techName.setText(selectedTech.getFirstName()+" "+selectedTech.getSurname());
@@ -74,6 +76,12 @@ public class DisplayTechnician extends AppCompatActivity {
             }
         });
 
+        quit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void unBindTech() {
@@ -109,9 +117,10 @@ public class DisplayTechnician extends AppCompatActivity {
     private void initialize() {
         skillLevel=(EditText)findViewById(R.id.editTechSkill);
         workHour=(EditText)findViewById(R.id.editTechWorkHour);
-        update=(Button)findViewById(R.id.editTechSubmit);
+        update=(ImageButton)findViewById(R.id.editTechSubmit);
         remove=(Button)findViewById(R.id.removeTech);
-        techName=(TextView)findViewById(R.id.editTechName);
+        techName=(TextView)findViewById(R.id.editedTechName);
+        quit=(ImageButton)findViewById(R.id.quitEditTech);
     }
 
     Response.Listener<String> listener=new Response.Listener<String>() {

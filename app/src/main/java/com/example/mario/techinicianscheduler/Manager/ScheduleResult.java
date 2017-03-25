@@ -41,7 +41,7 @@ import java.util.Map;
 
 public class ScheduleResult extends AppCompatActivity {
 
-    private static int UNASSIGNEDTASKPENALTY =3;
+    private static int UNASSIGNEDTASKPENALTY;
 
 
     private String showData="";
@@ -101,6 +101,7 @@ public class ScheduleResult extends AppCompatActivity {
         allTask=managerInfo.getParcelableArrayList("availableTask");
 
 
+        UNASSIGNEDTASKPENALTY=managerInfo.getInt("unassignedPenalty");
 
         sortTaskBySkill();
         sortTechnicianBySkill();
@@ -176,6 +177,7 @@ public class ScheduleResult extends AppCompatActivity {
                 };
 
                 requestQueue.add(stringRequest);
+                finish();
             }
         });
 
