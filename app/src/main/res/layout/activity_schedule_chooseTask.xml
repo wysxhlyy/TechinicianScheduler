@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="left"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
         >
 
 
@@ -32,7 +32,7 @@
             android:text="Choose Task"
             android:textSize="20dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="115dp"
+            android:layout_marginLeft="105dp"
             />
 
 

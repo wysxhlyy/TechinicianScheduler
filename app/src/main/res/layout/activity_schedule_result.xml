@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         android:layout_gravity="left"
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="4dp"
         >
 
 
@@ -43,7 +43,7 @@
             android:layout_height="25dp"
             android:background="@drawable/list"
             android:id="@+id/switchView"
-            android:layout_marginLeft="85dp"
+            android:layout_marginLeft="95dp"
             />
 
 

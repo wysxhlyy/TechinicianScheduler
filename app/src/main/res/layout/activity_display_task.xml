@@ -30,10 +30,10 @@
             android:padding="2dp"
             android:paddingTop="5dp"
             android:textColor="@color/myBlack"
-            android:text="Edit Task"
+            android:text="Task Information"
             android:textSize="20dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="120dp"
+            android:layout_marginLeft="100dp"
             />
 
 
