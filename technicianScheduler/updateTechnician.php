@@ -5,19 +5,20 @@ error_reporting(E_ALL ^ E_NOTICE);
 $con = mysqli_connect("146.148.28.194","root","wuyusheng","techSchedulerDB");
 
 
- $username = $_POST['username'];
  $password = $_POST['password'];
+ $email = $_POST['email'];
+ $phone = $_POST['phone'];
+ $techId=$_POST['techId'];
 
-$sql = "SELECT * from table1 WHERE username='$username' AND password='$password'";
+$sql = "UPDATE technician SET password='$password',email='$email',phone='$phone' WHERE t_id='$techId' ";
 
 $result=mysqli_query($con,$sql);
 
-$num = mysqli_num_rows($result);
 
 $response = array();
 
 
-if($num > 0){
+if($result){
     $response["success"] = 1;
    }else{
     $response["success"] = 0;
@@ -28,12 +29,8 @@ if ($result===FALSE) {
 }
 
 
-while ($row=mysqli_fetch_array($result)) {
-	$response["name"]=$row['username'];
-	$response["role"]=$row['role'];
-}
-
 echo json_encode($response);
 //以json的形式返回给客户端
 
 mysqli_close($con);
+?>

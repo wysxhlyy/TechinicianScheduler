@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL ^ E_NOTICE);
 
-$con = mysqli_connect("localhost","root","","techSchedulerDB");
+$con = mysqli_connect("146.148.28.194","root","wuyusheng","techSchedulerDB");
 
 
  $username = $_POST['username'];
@@ -27,13 +27,15 @@ if ($result===FALSE) {
     echo mysql_error();
 }
 
-
 while ($row=mysqli_fetch_array($result)) {
+	$count++;
 	$response["username"]=$row['username'];
 	$response["email"]=$row['email'];
 	$response["phone"]=$row['phone'];
 	$response["firstName"]=$row['firstName'];
 	$response["surname"]=$row['surname'];
+	$response["password"]=$row['password'];
+	$response["m_id"]=$row['m_id'];
 }
 
 echo json_encode($response);

@@ -898,12 +898,6 @@ public class ScheduleResult extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
     /**
      * For test use. Print all the related data.
      */

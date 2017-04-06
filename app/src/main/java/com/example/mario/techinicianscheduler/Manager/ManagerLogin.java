@@ -20,10 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mario.techinicianscheduler.DBHelper;
@@ -34,6 +37,7 @@ import com.example.mario.techinicianscheduler.Technician.TechnicianLogin;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,7 +115,7 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
             requestQueue= Volley.newRequestQueue(ManagerLogin.this);
 
             //Connect PHP File.
-            StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+"managerLogIn.php",listener,errorListener) {
+            StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+"managerLogin.php",listener,errorListener) {
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("username", username);
@@ -197,10 +201,25 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
     };
 
     Response.ErrorListener errorListener=new Response.ErrorListener() {
+
         @Override
         public void onErrorResponse(VolleyError volleyError) {
             Toast.makeText(ManagerLogin.this,"Database not connected",Toast.LENGTH_SHORT).show();
             Log.e(TAG,volleyError.getMessage(),volleyError);
+            NetworkResponse response = volleyError.networkResponse;
+            if (volleyError instanceof ServerError && response != null) {
+                try {
+                    String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                    // Now you can use any deserializer to make sense of data
+                    JSONObject obj = new JSONObject(res);
+                } catch (UnsupportedEncodingException e1) {
+                    // Couldn't properly decode data to string
+                    e1.printStackTrace();
+                } catch (JSONException e2) {
+                    // returned data is not JSONObject?
+                    e2.printStackTrace();
+                }
+            }
         }
     };
 

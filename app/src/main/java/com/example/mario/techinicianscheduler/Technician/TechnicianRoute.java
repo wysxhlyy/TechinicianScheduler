@@ -61,7 +61,6 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
         recordPos=techInfo.getParcelableArrayList("recordPos");
         orderedList=new ArrayList<LatLng>();
 
-        //showInfoForTest();
         findShortestOrder();
         routePlan();
 
@@ -77,7 +76,6 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
         routeCount=0;
         kopt(orderedList);
 
-//      showInfoForTest();
 //      mMap.clear();
         mMap.addMarker(new MarkerOptions().position(startEnd).title("Home").icon(BitmapDescriptorFactory.fromResource(R.drawable.start))).showInfoWindow();
         for(int i=1;i<orderedList.size()-1;i++){
@@ -104,18 +102,6 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
         //orderedListShow=(TextView)findViewById(R.id.orderedList);
         route=(ImageButton)findViewById(R.id.googleRoute);
         menu=(ImageButton)findViewById(R.id.routeMenu);
-    }
-
-
-    private void showInfoForTest(){
-        String show="";
-        show+="start:"+startEnd.latitude+","+startEnd.longitude+"\n";
-        for(int i=1;i<orderedList.size()-1;i++){
-            show+="place"+i+":"+orderedList.get(i).latitude+","+orderedList.get(i).longitude+"\n";
-        }
-        show+="End:"+startEnd.latitude+","+startEnd.longitude+"\n";
-        show+="total Distance:"+calculateDistance(orderedList);
-        orderedListShow.setText(show);
     }
 
 

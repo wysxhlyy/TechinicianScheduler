@@ -4,20 +4,24 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 $con = mysqli_connect("146.148.28.194","root","wuyusheng","techSchedulerDB");
 
+$judge=0;
 
- $username = $_POST['username'];
- $password = $_POST['password'];
+$scheduleSize=$_POST['scheduleSize'];
 
-$sql = "SELECT * from table1 WHERE username='$username' AND password='$password'";
-
-$result=mysqli_query($con,$sql);
-
-$num = mysqli_num_rows($result);
+for($i=0;$i<$scheduleSize;$i++){
+	$taskId=$_POST['taskId'.$i];
+	$techId=$_POST['techId'.$i];
+	$sql = "INSERT INTO taskSchedule (m_id,task_id,t_id) VALUES('$taskId','$techId') ";
+	$result=mysqli_query($con,$sql);
+	if(!$result){
+		$judge=1;
+	}
+}
 
 $response = array();
 
 
-if($num > 0){
+if($$judge==0){
     $response["success"] = 1;
    }else{
     $response["success"] = 0;
@@ -28,12 +32,8 @@ if ($result===FALSE) {
 }
 
 
-while ($row=mysqli_fetch_array($result)) {
-	$response["name"]=$row['username'];
-	$response["role"]=$row['role'];
-}
-
 echo json_encode($response);
 //以json的形式返回给客户端
 
 mysqli_close($con);
+?>

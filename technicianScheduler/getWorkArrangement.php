@@ -1,8 +1,8 @@
-g<?php
+<?php
 
 error_reporting(E_ALL ^ E_NOTICE);
 
-$con = mysqli_connect("localhost","root","","techSchedulerDB");
+$con = mysqli_connect("146.148.28.194","root","wuyusheng","techSchedulerDB");
 
 
  $technicianId = $_POST['technicianId'];
@@ -28,13 +28,15 @@ if ($result===FALSE) {
 
 $i=1;
 while ($row=mysqli_fetch_array($result)) {
+	$response["taskName".$i]=$row['name'];
 	$response["skill_level".$i]=$row['skill_level'];
 	$response["stationId".$i]=$row['s_id'];
 	$response["duration".$i]=$row['duration'];
+	$response["description".$i]=$row['description'];
 	$response["stationName".$i]=$row['stationName'];
 	$response["latitude".$i]=$row['latitude'];
 	$response["longitude".$i]=$row['longitude'];
-	$i=$i+1;	
+	$i=$i+1;
 }
 
 $response["taskSize"]=$i;

@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL ^ E_NOTICE);
 
-$conn =new mysqli("localhost","root","","techSchedulerDB");
+$conn =new mysqli("146.148.28.194","root","wuyusheng","techSchedulerDB");
 
 if($conn->connect_error){
 	die("Connection failed ".$conn->connect_error);
