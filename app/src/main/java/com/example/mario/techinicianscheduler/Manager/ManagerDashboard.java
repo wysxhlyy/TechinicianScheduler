@@ -93,11 +93,17 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     private void handleIndicator() {
 
         List<Fragment> list=new ArrayList<>();
-        MyFragment image1 = new MyFragment(R.drawable.bay1);
-        MyFragment image2 = new MyFragment(R.drawable.bay2);
-        MyFragment image3 = new MyFragment(R.drawable.bay3);
-        MyFragment image4 = new MyFragment(R.drawable.bay4);
-        MyFragment image5 = new MyFragment(R.drawable.bay5);
+        MyFragment image1 = new MyFragment();
+        MyFragment image2 = new MyFragment();
+        MyFragment image3 = new MyFragment();
+        MyFragment image4 = new MyFragment();
+        MyFragment image5 = new MyFragment();
+
+        image1.setRes(R.drawable.bay1);
+        image2.setRes(R.drawable.bay2);
+        image3.setRes(R.drawable.bay3);
+        image4.setRes(R.drawable.bay4);
+        image5.setRes(R.drawable.bay5);
 
         list.add(image1);
         list.add(image2);

@@ -17,18 +17,31 @@ import com.example.mario.techinicianscheduler.R;
 public class MyFragment extends Fragment {
     private View view;
     private int res;
-    public MyFragment(int res) {
-        this.res = res;
+
+    public  MyFragment(){
+
     }
+//    public MyFragment(int res) {
+//        this.res = res;
+//    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.myfragment,container,false);
-        setImage(res);
+        setImage(getRes());
         return view;
     }
     public void setImage(int res){
         ImageView imageView= (ImageView) view.findViewById(R.id.loop_image);
         imageView.setImageResource(res);
+    }
+
+
+    public int getRes() {
+        return res;
+    }
+
+    public void setRes(int res) {
+        this.res = res;
     }
 }
