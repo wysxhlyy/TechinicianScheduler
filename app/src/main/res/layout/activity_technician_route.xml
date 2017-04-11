@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/customized_marginbot"
     android:background="@color/white"
     >
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
+        android:id="@+id/rl_head"
         >
 
         <ImageButton
@@ -30,8 +32,8 @@
             android:layout_height="wrap_content"
             android:text="Route"
             android:textSize="22dp"
-            android:layout_marginLeft="130dp"
             android:textColor="@color/myBlack"
+            android:layout_centerHorizontal="true"
             />
 
         <ImageButton
@@ -39,10 +41,11 @@
             android:layout_height="25dp"
             android:id="@+id/googleRoute"
             android:background="@drawable/route_tech"
-            android:layout_marginLeft="145dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
             />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -51,10 +54,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         tools:context="com.example.mario.techinicianscheduler.Technician.TechnicianRoute"
+        android:layout_below="@+id/rl_head"
         />
 
 
@@ -64,6 +68,6 @@
         <!--android:id="@+id/orderedList"-->
         <!--/>-->
 
-</LinearLayout>
+</RelativeLayout>
 
 

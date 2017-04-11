@@ -102,6 +102,8 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
                         managerInfo.putParcelableArrayList("chosenTech",chosenTechs);
                         intent2.putExtras(managerInfo);
                         startActivity(intent2);
+                        finish();
+
                     }
                 });
                 builder.setNegativeButton("Lower cost", new DialogInterface.OnClickListener() {
@@ -125,6 +127,7 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
                         managerInfo.putParcelableArrayList("chosenTech",chosenTechs);
                         intent2.putExtras(managerInfo);
                         startActivity(intent2);
+                        finish();
                     }
                 });
                 builder.create().show();

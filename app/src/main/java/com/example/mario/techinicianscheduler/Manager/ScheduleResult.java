@@ -13,8 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -78,7 +78,7 @@ public class ScheduleResult extends AppCompatActivity {
     private JSONObject jsonObject;
     private int retCode;
 
-    private LinearLayout layout;
+    private RelativeLayout layout;
     private ListView editedResultList;
     private int editable=1;
     private Button confirmResult;
@@ -245,7 +245,7 @@ public class ScheduleResult extends AppCompatActivity {
         switchView=(ImageButton)findViewById(R.id.switchView);
         editScheduleResult=(EditText)findViewById(R.id.editScheduleResult);
         editedResultList=(ListView)findViewById(R.id.editedResultList);
-        layout=(LinearLayout)findViewById(R.id.activity_schedule_result);
+        layout=(RelativeLayout)findViewById(R.id.activity_schedule_result);
         confirmResult=(Button)findViewById(R.id.confirmResult);
         penalty=new ArrayList<Integer>();
         penalty.add(0,0);

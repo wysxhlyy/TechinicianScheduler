@@ -11,13 +11,14 @@
 
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="left"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+
         >
 
 
@@ -34,8 +35,7 @@
             android:textColor="@color/myBlack"
             android:text="Create Tasks"
             android:textSize="20dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="105dp"
+            android:layout_centerInParent="true"
             />
 
         <ImageButton
@@ -43,11 +43,11 @@
             android:layout_height="25dp"
             android:id="@+id/createTaskSubmit"
             android:background="@drawable/tick"
-            android:layout_marginLeft="110dp"
+            android:layout_alignParentRight="true"
             />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

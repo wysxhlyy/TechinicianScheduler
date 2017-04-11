@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_sign_up"
     android:layout_width="match_parent"
@@ -12,8 +12,8 @@
     android:orientation="vertical"
     >
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
@@ -22,7 +22,6 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:background="@drawable/quit"
-            android:layout_gravity="left"
             android:id="@+id/quitSignUp"
             />
 
@@ -32,20 +31,22 @@
             android:layout_height="wrap_content"
             android:text="Sign Up"
             android:id="@+id/signUpTitle"
-            android:layout_marginLeft="140dp"
             android:textColor="@color/myBlack"
             android:textSize="20dp"
+            android:layout_centerInParent="true"
             />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <ImageView
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_gravity="center"
         android:id="@+id/showRole"
         android:background="@drawable/cycling"
+        android:layout_centerHorizontal="true"
+
         >
 
 
@@ -56,7 +57,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="40dp"
+        android:layout_marginBottom="2dp"
+        android:layout_above="@+id/rl_et_signUp6"
+        android:id="@+id/rl_et_signUp7"
         >
 
         <LinearLayout
@@ -90,7 +93,6 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="2dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             >
@@ -121,9 +123,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="2dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="2dp"
+        android:layout_above="@+id/rl_et_signUp5"
+        android:id="@+id/rl_et_signUp6"
         >
 
         <TextView
@@ -149,9 +153,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="2dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="2dp"
+        android:layout_above="@+id/rl_et_signUp4"
+        android:id="@+id/rl_et_signUp5"
         >
 
         <TextView
@@ -177,8 +183,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="2dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="2dp"
+        android:layout_above="@+id/rl_et_signUp3"
+        android:id="@+id/rl_et_signUp4"
         >
 
         <TextView
@@ -202,8 +210,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="2dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="2dp"
+        android:layout_above="@+id/rl_et_signUp2"
+        android:id="@+id/rl_et_signUp3"
         >
 
         <TextView
@@ -228,7 +238,9 @@
         android:orientation="horizontal"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_above="@+id/rl_et_signUp1"
+        android:id="@+id/rl_et_signUp2"
         >
 
         <TextView
@@ -252,8 +264,10 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/rl_btn_signUp"
+        android:id="@+id/rl_et_signUp1"
         >
 
         <Button
@@ -275,7 +289,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
+        android:id="@+id/rl_btn_signUp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
         >
 
         <TextView
@@ -296,4 +313,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

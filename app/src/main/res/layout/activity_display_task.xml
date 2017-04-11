@@ -7,11 +7,10 @@
     android:orientation="vertical"
     >
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="left"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         >
@@ -33,11 +32,11 @@
             android:text="Task Information"
             android:textSize="20dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="100dp"
+            android:layout_centerInParent="true"
             />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

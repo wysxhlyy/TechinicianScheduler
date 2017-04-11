@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_technician_dashboard"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.mario.techinicianscheduler.Technician.TechnicianDashboard"
     android:orientation="vertical"
     android:background="@color/white"
@@ -14,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
         >
 
         <ImageButton
@@ -41,9 +41,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="70dp"
         android:orientation="vertical"
         android:layout_gravity="center"
+        android:id="@+id/rl_tech_main"
         >
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -99,92 +100,97 @@
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:orientation="horizontal"
-        android:layout_marginTop="-10dp"
+        android:layout_below="@+id/rl_tech_main"
+        android:id="@+id/rl_tech_db"
         >
 
-        <LinearLayout
-            android:layout_width="137dp"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/myDarkGreen"
             android:orientation="vertical"
+            android:id="@+id/rl_td_tv1"
+            android:layout_weight="1"
             >
 
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:background="@drawable/work_hour"
-                android:layout_marginLeft="60dp"
                 android:layout_marginTop="25dp"
+                android:layout_centerHorizontal="true"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="50dp"
+                android:layout_marginTop="65dp"
+                android:layout_centerHorizontal="true"
                 android:id="@+id/techWorkHour"
                 android:textSize="20dp"
                 android:textColor="@color/white"
                 />
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="137dp"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/myGreen2"
             android:id="@+id/techBlock2"
             android:orientation="vertical"
+            android:layout_weight="1"
             >
 
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:background="@drawable/tasknum"
-                android:layout_marginLeft="60dp"
                 android:layout_marginTop="25dp"
+                android:layout_centerHorizontal="true"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="65dp"
+                android:layout_marginTop="65dp"
                 android:id="@+id/techTaskNum"
                 android:textSize="20dp"
                 android:textColor="@color/white"
+                android:layout_centerHorizontal="true"
                 />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="137dp"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/myGreen3"
             android:id="@+id/techBlock3"
             android:orientation="vertical"
+            android:layout_weight="1"
             >
 
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginLeft="60dp"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/taskestimatetime"
+                android:layout_centerHorizontal="true"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="55dp"
+                android:layout_marginTop="65dp"
                 android:id="@+id/techEstimateTaskDur"
                 android:textSize="20dp"
                 android:textColor="@color/white"
+                android:layout_centerHorizontal="true"
                 />
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
 
@@ -192,24 +198,31 @@
     
     <su.levenetc.android.textsurface.TextSurface
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:id="@+id/techTextSurface"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/rl_tech_db"
+        android:layout_marginBottom="20dp"
         >
 
     </su.levenetc.android.textsurface.TextSurface>
 
+
     <TextClock
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/timeShow"
         android:format24Hour="hh:mm:ss"
         android:format12Hour="h:mm:ssaa"
         android:textColor="@color/myDarkGreen"
         android:textSize="70dp"
-        android:paddingTop="100dp"
         android:textAlignment="center"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/rl_tech_db"
+        android:layout_marginTop="65dp"
+        android:layout_marginBottom="30dp"
         />
 
 
-</LinearLayout>
+</RelativeLayout>

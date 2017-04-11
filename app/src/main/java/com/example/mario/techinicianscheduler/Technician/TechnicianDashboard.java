@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,7 +66,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
     private TextView techWorkHour;
     private TextView taskEstimateTime;
 
-    private LinearLayout layout;
+    private RelativeLayout layout;
 
 
     private int estimateDuration=0;
@@ -305,7 +305,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
         techTaskNum=(TextView)findViewById(R.id.techTaskNum);
         taskEstimateTime=(TextView)findViewById(R.id.techEstimateTaskDur);
         textSurface=(TextSurface) findViewById(R.id.techTextSurface);
-        layout=(LinearLayout)findViewById(R.id.activity_technician_dashboard);
+        layout=(RelativeLayout)findViewById(R.id.activity_technician_dashboard);
         timeShow=(TextClock) findViewById(R.id.timeShow);
         layout.removeView(timeShow);
         //timeShow.setVisibility(View.INVISIBLE);

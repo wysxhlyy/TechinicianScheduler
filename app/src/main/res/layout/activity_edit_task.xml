@@ -1,215 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/activity_create_task"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context="com.example.mario.techinicianscheduler.Manager.HandleTask.CreateTask"
-android:orientation="vertical"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_create_task"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.mario.techinicianscheduler.Manager.HandleTask.CreateTask">
 
 
-
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_gravity="left"
-    android:layout_marginTop="15dp"
-    android:layout_marginLeft="20dp"
-    >
-
-
-    <ImageButton
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@drawable/quit"
-        android:id="@+id/quitEditTask"
-        />
-
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/myBlack"
-        android:text="Edit Task"
-        android:textSize="20dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="120dp"
-        />
-
-    <ImageButton
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:id="@+id/editTaskSubmit"
-        android:background="@drawable/update"
-        android:layout_marginLeft="125dp"
-        />
-
-
-</LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="280dp"
-    android:orientation="vertical"
-    android:background="@color/myLLightGray"
-    android:layout_marginTop="30dp"
-    >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_gravity="left"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
-        android:orientation="vertical"
-        >
+        android:orientation="horizontal">
 
+
+        <ImageButton
+            android:id="@+id/quitEditTask"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/quit" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="TITLE"
-            />
-
-
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/editTaskName"
-            android:layout_marginTop="5dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Edit Task"
             android:textColor="@color/myBlack"
-            />
+            android:textSize="20dp" />
+
+        <ImageButton
+            android:id="@+id/editTaskSubmit"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/update" />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/myLLightGray"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="TITLE" />
+
+
+            <EditText
+                android:id="@+id/editTaskName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/myBlack" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DESCRIPTION" />
+
+            <EditText
+                android:id="@+id/editTaskDescrip"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:maxLines="8"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SKILL REQUIREMENT" />
+
+        <EditText
+            android:id="@+id/editTaskSkillReq"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/myBlack" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
-        >
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DESCRIPTION"
-            />
+            android:text="LOCATION" />
 
-        <EditText
+        <AutoCompleteTextView
+            android:id="@+id/editTaskStation"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:id="@+id/editTaskDescrip"
-            android:gravity="top"
-            android:inputType="textMultiLine"
-            android:maxLines="8"
-            android:scrollbars="vertical"
-            />
+            android:layout_height="wrap_content"
+            android:textColor="@color/myBlack" />
 
     </LinearLayout>
 
-
-
-
-</LinearLayout>
-
-
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginTop="20dp"
-    android:orientation="vertical"
-    >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SKILL REQUIREMENT"
-        />
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editTaskSkillReq"
-        android:textColor="@color/myBlack"
-        />
-
-</LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginTop="15dp"
-    android:orientation="vertical"
-    >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="LOCATION"
-        />
-
-    <AutoCompleteTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTaskStation"
-        android:textColor="@color/myBlack"
-        />
-
-</LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginTop="15dp"
-    android:orientation="vertical"
-    >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ESTIMATE DURATION"
-        />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTaskDuration"
-        android:textColor="@color/myBlack"
-        />
-
-</LinearLayout>
-
-<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="25dp"
         android:layout_marginRight="20dp"
-        >
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ESTIMATE DURATION" />
+
+        <EditText
+            android:id="@+id/editTaskDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/myBlack" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal">
 
         <Button
+            android:id="@+id/deleteTask"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:id="@+id/deleteTask"
             android:layout_gravity="center"
-            android:text="Delete"
-            android:textColor="@color/white"
-            android:textAllCaps="false"
             android:background="@color/myRed"
-            />
-</LinearLayout>
+            android:text="Delete"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+    </LinearLayout>
 
 </LinearLayout>
