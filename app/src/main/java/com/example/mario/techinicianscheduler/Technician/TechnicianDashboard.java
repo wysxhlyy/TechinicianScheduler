@@ -382,6 +382,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
 
                 techTaskNum.setText(taskSize+"");
                 techWorkHour.setText(techInfo.getString("workHour"));
+                estimateDuration=estimateDuration/Integer.parseInt(techInfo.getString("skillLevel"));
                 taskEstimateTime.setText(estimateDuration+"");
                 handleTextAnimation();
 

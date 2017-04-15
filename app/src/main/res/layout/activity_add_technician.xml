@@ -66,7 +66,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Create"
+        android:text="Bind"
         android:textSize="20dp"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"

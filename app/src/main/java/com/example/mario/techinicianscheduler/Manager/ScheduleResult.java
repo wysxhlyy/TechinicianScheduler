@@ -328,7 +328,8 @@ public class ScheduleResult extends AppCompatActivity {
 
 
     /**
-     * Need asynchronism.
+     * Find neighbor which have less costs.
+     * The cost includes the penalty value so this is the modified hill climbing.
      * @param schedule
      */
     private void modifiedHillClimbing(Map<Task,TechnicianInfo> schedule) {
@@ -371,7 +372,6 @@ public class ScheduleResult extends AppCompatActivity {
                 }
             }
         }
-
 
         if(!find){
             localOptima=schedule;
@@ -443,7 +443,6 @@ public class ScheduleResult extends AppCompatActivity {
         techs.addAll(originSchedule.values());
 
         Boolean find=false;
-
 
         for(int k=0;k<findNeighborIteration;k++){
 
@@ -583,7 +582,6 @@ public class ScheduleResult extends AppCompatActivity {
                 }
 
             }
-
         }
 
         if(!unassignedTask.isEmpty()){
@@ -606,7 +604,6 @@ public class ScheduleResult extends AppCompatActivity {
         ArrayList<Task> unassignedTask=new ArrayList<>();
         unassignedTask.addAll(sortedTask);
         availableTask.addAll(schedule.keySet());
-        //double maxCost=0;
         ArrayList<Double> result=new ArrayList<>();
         double cost=0;
         double taskCost=0;
@@ -811,6 +808,8 @@ public class ScheduleResult extends AppCompatActivity {
             sortTechnicianBySkill();
         }
     }
+
+
 
     /**
      * Insert the schedule result into database.
