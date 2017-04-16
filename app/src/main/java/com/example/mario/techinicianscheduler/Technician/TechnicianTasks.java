@@ -37,6 +37,8 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
     private ImageButton workArrangementMenu;
     private ResideMenu resideMenu;
 
+    private Map<String,Object> map=new HashMap<String,Object>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -81,8 +83,8 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
                 switch (index){
                     case 0:
                         arrangedTasks.get(position).setFinished("true");
-                        //添加删除线
-                        recreate();
+                        arrangedTasks.remove(position);
+                        setListview();
                         break;
                 }
                 return  false;
@@ -108,15 +110,15 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
      */
     private void setListview() {
         List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
-        Map<String,Object> map=new HashMap<String,Object>();
 
-        map=new HashMap<String,Object>();
         for(int i=0;i<arrangedTasks.size();i++){
-            map=new HashMap<String,Object>();
-            map.put("taskName",arrangedTasks.get(i).getName());
-            map.put("skillLevel","Level "+arrangedTasks.get(i).getSkillRequirement()+"");
-            map.put("estimateDur",arrangedTasks.get(i).getDuration()+"");
-            list.add(map);
+            if(arrangedTasks.get(i).getFinished().equals("false")){
+                map=new HashMap<String,Object>();
+                map.put("taskName",arrangedTasks.get(i).getName());
+                map.put("skillLevel","Level "+arrangedTasks.get(i).getSkillRequirement()+"");
+                map.put("estimateDur",arrangedTasks.get(i).getDuration()+"");
+                list.add(map);
+            }
         }
 
         dataAdapter=new SimpleAdapter(TechnicianTasks.this,list,R.layout.manage_task_list,new String[]{"taskName","skillLevel","estimateDur"},new int[]{R.id.task_name,R.id.task_skill,R.id.task_duration});
@@ -188,23 +190,27 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
             case 0:
                 Intent intent0=new Intent(TechnicianTasks.this,TechnicianDashboard.class);
                 intent0.putExtras(techInfo);
+                techInfo.putParcelableArrayList("arrangedTasks",arrangedTasks);
                 startActivity(intent0);
                 break;
             case 1:
                 Intent intent=new Intent(TechnicianTasks.this,TechnicianTasks.class);
                 intent.putExtras(techInfo);
+                techInfo.putParcelableArrayList("arrangedTasks",arrangedTasks);
                 startActivity(intent);
                 finish();
                 break;
             case 2:
                 Intent intent1=new Intent(TechnicianTasks.this,TechnicianRoute.class);
                 intent1.putExtras(techInfo);
+                techInfo.putParcelableArrayList("arrangedTasks",arrangedTasks);
                 startActivity(intent1);
                 finish();
                 break;
             case 3:
                 Intent intent20=new Intent(TechnicianTasks.this,TechnicianSetting.class);
                 intent20.putExtras(techInfo);
+                techInfo.putParcelableArrayList("arrangedTasks",arrangedTasks);
                 startActivity(intent20);
                 break;
             case 4:

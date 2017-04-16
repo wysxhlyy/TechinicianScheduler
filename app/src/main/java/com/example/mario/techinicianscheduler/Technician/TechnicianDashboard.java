@@ -372,6 +372,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
                         task.setDescription(jsonObject.getString("description"+i));
                         task.setStationName(jsonObject.getString("stationName"+i));
                         task.setPosition(new LatLng(jsonObject.getDouble("latitude"+i),jsonObject.getDouble("longitude"+i)));
+                        task.setFinished(jsonObject.getString("status"+i));
                         recordPos.add(task.getPosition());
                         arrangedTasks.add(task);
                         estimateDuration+=task.getDuration();
