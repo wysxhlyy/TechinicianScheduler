@@ -1,33 +1,26 @@
 <?php
-
 error_reporting(E_ALL ^ E_NOTICE);
-
 $con = mysqli_connect("146.148.28.194","root","wuyusheng","techSchedulerDB");
 
-
- $username = $_POST['username'];
- $password = $_POST['password'];
+$username = $_POST['username'];
+$password = $_POST['password'];
 
 $sql = "SELECT * FROM technician WHERE username='$username' AND password='$password' ";
 
 $result=mysqli_query($con,$sql);
-
-$num = mysqli_num_rows($result);
+$success = mysqli_num_rows($result);
+//The variable success judge whether get the data from database successfully.
 
 $response = array();
 
-
-if($num > 0){
+if($success > 0){
     $response["success"] = 1;
-   }else{
+}else{
     $response["success"] = 0;
 }
-
 if ($result===FALSE) {
     echo mysql_error();
 }
-
-
 while ($row=mysqli_fetch_array($result)) {
 	$response["username"]=$row['username'];
 	$response["password"]=$row['password'];
@@ -41,7 +34,7 @@ while ($row=mysqli_fetch_array($result)) {
 }
 
 echo json_encode($response);
-//以json的形式返回给客户端
+//transfer the array response back to the application using JSON object.
 
 mysqli_close($con);
 ?>

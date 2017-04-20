@@ -151,6 +151,7 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
                 ArrayList<LatLng> newList=new ArrayList<LatLng>();
                 newList.addAll(list);
                 swap(i,j,newList);
+                //try to swap the location to get smaller distance for traveling all the position.
                 float newDist=calculateDistance(newList);
                 if(newDist<bestDistance){
                     list.clear();
@@ -158,14 +159,17 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
                 }
             }
         }
-
         float improveDistance=calculateDistance(list);
         if(improveDistance<bestDistance){
+            //if have found the visiting sequence that have smaller distance than the best known solution,record it.
             bestDistance=improveDistance;
             kopt(list);
         }
     }
 
+    /**
+    * Swap two positions.
+    */
     private void swap(int i,int j,ArrayList<LatLng> list){
         LatLng latlng1=list.get(i);
         LatLng latlng2=list.get(j);
@@ -181,10 +185,10 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
     }
 
     /**
-     * Use Traveling Salesmen problem to find the shortest route order.
+     * Use greedy search  to find the shortest route order.
      */
     private void findShortestOrder() {
-        orderedList.add(startEnd);
+        orderedList.add(startEnd); //startEnd means the position of the company.
         ArrayList<LatLng> waitList=new ArrayList<LatLng>();
         waitList.addAll(recordPos);
         greedySearch(waitList,startEnd);
@@ -195,23 +199,24 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
         float minDistance=10000000;
         int minDistId=0;
 
-        //calculate the distance between startpos to each other position
+        //calculate the distance between start position to each other position
         for(int i=0;i<waitList.size();i++){
             LatLng latlng=waitList.get(i);
             float[] distBetweemTwoNodes=new float[1];
             Location.distanceBetween(base.latitude,base.longitude,latlng.latitude,latlng.longitude,distBetweemTwoNodes);
             if(distBetweemTwoNodes[0]<minDistance){
-                minDistance=distBetweemTwoNodes[0];         //find the position with minimum distance
-                minDistId=i;
+                minDistance=distBetweemTwoNodes[0];
+                //find the position with minimum distance
+                minDistId=i;  //use minDistId record the id of position in waitlist.
             }
         }
         if(waitList.size()>1){
-            LatLng newBase=waitList.get(minDistId);
+            LatLng newBase=waitList.get(minDistId);   //add the found position which has min distance into orderedList.
             orderedList.add(waitList.get(minDistId));
-            waitList.remove(minDistId);
+            waitList.remove(minDistId);               //remove the found position.
             greedySearch(waitList,newBase);
         }else {
-            orderedList.add(waitList.get(minDistId));
+            orderedList.add(waitList.get(minDistId));  //if the waitList only have 1 location left, then the greedySearch ends.
             waitList.remove(minDistId);
             orderedList.add(startEnd);
         }
