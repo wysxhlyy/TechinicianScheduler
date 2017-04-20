@@ -113,7 +113,6 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
         @Override
         protected String doInBackground(String... strings) {
             requestQueue= Volley.newRequestQueue(ManagerLogin.this);
-
             //Connect PHP File.
             StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+"managerLogin.php",listener,errorListener) {
                 protected Map<String, String> getParams() throws AuthFailureError {
