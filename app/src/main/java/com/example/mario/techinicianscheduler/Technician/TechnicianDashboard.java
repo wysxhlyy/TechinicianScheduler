@@ -57,6 +57,13 @@ import su.levenetc.android.textsurface.contants.Side;
 
 import static com.example.mario.techinicianscheduler.R.drawable.schedule;
 
+/**
+ * Entrance of the technicians' account, the work houur of technican,the number of tasks has been assigned to him
+ * and the estimate duration to finish these tasks has been shown on the activity.
+ * A cool text animation will be shown when this activity start, after the animation ends, the lower half of the
+ * page will show a clock which indicates current time.
+ */
+
 public class TechnicianDashboard extends AppCompatActivity implements View.OnClickListener {
 
     private TextView loggedTechUsername;

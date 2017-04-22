@@ -60,7 +60,6 @@
         <activity android:name=".Manager.ManagerSetting" />
         <activity android:name=".Technician.TechnicianSetting" />
         <activity android:name=".Manager.HandleTask.DisplayTask" />
-        <activity android:name=".Manager.ConfirmResult"></activity>
     </application>
 
 </manifest>

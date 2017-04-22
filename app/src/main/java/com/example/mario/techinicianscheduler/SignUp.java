@@ -42,7 +42,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
- * 添加表单验证功能
+ * Allow the user to sign up an account by themselves.
+ * After sign up, their information will be inserted into the database.
  */
 
 public class SignUp extends AppCompatActivity {

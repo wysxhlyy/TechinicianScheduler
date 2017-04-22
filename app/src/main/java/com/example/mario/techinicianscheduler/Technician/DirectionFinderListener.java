@@ -3,7 +3,7 @@ package com.example.mario.techinicianscheduler.Technician;
 import java.util.List;
 
 /**
- * Created by mario on 2017/1/31.
+ * A listener for the DirectionFinder.
  */
 
 public interface DirectionFinderListener {

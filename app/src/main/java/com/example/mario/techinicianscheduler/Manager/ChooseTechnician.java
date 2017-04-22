@@ -20,6 +20,13 @@ import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
+/**
+ * The second step of schedule process.
+ * The chosen technician will be stored in parcelableArraylist as the tasks.
+ * Another function handled in this activity: preference chosen.
+ * The value of unassignedpenalty will change depend on the choice of user.
+ */
+
 public class ChooseTechnician extends AppCompatActivity implements View.OnClickListener, MyListAdapter.CheckedAllListener {
 
 
@@ -38,18 +45,19 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
     private ArrayList<TechnicianInfo> chosenTechs;
 
     private ArrayList<TechnicianInfo> list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_choosetech);
         initialize();
 
-        managerInfo=getIntent().getExtras();
+        managerInfo = getIntent().getExtras();
 
-        techs=managerInfo.getParcelableArrayList("availableTechnician");
-        Log.d("numOfTechs:",techs.size()+"");
+        techs = managerInfo.getParcelableArrayList("availableTechnician");
+        Log.d("numOfTechs:", techs.size() + "");
 
-        adapter=new MyListAdapter(techs,this);
+        adapter = new MyListAdapter(techs, this);
         adapter.setCheckedAllListener(this);
         availableTechs.setAdapter(adapter);
         availableTechs.setDivider(null);
@@ -61,45 +69,45 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
     }
 
     private void initialize() {
-        techs=new ArrayList<>();
-        chosenTechs=new ArrayList<>();
+        techs = new ArrayList<>();
+        chosenTechs = new ArrayList<>();
 
-        cbButtonAll=(CheckBox)findViewById(R.id.cb_all_button);
-        isChecked=new SparseBooleanArray();
-        availableTechs=(ListView)findViewById(R.id.availableTechs);
-        checkedTech=new SparseBooleanArray();
-        quit=(ImageButton)findViewById(R.id.quitChooseTech);
+        cbButtonAll = (CheckBox) findViewById(R.id.cb_all_button);
+        isChecked = new SparseBooleanArray();
+        availableTechs = (ListView) findViewById(R.id.availableTechs);
+        checkedTech = new SparseBooleanArray();
+        quit = (ImageButton) findViewById(R.id.quitChooseTech);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
-        generate=(ImageButton)findViewById(R.id.generate);
+        generate = (ImageButton) findViewById(R.id.generate);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.generate:
-                AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Please choose your schedule preference when dealing with high-cost task:");
                 builder.setTitle("preference question");
                 builder.setPositiveButton("More Task Assigned", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int a) {
                         dialogInterface.dismiss();
-                        managerInfo.putInt("unassignedPenalty",6);
-                        Intent intent2=new Intent(ChooseTechnician.this,ScheduleResult.class);
-                        if(cbButtonAll.isChecked()){
-                            for(int i=0;i<techs.size();i++){
+                        managerInfo.putInt("unassignedPenalty", 6);
+                        Intent intent2 = new Intent(ChooseTechnician.this, ScheduleResult.class);
+                        if (cbButtonAll.isChecked()) {
+                            for (int i = 0; i < techs.size(); i++) {
                                 chosenTechs.add(techs.get(i));
                             }
-                        }else {
-                            for(int i=0;i<techs.size();i++){
-                                if(checkedTech.valueAt(i)){
+                        } else {
+                            for (int i = 0; i < techs.size(); i++) {
+                                if (checkedTech.valueAt(i)) {
                                     chosenTechs.add(techs.get(i));
                                 }
                             }
                         }
 
-                        managerInfo.putParcelableArrayList("chosenTech",chosenTechs);
+                        managerInfo.putParcelableArrayList("chosenTech", chosenTechs);
                         intent2.putExtras(managerInfo);
                         startActivity(intent2);
                         finish();
@@ -110,21 +118,21 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onClick(DialogInterface dialogInterface, int a) {
                         dialogInterface.dismiss();
-                        managerInfo.putInt("unassignedPenalty",3);
-                        Intent intent2=new Intent(ChooseTechnician.this,ScheduleResult.class);
-                        if(cbButtonAll.isChecked()){
-                            for(int i=0;i<techs.size();i++){
+                        managerInfo.putInt("unassignedPenalty", 3);
+                        Intent intent2 = new Intent(ChooseTechnician.this, ScheduleResult.class);
+                        if (cbButtonAll.isChecked()) {
+                            for (int i = 0; i < techs.size(); i++) {
                                 chosenTechs.add(techs.get(i));
                             }
-                        }else {
-                            for(int i=0;i<techs.size();i++){
-                                if(checkedTech.valueAt(i)){
+                        } else {
+                            for (int i = 0; i < techs.size(); i++) {
+                                if (checkedTech.valueAt(i)) {
                                     chosenTechs.add(techs.get(i));
                                 }
                             }
                         }
 
-                        managerInfo.putParcelableArrayList("chosenTech",chosenTechs);
+                        managerInfo.putParcelableArrayList("chosenTech", chosenTechs);
                         intent2.putExtras(managerInfo);
                         startActivity(intent2);
                         finish();
@@ -134,7 +142,7 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
 
                 break;
             case R.id.quitChooseTech:
-                Intent intent=new Intent(ChooseTechnician.this,ManagerDashboard.class);
+                Intent intent = new Intent(ChooseTechnician.this, ManagerDashboard.class);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
                 finish();
@@ -143,44 +151,43 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
     }
 
 
-
-
     @Override
     public void CheckAll(SparseBooleanArray checkall) {
 
         if (checkall.indexOfValue(false) < 0) {
-                if (!cbButtonAll.isChecked()) {
-                    this.flag = false;
-                    cbButtonAll.setChecked(true);
-                }                                   //if all the checkbox is selected, the select all button should be set to true.
-            } else if (checkall.indexOfValue(false) >= 0 && checkall.indexOfValue(true) >= 0) {
-                if (cbButtonAll.isChecked()) {
-                    this.flag = true;
-                    cbButtonAll.setChecked(false);
-                }                                   //if some of the checkbox is true, some is false, the selct all button will be set to false.
-            }
-        checkedTech=checkall;
+            if (!cbButtonAll.isChecked()) {
+                this.flag = false;
+                cbButtonAll.setChecked(true);
+            }                                   //if all the checkbox is selected, the select all button should be set to true.
+        } else if (checkall.indexOfValue(false) >= 0 && checkall.indexOfValue(true) >= 0) {
+            if (cbButtonAll.isChecked()) {
+                this.flag = true;
+                cbButtonAll.setChecked(false);
+            }                                   //if some of the checkbox is true, some is false, the selct all button will be set to false.
+        }
+        checkedTech = checkall;
     }
 
     /**
      * Handle the Select All checkbox
+     *
      * @param v
      */
-    public void allSelect(View v){
-        if(cbButtonAll.isChecked()){
-            flag=true;
-        }else {
-            flag=false;
+    public void allSelect(View v) {
+        if (cbButtonAll.isChecked()) {
+            flag = true;
+        } else {
+            flag = false;
         }
 
-        if(flag){
-            for(int i=0;i<techs.size();i++){
-                isChecked.put(i,true);
+        if (flag) {
+            for (int i = 0; i < techs.size(); i++) {
+                isChecked.put(i, true);
                 MyListAdapter.setIsSelected(isChecked);
             }
-        }else{
-            for(int i=0;i<techs.size();i++){
-                isChecked.put(i,false);
+        } else {
+            for (int i = 0; i < techs.size(); i++) {
+                isChecked.put(i, false);
                 MyListAdapter.setIsSelected(isChecked);
             }
         }

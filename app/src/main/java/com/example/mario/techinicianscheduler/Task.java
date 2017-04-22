@@ -6,7 +6,8 @@ import android.os.Parcelable;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Created by mario on 2017/2/1.
+ * Task class, A task object will store all the information related to this task.
+ * Implements the parcelable in order to make the task object could be transmitted between the activity.
  */
 
 public class Task implements Parcelable {

@@ -30,6 +30,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Allow the manager to edit the task, the edited information could be put into the database.
+ */
+
 public class EditTask extends AppCompatActivity {
 
     private EditText editName;
@@ -58,15 +62,15 @@ public class EditTask extends AppCompatActivity {
         setContentView(R.layout.activity_edit_task);
         initialize();
 
-        chosenId=managerInfo.getInt("selectedTask");
-        existTasks=managerInfo.getParcelableArrayList("availableTask");
-        selectedTask=existTasks.get(chosenId-1);
+        chosenId = managerInfo.getInt("selectedTask");
+        existTasks = managerInfo.getParcelableArrayList("availableTask");
+        selectedTask = existTasks.get(chosenId - 1);
 
         editName.setText(selectedTask.getName());
-        Log.d("TEST",selectedTask.getName()+"");
-        editSkillReq.setText(selectedTask.getSkillRequirement()+"");
+        Log.d("TEST", selectedTask.getName() + "");
+        editSkillReq.setText(selectedTask.getSkillRequirement() + "");
         editStationName.setText(selectedTask.getStationName());
-        editDuration.setText(selectedTask.getDuration()+"");
+        editDuration.setText(selectedTask.getDuration() + "");
         editDescription.setText(selectedTask.getDescription());
 
 
@@ -74,7 +78,7 @@ public class EditTask extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 updateTask();
-                Intent intent=new Intent(EditTask.this,ManagerDashboard.class);
+                Intent intent = new Intent(EditTask.this, ManagerDashboard.class);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
                 finish();
@@ -98,12 +102,12 @@ public class EditTask extends AppCompatActivity {
     }
 
     private void deleteTask() {
-        requestQueue= Volley.newRequestQueue(EditTask.this);
+        requestQueue = Volley.newRequestQueue(EditTask.this);
 
-        StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+ "deleteTask.php",listener,errorListener){
-            protected Map<String,String> getParams() throws AuthFailureError {
-                Map<String,String> map=new HashMap<String, String>();
-                map.put("taskId",selectedTask.getId()+"");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS + "deleteTask.php", listener, errorListener) {
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("taskId", selectedTask.getId() + "");
                 return map;
             }
         };
@@ -112,64 +116,64 @@ public class EditTask extends AppCompatActivity {
     }
 
     private void updateTask() {
-           requestQueue= Volley.newRequestQueue(EditTask.this);
+        requestQueue = Volley.newRequestQueue(EditTask.this);
 
-                StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+ "editTask.php",listener,errorListener){
-                    protected Map<String,String> getParams() throws AuthFailureError {
-                        Map<String,String> map=new HashMap<String, String>();
-                        map.put("taskName",editName.getText().toString());
-                        map.put("taskSkillReq",editSkillReq.getText().toString());
-                        map.put("taskStation",editStationName.getText().toString());
-                        map.put("taskDuration",editDuration.getText().toString());
-                        map.put("taskDescription",editDescription.getText().toString());
-                        map.put("taskId",selectedTask.getId()+"");
-                        return map;
-                    }
-                };
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS + "editTask.php", listener, errorListener) {
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("taskName", editName.getText().toString());
+                map.put("taskSkillReq", editSkillReq.getText().toString());
+                map.put("taskStation", editStationName.getText().toString());
+                map.put("taskDuration", editDuration.getText().toString());
+                map.put("taskDescription", editDescription.getText().toString());
+                map.put("taskId", selectedTask.getId() + "");
+                return map;
+            }
+        };
 
-                requestQueue.add(stringRequest);
+        requestQueue.add(stringRequest);
 
     }
 
     private void initialize() {
-        editName=(EditText)findViewById(R.id.editTaskName);
-        editSkillReq=(EditText)findViewById(R.id.editTaskSkillReq);
-        editStationName=(EditText)findViewById(R.id.editTaskStation);
-        editDuration=(EditText)findViewById(R.id.editTaskDuration);
-        editDescription=(EditText)findViewById(R.id.editTaskDescrip);
-        managerInfo=getIntent().getExtras();
-        update=(ImageButton)findViewById(R.id.editTaskSubmit);
-        delete=(Button)findViewById(R.id.deleteTask);
-        quitEditTask=(ImageButton)findViewById(R.id.quitEditTask);
+        editName = (EditText) findViewById(R.id.editTaskName);
+        editSkillReq = (EditText) findViewById(R.id.editTaskSkillReq);
+        editStationName = (EditText) findViewById(R.id.editTaskStation);
+        editDuration = (EditText) findViewById(R.id.editTaskDuration);
+        editDescription = (EditText) findViewById(R.id.editTaskDescrip);
+        managerInfo = getIntent().getExtras();
+        update = (ImageButton) findViewById(R.id.editTaskSubmit);
+        delete = (Button) findViewById(R.id.deleteTask);
+        quitEditTask = (ImageButton) findViewById(R.id.quitEditTask);
     }
 
-    Response.Listener<String> listener=new Response.Listener<String>() {
+    Response.Listener<String> listener = new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {
             try {
-                jsonObject=new JSONObject(s);
-                retCode=jsonObject.getInt("success");
-            }catch (JSONException e){
+                jsonObject = new JSONObject(s);
+                retCode = jsonObject.getInt("success");
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(retCode==1){
-                Toast.makeText(EditTask.this,"Success",Toast.LENGTH_SHORT).show();
+            if (retCode == 1) {
+                Toast.makeText(EditTask.this, "Success", Toast.LENGTH_SHORT).show();
 
-                Intent intent=new Intent(EditTask.this, ManagerDashboard.class);
+                Intent intent = new Intent(EditTask.this, ManagerDashboard.class);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
 
-            }else{
-                Toast.makeText(EditTask.this,"Failed to Update",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(EditTask.this, "Failed to Update", Toast.LENGTH_SHORT).show();
             }
 
         }
     };
 
-    Response.ErrorListener errorListener=new Response.ErrorListener() {
+    Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            Toast.makeText(EditTask.this,"Database not connected",Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditTask.this, "Database not connected", Toast.LENGTH_SHORT).show();
 
         }
     };

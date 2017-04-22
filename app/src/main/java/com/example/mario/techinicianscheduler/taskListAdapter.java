@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mario on 2017/2/7.
+ * An customized adapter to make the task list checkable.
+ * Used when choose the task.
  */
 
 public class TaskListAdapter extends BaseAdapter {
@@ -41,8 +42,7 @@ public class TaskListAdapter extends BaseAdapter {
     /**
      * initial data
      */
-    private void initData()
-    {
+    private void initData() {
         for (int i = 0; i < list.size(); i++) {
 
             getIsSelected().put(i, false);
@@ -51,8 +51,7 @@ public class TaskListAdapter extends BaseAdapter {
     }
 
 
-    public static SparseBooleanArray getIsSelected()
-    {
+    public static SparseBooleanArray getIsSelected() {
         return isSelected;
     }
 
@@ -85,25 +84,24 @@ public class TaskListAdapter extends BaseAdapter {
         if (view == null) {
             holderView = new TaskListAdapter.HolderView();
             //get the source file
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.listview_task, parent, false);
-            holderView.cb_task = (CheckBox)view.findViewById(R.id.cb_task);
-            holderView.task_name = (TextView)view.findViewById(R.id.task_name);
-            holderView.task_skill=(TextView)view.findViewById(R.id.task_skill);
-            holderView.task_duration=(TextView)view.findViewById(R.id.task_duration);
+            holderView.cb_task = (CheckBox) view.findViewById(R.id.cb_task);
+            holderView.task_name = (TextView) view.findViewById(R.id.task_name);
+            holderView.task_skill = (TextView) view.findViewById(R.id.task_skill);
+            holderView.task_duration = (TextView) view.findViewById(R.id.task_duration);
 
             view.setTag(holderView);
 
-        }
-        else {
-            holderView = (TaskListAdapter.HolderView)view.getTag();
+        } else {
+            holderView = (TaskListAdapter.HolderView) view.getTag();
         }
 
         final Task item = getItem(position);
         if (item != null) {
             holderView.task_name.setText(item.getName());                           //set Text for the checkbox;
-            holderView.task_skill.setText("Skill Requirement:"+item.getSkillRequirement());
-            holderView.task_duration.setText(item.getDuration()+"");
+            holderView.task_skill.setText("Skill Requirement:" + item.getSkillRequirement());
+            holderView.task_duration.setText(item.getDuration() + "");
             holderView.cb_task.setChecked(isSelected.get(position));
 
         }
@@ -118,8 +116,7 @@ public class TaskListAdapter extends BaseAdapter {
                 //						holderView.cb_button.toggle();
                 if (buttonView.isPressed()) {
 
-                    isSelected.put(position,isChecked);
-                    //监听回调，是否改变全选按钮的状态
+                    isSelected.put(position, isChecked);
                     mListener.CheckAll(isSelected);
                 }
             }
@@ -128,21 +125,15 @@ public class TaskListAdapter extends BaseAdapter {
     }
 
 
-    class HolderView
-    {
+    class HolderView {
         private CheckBox cb_task;
         private TextView task_name;
         private TextView task_duration;
         private TextView task_skill;
     }
 
-    /**
-     * 当所有CheckBox全选时回调
-     * @author Administrator
-     *
-     */
-    public interface CheckedAllListener
-    {
+
+    public interface CheckedAllListener {
 
         void CheckAll(SparseBooleanArray checkall);
 

@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mario on 2017/2/7.
+ * An customized adapter to make the technician list checkable.
+ * Used when choose the technicians.
  */
+
 
 public class MyListAdapter extends BaseAdapter {
     List<TechnicianInfo> list = new ArrayList<TechnicianInfo>();

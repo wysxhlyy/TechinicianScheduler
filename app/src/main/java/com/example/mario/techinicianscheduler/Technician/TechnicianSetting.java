@@ -28,6 +28,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The technician could change its personal information here.
+ */
+
 public class TechnicianSetting extends AppCompatActivity implements View.OnClickListener {
 
     private EditText password;

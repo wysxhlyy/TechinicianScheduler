@@ -29,6 +29,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Show the information of technician, the manager is allowed to edit these information.
+ */
+
 public class DisplayTechnician extends AppCompatActivity {
 
     private EditText skillLevel;
@@ -53,13 +57,13 @@ public class DisplayTechnician extends AppCompatActivity {
         setContentView(R.layout.activity_display_technician);
         initialize();
 
-        managerInfo=getIntent().getExtras();
-        selectedId=managerInfo.getInt("selectedTech");
-        bindTech=managerInfo.getParcelableArrayList("availableTechnician");
-        selectedTech=bindTech.get(selectedId);
-        skillLevel.setText(selectedTech.getSkillLevel()+"");
-        workHour.setText(selectedTech.getWorkHour()+"");
-        techName.setText(selectedTech.getFirstName()+" "+selectedTech.getSurname());
+        managerInfo = getIntent().getExtras();
+        selectedId = managerInfo.getInt("selectedTech");
+        bindTech = managerInfo.getParcelableArrayList("availableTechnician");
+        selectedTech = bindTech.get(selectedId);
+        skillLevel.setText(selectedTech.getSkillLevel() + "");
+        workHour.setText(selectedTech.getWorkHour() + "");
+        techName.setText(selectedTech.getFirstName() + " " + selectedTech.getSurname());
 
 
         update.setOnClickListener(new View.OnClickListener() {
@@ -85,12 +89,12 @@ public class DisplayTechnician extends AppCompatActivity {
     }
 
     private void unBindTech() {
-        requestQueue= Volley.newRequestQueue(DisplayTechnician.this);
+        requestQueue = Volley.newRequestQueue(DisplayTechnician.this);
 
-        StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+ "unbindTech.php",listener,errorListener){
-            protected Map<String,String> getParams() throws AuthFailureError {
-                Map<String,String> map=new HashMap<String, String>();
-                map.put("techId",selectedTech.getId()+"");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS + "unbindTech.php", listener, errorListener) {
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("techId", selectedTech.getId() + "");
                 return map;
             }
         };
@@ -99,14 +103,14 @@ public class DisplayTechnician extends AppCompatActivity {
     }
 
     private void updateTechInfo() {
-        requestQueue= Volley.newRequestQueue(DisplayTechnician.this);
+        requestQueue = Volley.newRequestQueue(DisplayTechnician.this);
 
-        StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+ "editTech.php",listener,errorListener){
-            protected Map<String,String> getParams() throws AuthFailureError {
-                Map<String,String> map=new HashMap<String, String>();
-                map.put("techSkill",skillLevel.getText().toString());
-                map.put("techWorkHour",workHour.getText().toString());
-                map.put("techId",selectedTech.getId()+"");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS + "editTech.php", listener, errorListener) {
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("techSkill", skillLevel.getText().toString());
+                map.put("techWorkHour", workHour.getText().toString());
+                map.put("techId", selectedTech.getId() + "");
                 return map;
             }
         };
@@ -115,41 +119,41 @@ public class DisplayTechnician extends AppCompatActivity {
     }
 
     private void initialize() {
-        skillLevel=(EditText)findViewById(R.id.editTechSkill);
-        workHour=(EditText)findViewById(R.id.editTechWorkHour);
-        update=(ImageButton)findViewById(R.id.editTechSubmit);
-        remove=(Button)findViewById(R.id.removeTech);
-        techName=(TextView)findViewById(R.id.editedTechName);
-        quit=(ImageButton)findViewById(R.id.quitEditTech);
+        skillLevel = (EditText) findViewById(R.id.editTechSkill);
+        workHour = (EditText) findViewById(R.id.editTechWorkHour);
+        update = (ImageButton) findViewById(R.id.editTechSubmit);
+        remove = (Button) findViewById(R.id.removeTech);
+        techName = (TextView) findViewById(R.id.editedTechName);
+        quit = (ImageButton) findViewById(R.id.quitEditTech);
     }
 
-    Response.Listener<String> listener=new Response.Listener<String>() {
+    Response.Listener<String> listener = new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {
             try {
-                jsonObject=new JSONObject(s);
-                retCode=jsonObject.getInt("success");
-            }catch (JSONException e){
+                jsonObject = new JSONObject(s);
+                retCode = jsonObject.getInt("success");
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(retCode==1){
-                Toast.makeText(DisplayTechnician.this,"Success",Toast.LENGTH_SHORT).show();
+            if (retCode == 1) {
+                Toast.makeText(DisplayTechnician.this, "Success", Toast.LENGTH_SHORT).show();
 
-                Intent intent=new Intent(DisplayTechnician.this, ManagerDashboard.class);
+                Intent intent = new Intent(DisplayTechnician.this, ManagerDashboard.class);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
 
-            }else{
-                Toast.makeText(DisplayTechnician.this,"Failed to Update",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(DisplayTechnician.this, "Failed to Update", Toast.LENGTH_SHORT).show();
             }
 
         }
     };
 
-    Response.ErrorListener errorListener=new Response.ErrorListener() {
+    Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            Toast.makeText(DisplayTechnician.this,"Database not connected",Toast.LENGTH_SHORT).show();
+            Toast.makeText(DisplayTechnician.this, "Database not connected", Toast.LENGTH_SHORT).show();
 
         }
     };

@@ -27,6 +27,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is used to handle the create task.
+ */
+
 public class CreateTask extends AppCompatActivity {
 
     private EditText name;
@@ -52,35 +56,35 @@ public class CreateTask extends AppCompatActivity {
         addTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String taskName,taskSkillReq,taskStation,taskDescrip,taskDuration;
-                taskName=name.getText().toString();
-                taskSkillReq=skillReq.getText().toString();
-                taskStation=stationName.getText().toString();
-                taskDescrip=description.getText().toString();
-                taskDuration=duration.getText().toString();
+                final String taskName, taskSkillReq, taskStation, taskDescrip, taskDuration;
+                taskName = name.getText().toString();
+                taskSkillReq = skillReq.getText().toString();
+                taskStation = stationName.getText().toString();
+                taskDescrip = description.getText().toString();
+                taskDuration = duration.getText().toString();
 
-                if(taskName.equals("")||taskSkillReq.equals("")||taskStation.equals("")||taskDescrip.equals("")){
-                    Toast.makeText(CreateTask.this,"Please Enter all the information",Toast.LENGTH_SHORT).show();
+                if (taskName.equals("") || taskSkillReq.equals("") || taskStation.equals("") || taskDescrip.equals("")) {
+                    Toast.makeText(CreateTask.this, "Please Enter all the information", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                requestQueue= Volley.newRequestQueue(CreateTask.this);
+                requestQueue = Volley.newRequestQueue(CreateTask.this);
 
-                StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+"createTask.php",listener,errorListener){
-                    protected Map<String,String> getParams() throws AuthFailureError{
-                        Map<String,String> map=new HashMap<String, String>();
-                        map.put("taskName",taskName);
-                        map.put("taskSkillReq",taskSkillReq);
-                        map.put("taskStation",taskStation);
-                        map.put("taskDescription",taskDescrip);
-                        map.put("taskDuration",taskDuration);
-                        map.put("managerId",getSharedPreferences("managerSession",MODE_PRIVATE).getString("managerId",null));
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS + "createTask.php", listener, errorListener) {
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("taskName", taskName);
+                        map.put("taskSkillReq", taskSkillReq);
+                        map.put("taskStation", taskStation);
+                        map.put("taskDescription", taskDescrip);
+                        map.put("taskDuration", taskDuration);
+                        map.put("managerId", getSharedPreferences("managerSession", MODE_PRIVATE).getString("managerId", null));
                         return map;
                     }
                 };
                 requestQueue.add(stringRequest);
 
-                Intent intent=new Intent(CreateTask.this, ManagerDashboard.class);
+                Intent intent = new Intent(CreateTask.this, ManagerDashboard.class);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
             }
@@ -96,36 +100,36 @@ public class CreateTask extends AppCompatActivity {
     }
 
     private void initialize() {
-        name=(EditText)findViewById(R.id.createTaskName);
-        skillReq=(EditText)findViewById(R.id.createTaskSkillReq);
-        stationName=(AutoCompleteTextView)findViewById(R.id.createTaskStation);
-        description=(EditText)findViewById(R.id.createTaskDescrip);
-        addTask=(ImageButton)findViewById(R.id.createTaskSubmit);
-        duration=(EditText)findViewById(R.id.createTaskDuration);
-        managerInfo=getIntent().getExtras();
-        quit=(ImageButton)findViewById(R.id.quitCreateTask);
+        name = (EditText) findViewById(R.id.createTaskName);
+        skillReq = (EditText) findViewById(R.id.createTaskSkillReq);
+        stationName = (AutoCompleteTextView) findViewById(R.id.createTaskStation);
+        description = (EditText) findViewById(R.id.createTaskDescrip);
+        addTask = (ImageButton) findViewById(R.id.createTaskSubmit);
+        duration = (EditText) findViewById(R.id.createTaskDuration);
+        managerInfo = getIntent().getExtras();
+        quit = (ImageButton) findViewById(R.id.quitCreateTask);
     }
 
-    Response.Listener<String> listener=new Response.Listener<String>() {
+    Response.Listener<String> listener = new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {
-            try{
-                jsonObject=new JSONObject(s);
-                retCode=jsonObject.getInt("success");
-            }catch (JSONException e){
+            try {
+                jsonObject = new JSONObject(s);
+                retCode = jsonObject.getInt("success");
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            if(retCode==1){
-                Toast.makeText(CreateTask.this,"New task has been added successfully!",Toast.LENGTH_SHORT).show();
+            if (retCode == 1) {
+                Toast.makeText(CreateTask.this, "New task has been added successfully!", Toast.LENGTH_SHORT).show();
             }
         }
     };
 
-    Response.ErrorListener errorListener=new Response.ErrorListener() {
+    Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            Toast.makeText(CreateTask.this,"Database not connected",Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreateTask.this, "Database not connected", Toast.LENGTH_SHORT).show();
         }
     };
 }

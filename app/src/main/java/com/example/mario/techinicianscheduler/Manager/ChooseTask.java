@@ -18,6 +18,12 @@ import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
+/**
+ * The first step of start a schedule process.
+ * Choose the tasks from listview.
+ * The chosen task will be stored in a parceableArraylists and transfer to next activity (chooseTechnician).
+ */
+
 public class ChooseTask extends AppCompatActivity implements View.OnClickListener, TaskListAdapter.CheckedAllListener {
 
     private ImageButton next2;
@@ -42,11 +48,11 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_schedule_choosetask);
 
         initialize();
-        managerInfo=getIntent().getExtras();
-        tasks=managerInfo.getParcelableArrayList("availableTask");
-        Log.d("number of task",""+tasks.size());
+        managerInfo = getIntent().getExtras();
+        tasks = managerInfo.getParcelableArrayList("availableTask");
+        Log.d("number of task", "" + tasks.size());
 
-        adapter=new TaskListAdapter(tasks,this);
+        adapter = new TaskListAdapter(tasks, this);
         adapter.setCheckedAllListener(this);
         availableTask.setAdapter(adapter);
         availableTask.setDivider(null);
@@ -60,44 +66,44 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
 
 
     private void initialize() {
-        tasks=new ArrayList<>();
-        chosenTasks=new ArrayList<>();
-        next2=(ImageButton)findViewById(R.id.next2);
-        quit=(ImageButton)findViewById(R.id.quitChooseTask);
+        tasks = new ArrayList<>();
+        chosenTasks = new ArrayList<>();
+        next2 = (ImageButton) findViewById(R.id.next2);
+        quit = (ImageButton) findViewById(R.id.quitChooseTask);
 
 
-        cbButtonAll=(CheckBox)findViewById(R.id.cb_all_button2);
-        isChecked=new SparseBooleanArray();
-        availableTask=(ListView)findViewById(R.id.availableTasks);
-        checkedTask=new SparseBooleanArray();
+        cbButtonAll = (CheckBox) findViewById(R.id.cb_all_button2);
+        isChecked = new SparseBooleanArray();
+        availableTask = (ListView) findViewById(R.id.availableTasks);
+        checkedTask = new SparseBooleanArray();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
 
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.next2:
-                Intent intent=new Intent(ChooseTask.this,ChooseTechnician.class);
+                Intent intent = new Intent(ChooseTask.this, ChooseTechnician.class);
 
-                if(cbButtonAll.isChecked()){
-                    for(int i=0;i<tasks.size();i++){
+                if (cbButtonAll.isChecked()) {
+                    for (int i = 0; i < tasks.size(); i++) {
                         chosenTasks.add(tasks.get(i));
                     }
-                }else {
-                    for(int i=0;i<tasks.size();i++){
-                        if(checkedTask.valueAt(i)){
+                } else {
+                    for (int i = 0; i < tasks.size(); i++) {
+                        if (checkedTask.valueAt(i)) {
                             chosenTasks.add(tasks.get(i));
                         }
                     }
                 }
 
-                managerInfo.putParcelableArrayList("chosenTask",chosenTasks);
+                managerInfo.putParcelableArrayList("chosenTask", chosenTasks);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
                 break;
             case R.id.quitChooseTask:
-                Intent intent1=new Intent(ChooseTask.this,ManagerDashboard.class);
+                Intent intent1 = new Intent(ChooseTask.this, ManagerDashboard.class);
                 intent1.putExtras(managerInfo);
                 startActivity(intent1);
                 finish();
@@ -119,24 +125,24 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
                 cbButtonAll.setChecked(false);
             }                                   //if some of the checkbox is true, some is false, the selct all button will be set to false.
         }
-        checkedTask=checkall;
+        checkedTask = checkall;
     }
 
-    public void allSelectTask(View v){
-        if(cbButtonAll.isChecked()){
-            flag=true;
-        }else {
-            flag=false;
+    public void allSelectTask(View v) {
+        if (cbButtonAll.isChecked()) {
+            flag = true;
+        } else {
+            flag = false;
         }
 
-        if(flag){
-            for(int i=0;i<tasks.size();i++){
-                isChecked.put(i,true);
+        if (flag) {
+            for (int i = 0; i < tasks.size(); i++) {
+                isChecked.put(i, true);
                 TaskListAdapter.setIsSelected(isChecked);
             }
-        }else{
-            for(int i=0;i<tasks.size();i++){
-                isChecked.put(i,false);
+        } else {
+            for (int i = 0; i < tasks.size(); i++) {
+                isChecked.put(i, false);
                 TaskListAdapter.setIsSelected(isChecked);
             }
         }

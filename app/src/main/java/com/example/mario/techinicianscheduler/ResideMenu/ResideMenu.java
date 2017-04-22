@@ -28,10 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * User: special
- * Date: 13-12-10
- * Time: 下午10:44
- * Mail: specialcyci@gmail.com
+ *  This class is from the library.
  */
 public class ResideMenu extends FrameLayout {
 

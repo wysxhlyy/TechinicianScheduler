@@ -38,6 +38,11 @@ import java.util.Map;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+/**
+ * Handle the login of the technicains. Once the technician input correct username and password, his information
+ * will all be returned by database and they are stored in a bundle object. The bundle object can be transmitted
+ * to each activity, which means the technician information can be accessed in each activity.
+ */
 public class TechnicianLogin extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = ManagerLogin.class.getSimpleName();
 

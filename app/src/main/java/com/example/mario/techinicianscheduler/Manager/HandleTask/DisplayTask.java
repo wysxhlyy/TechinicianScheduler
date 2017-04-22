@@ -11,6 +11,10 @@ import com.example.mario.techinicianscheduler.Task;
 
 import java.util.ArrayList;
 
+/**
+ * Display the task including all the information about this task.
+ */
+
 public class DisplayTask extends AppCompatActivity {
 
     private TextView displayName;

@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mario on 2017/1/31.
+ * Use the Google Map Api to achieve the route function.
+ * Here the route only means use Google Api to automatically generate the path from place A to place B.
  */
 
 public class DirectionFinder {

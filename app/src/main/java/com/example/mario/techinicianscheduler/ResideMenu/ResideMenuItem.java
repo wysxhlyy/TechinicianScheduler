@@ -9,10 +9,7 @@ import android.widget.TextView;
 import com.example.mario.techinicianscheduler.R;
 
 /**
- * User: special
- * Date: 13-12-10
- * Time: 下午11:05
- * Mail: specialcyci@gmail.com
+ *  This class is from the library.
  */
 public class ResideMenuItem extends LinearLayout {
 

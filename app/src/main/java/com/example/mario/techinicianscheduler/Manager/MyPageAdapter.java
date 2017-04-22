@@ -7,7 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.List;
 
 /**
- * Created by mario on 22/03/2017.
+ * A customized page adapter for the side Menu.
+ * These code is from the library.
  */
 
 public class MyPageAdapter extends FragmentPagerAdapter {

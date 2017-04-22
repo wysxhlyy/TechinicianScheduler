@@ -27,6 +27,11 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Used to bind the technician, after user input technician's username, the system will find the technician according
+ * to its username, if the bind fails, a prompt will be shown according to the reason of failure, otherwise this technician
+ * can be bind to this manager,which means he will present in the corresponding manager's technicianl ist.
+ */
 public class AddTechnician extends AppCompatActivity {
 
     private AutoCompleteTextView addTechnicianUsername;
@@ -52,13 +57,13 @@ public class AddTechnician extends AppCompatActivity {
         addTech.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestQueue= Volley.newRequestQueue(AddTechnician.this);
+                requestQueue = Volley.newRequestQueue(AddTechnician.this);
 
-                StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+ "addTechnician.php",listener,errorListener){
-                    protected Map<String,String> getParams() throws AuthFailureError {
-                        Map<String,String> map=new HashMap<String, String>();
-                        map.put("username",addTechnicianUsername.getText().toString());
-                        map.put("managerId",managerInfo.getString("managerId"));
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS + "addTechnician.php", listener, errorListener) {
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("username", addTechnicianUsername.getText().toString());
+                        map.put("managerId", managerInfo.getString("managerId"));
                         return map;
                     }
                 };
@@ -76,54 +81,53 @@ public class AddTechnician extends AppCompatActivity {
         });
 
 
-
     }
 
     private void initialize() {
-        managerInfo=getIntent().getExtras();
-        addTechnicianUsername=(AutoCompleteTextView)findViewById(R.id.addTechUsername);
-        addTech=(Button)findViewById(R.id.addTechBtn);
-        quit=(ImageButton)findViewById(R.id.quitAddTechnician);
+        managerInfo = getIntent().getExtras();
+        addTechnicianUsername = (AutoCompleteTextView) findViewById(R.id.addTechUsername);
+        addTech = (Button) findViewById(R.id.addTechBtn);
+        quit = (ImageButton) findViewById(R.id.quitAddTechnician);
     }
 
     private void setAutoComplete() {
-        String[] availableTechs=new String[]{"abcde","abcdef","bcdefg","efgh","abcfjiosf"};
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line,availableTechs);
+        String[] availableTechs = new String[]{"abcde", "abcdef", "bcdefg", "efgh", "abcfjiosf"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, availableTechs);
         addTechnicianUsername.setAdapter(adapter);
     }
 
-    Response.Listener<String> listener=new Response.Listener<String>() {
+    Response.Listener<String> listener = new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {
             try {
-                jsonObject=new JSONObject(s);
-                retCode=jsonObject.getInt("success");
-                addCode=jsonObject.getInt("addSuccess");
-            }catch (JSONException e){
+                jsonObject = new JSONObject(s);
+                retCode = jsonObject.getInt("success");
+                addCode = jsonObject.getInt("addSuccess");
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(retCode==1){
-                if(addCode==1){
-                    Toast.makeText(AddTechnician.this,"Add Successfully",Toast.LENGTH_SHORT).show();
+            if (retCode == 1) {
+                if (addCode == 1) {
+                    Toast.makeText(AddTechnician.this, "Add Successfully", Toast.LENGTH_SHORT).show();
 
-                }else {
-                    Toast.makeText(AddTechnician.this,"Technician has already been assigned to other Manager",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(AddTechnician.this, "Technician has already been assigned to other Manager", Toast.LENGTH_SHORT).show();
                 }
 
-                Intent intent=new Intent(AddTechnician.this, ManagerDashboard.class);
+                Intent intent = new Intent(AddTechnician.this, ManagerDashboard.class);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
 
-            }else{
-                Toast.makeText(AddTechnician.this,"Cannot find the technician",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(AddTechnician.this, "Cannot find the technician", Toast.LENGTH_SHORT).show();
             }
         }
     };
 
-    Response.ErrorListener errorListener=new Response.ErrorListener() {
+    Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            Toast.makeText(AddTechnician.this,"Database not connected",Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddTechnician.this, "Database not connected", Toast.LENGTH_SHORT).show();
 
         }
     };

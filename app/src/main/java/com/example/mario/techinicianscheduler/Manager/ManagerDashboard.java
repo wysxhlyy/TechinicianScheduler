@@ -42,6 +42,11 @@ import me.relex.circleindicator.CircleIndicator;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+/**
+ * The entrance of manager's account.
+ * The most important function is to get the tasks and technicians information related to this manager.
+ * The receive of tasks and technicians information will only happen here to reduce the times of connecting database.
+ */
 public class ManagerDashboard extends AppCompatActivity implements View.OnClickListener {
 
     private TextView username;
@@ -53,16 +58,16 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     private int retCode;
     private static final String TAG = ManagerLogin.class.getSimpleName();
     private JSONObject jsonObject;
-    private int techNum=0;
+    private int techNum = 0;
 
     private ArrayList<TechnicianInfo> techs;
     private ArrayList<Task> tasks;
-    private int taskNum=0;
+    private int taskNum = 0;
 
     private ResideMenu resideMenu;
     private ImageButton menu;
 
-    private static int ACTIVITY_MANAGER_SETTING=1;
+    private static int ACTIVITY_MANAGER_SETTING = 1;
     private ViewPager viewPager;
     private CircleIndicator indicator;
 
@@ -73,13 +78,13 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
         initialize();
 
-        if(getIntent().getExtras()!=null){
-            managerInfo=getIntent().getExtras();
+        if (getIntent().getExtras() != null) {
+            managerInfo = getIntent().getExtras();
             username.setText(managerInfo.getString("managerName"));
         }
 
 
-        ManagerDashboard.CostTimeTask costTimeTask=new ManagerDashboard.CostTimeTask(ManagerDashboard.this);
+        ManagerDashboard.CostTimeTask costTimeTask = new ManagerDashboard.CostTimeTask(ManagerDashboard.this);
         costTimeTask.execute();
 
         menu.setOnClickListener(this);
@@ -92,7 +97,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
     private void handleIndicator() {
 
-        List<Fragment> list=new ArrayList<>();
+        List<Fragment> list = new ArrayList<>();
         MyFragment image1 = new MyFragment();
         MyFragment image2 = new MyFragment();
         MyFragment image3 = new MyFragment();
@@ -110,7 +115,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         list.add(image3);
         list.add(image4);
         list.add(image5);
-        MyPageAdapter pageAdapter=new MyPageAdapter(getSupportFragmentManager(),list);
+        MyPageAdapter pageAdapter = new MyPageAdapter(getSupportFragmentManager(), list);
 
 
         viewPager.setAdapter(pageAdapter);
@@ -118,22 +123,22 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     }
 
 
-    private void handleResideMenu(){
-        resideMenu=new ResideMenu(this);
+    private void handleResideMenu() {
+        resideMenu = new ResideMenu(this);
         resideMenu.setShadowVisible(true);
         resideMenu.attachToActivity(this);
         resideMenu.setScaleValue(0.6f);
         resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
 
 
-        String titles[]={"Home","Schedule","Manage Tasks","Manage Technicians","Settings","Log out"};
-        int icon[]={R.drawable.home,R.drawable.schedule,R.drawable.tasks,R.drawable.technicians,R.drawable.settings,R.drawable.logout};
+        String titles[] = {"Home", "Schedule", "Manage Tasks", "Manage Technicians", "Settings", "Log out"};
+        int icon[] = {R.drawable.home, R.drawable.schedule, R.drawable.tasks, R.drawable.technicians, R.drawable.settings, R.drawable.logout};
 
-        for(int i=0;i<titles.length;i++){
-            ResideMenuItem item=new ResideMenuItem(this,icon[i],titles[i]);
+        for (int i = 0; i < titles.length; i++) {
+            ResideMenuItem item = new ResideMenuItem(this, icon[i], titles[i]);
             item.setId(i);
             item.setOnClickListener(this);
-            resideMenu.addMenuItem(item,ResideMenu.DIRECTION_LEFT);
+            resideMenu.addMenuItem(item, ResideMenu.DIRECTION_LEFT);
         }
 
         resideMenu.setMenuListener(menuListener);
@@ -141,33 +146,34 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private ResideMenu.OnMenuListener menuListener=new ResideMenu.OnMenuListener() {
+    private ResideMenu.OnMenuListener menuListener = new ResideMenu.OnMenuListener() {
         @Override
         public void openMenu() {
             resideMenu.setBackground(R.drawable.bg);
         }
+
         @Override
         public void closeMenu() {
             resideMenu.setBackground(R.drawable.white);
         }
     };
 
-    public boolean dispatchTouchEvent(MotionEvent ev){
+    public boolean dispatchTouchEvent(MotionEvent ev) {
         return resideMenu.dispatchTouchEvent(ev);
     }
 
 
     private void initialize() {
-        username=(TextView)findViewById(R.id.loggedManagerUsername);
-        managerDashNumTask=(TextView)findViewById(R.id.managerDashNumTask);
-        manageTaskNum=(TextView)findViewById(R.id.manageTaskNum);
-        manageTechNum=(TextView)findViewById(R.id.manageTechNum);
-        menu=(ImageButton)findViewById(R.id.startSideBar);
-        indicator=(CircleIndicator) findViewById(R.id.indicator);
-        viewPager=(ViewPager)findViewById(R.id.viewPager);
+        username = (TextView) findViewById(R.id.loggedManagerUsername);
+        managerDashNumTask = (TextView) findViewById(R.id.managerDashNumTask);
+        manageTaskNum = (TextView) findViewById(R.id.manageTaskNum);
+        manageTechNum = (TextView) findViewById(R.id.manageTechNum);
+        menu = (ImageButton) findViewById(R.id.startSideBar);
+        indicator = (CircleIndicator) findViewById(R.id.indicator);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
 
-        techs=new ArrayList<>();
-        tasks=new ArrayList<>();
+        techs = new ArrayList<>();
+        tasks = new ArrayList<>();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
 
     }
@@ -176,12 +182,12 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    private class CostTimeTask extends AsyncTask<String,Integer,String> {
+    private class CostTimeTask extends AsyncTask<String, Integer, String> {
         private ProgressDialog dialog;
 
 
-        public CostTimeTask(Context context){
-            dialog=new ProgressDialog(context,0);
+        public CostTimeTask(Context context) {
+            dialog = new ProgressDialog(context, 0);
 
             dialog.setMessage("Calculating...");
             dialog.setCancelable(true);
@@ -192,11 +198,11 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected String doInBackground(String... strings) {
-            RequestQueue requestQueue= Volley.newRequestQueue(ManagerDashboard.this);
-            StringRequest stringRequest=new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS+"getAvailableTech.php",listener,errorListener){
-                protected Map<String,String> getParams() throws AuthFailureError {
-                    Map<String,String> map=new HashMap<String, String>();
-                    map.put("managerId",getSharedPreferences("managerSession",MODE_PRIVATE).getString("managerId",null));
+            RequestQueue requestQueue = Volley.newRequestQueue(ManagerDashboard.this);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS + "getAvailableTech.php", listener, errorListener) {
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("managerId", getSharedPreferences("managerSession", MODE_PRIVATE).getString("managerId", null));
                     return map;
                 }
             };
@@ -215,49 +221,49 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case 0:
-                Intent intentt=new Intent(ManagerDashboard.this,ManagerDashboard.class);
+                Intent intentt = new Intent(ManagerDashboard.this, ManagerDashboard.class);
                 intentt.putExtras(managerInfo);
                 startActivity(intentt);
                 finish();
                 break;
             case 1:
-                Intent intent=new Intent(ManagerDashboard.this,ChooseTask.class);
-                Bundle bundle= managerInfo;
-                bundle.putParcelableArrayList("availableTechnician",techs);
-                bundle.putParcelableArrayList("availableTask",tasks);
+                Intent intent = new Intent(ManagerDashboard.this, ChooseTask.class);
+                Bundle bundle = managerInfo;
+                bundle.putParcelableArrayList("availableTechnician", techs);
+                bundle.putParcelableArrayList("availableTask", tasks);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case 2:
-                Intent intent1=new Intent(ManagerDashboard.this,ManageTasks.class);
-                Bundle bundle1=managerInfo;
-                bundle1.putParcelableArrayList("availableTechnician",techs);
-                bundle1.putParcelableArrayList("availableTask",tasks);
+                Intent intent1 = new Intent(ManagerDashboard.this, ManageTasks.class);
+                Bundle bundle1 = managerInfo;
+                bundle1.putParcelableArrayList("availableTechnician", techs);
+                bundle1.putParcelableArrayList("availableTask", tasks);
                 intent1.putExtras(bundle1);
                 startActivity(intent1);
                 finish();
                 break;
             case 3:
-                Intent intent2=new Intent(ManagerDashboard.this,ManageTechnicians.class);
-                Bundle bundle2=managerInfo;
-                bundle2.putParcelableArrayList("availableTechnician",techs);
-                bundle2.putParcelableArrayList("availableTask",tasks);
+                Intent intent2 = new Intent(ManagerDashboard.this, ManageTechnicians.class);
+                Bundle bundle2 = managerInfo;
+                bundle2.putParcelableArrayList("availableTechnician", techs);
+                bundle2.putParcelableArrayList("availableTask", tasks);
                 intent2.putExtras(bundle2);
                 startActivity(intent2);
                 finish();
                 break;
             case 4:
-                Intent intent3=new Intent(ManagerDashboard.this,ManagerSetting.class);
-                Bundle bundle3=managerInfo;
-                bundle3.putParcelableArrayList("availableTechnician",techs);
-                bundle3.putParcelableArrayList("availableTask",tasks);
+                Intent intent3 = new Intent(ManagerDashboard.this, ManagerSetting.class);
+                Bundle bundle3 = managerInfo;
+                bundle3.putParcelableArrayList("availableTechnician", techs);
+                bundle3.putParcelableArrayList("availableTask", tasks);
                 intent3.putExtras(bundle3);
-                startActivityForResult(intent3,ACTIVITY_MANAGER_SETTING);
+                startActivityForResult(intent3, ACTIVITY_MANAGER_SETTING);
                 break;
             case 5:
-                Intent intent4=new Intent(ManagerDashboard.this, ManagerLogin.class);
+                Intent intent4 = new Intent(ManagerDashboard.this, ManagerLogin.class);
                 startActivity(intent4);
                 finish();
                 break;
@@ -269,77 +275,75 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==ACTIVITY_MANAGER_SETTING){
+        if (requestCode == ACTIVITY_MANAGER_SETTING) {
             recreate();
         }
     }
 
-    Response.Listener<String> listener=new Response.Listener<String>() {
+    Response.Listener<String> listener = new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {
             try {
-                jsonObject=new JSONObject(s);
-                retCode=jsonObject.getInt("success");
-            }catch (JSONException e){
+                jsonObject = new JSONObject(s);
+                retCode = jsonObject.getInt("success");
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            if(retCode==1){
+            if (retCode == 1) {
                 try {
 
-                    taskNum=Integer.parseInt(jsonObject.getString("taskNum"));
-                    if(taskNum!=0){
-                        for(int i=1;i<taskNum+1;i++){
-                            Task task=new Task();
-                            task.setId(Integer.parseInt(jsonObject.getString("taskId"+i)));
-                            task.setName(jsonObject.getString("taskName"+i));
-                            task.setDescription(jsonObject.getString("taskDescription"+i));
-                            task.setSkillRequirement(Integer.parseInt(jsonObject.getString("taskSkill"+i)));
-                            task.setDuration(Integer.parseInt(jsonObject.getString("taskDuration"+i)));
-                            task.setFinished(jsonObject.getString("taskStatus"+i));
-                            task.setStationName(jsonObject.getString("stationName"+i));
-                            task.setPosition(new LatLng(Double.parseDouble(jsonObject.getString("stationLat"+i)),Double.parseDouble(jsonObject.getString("stationLong"+i))));
+                    taskNum = Integer.parseInt(jsonObject.getString("taskNum"));
+                    if (taskNum != 0) {
+                        for (int i = 1; i < taskNum + 1; i++) {
+                            Task task = new Task();
+                            task.setId(Integer.parseInt(jsonObject.getString("taskId" + i)));
+                            task.setName(jsonObject.getString("taskName" + i));
+                            task.setDescription(jsonObject.getString("taskDescription" + i));
+                            task.setSkillRequirement(Integer.parseInt(jsonObject.getString("taskSkill" + i)));
+                            task.setDuration(Integer.parseInt(jsonObject.getString("taskDuration" + i)));
+                            task.setFinished(jsonObject.getString("taskStatus" + i));
+                            task.setStationName(jsonObject.getString("stationName" + i));
+                            task.setPosition(new LatLng(Double.parseDouble(jsonObject.getString("stationLat" + i)), Double.parseDouble(jsonObject.getString("stationLong" + i))));
 
-                            Log.d("task Name",task.getStationName());
+                            Log.d("task Name", task.getStationName());
                             tasks.add(task);
                         }
                     }
 
 
-
-                    techNum=Integer.parseInt(jsonObject.getString("techNum"));
-                    if(techNum!=0){
-                        for(int i=1;i<techNum+1;i++){
-                            TechnicianInfo t=new TechnicianInfo();
-                            t.setId(Integer.parseInt(jsonObject.getString("techId"+i)));
-                            t.setFirstName(jsonObject.getString("techName"+i));
-                            t.setSkillLevel(Integer.parseInt(jsonObject.getString("skillLevel"+i)));
-                            t.setWorkHour(jsonObject.getInt("workHour"+i));
-                            t.setSurname(jsonObject.getString("surname"+i));
+                    techNum = Integer.parseInt(jsonObject.getString("techNum"));
+                    if (techNum != 0) {
+                        for (int i = 1; i < techNum + 1; i++) {
+                            TechnicianInfo t = new TechnicianInfo();
+                            t.setId(Integer.parseInt(jsonObject.getString("techId" + i)));
+                            t.setFirstName(jsonObject.getString("techName" + i));
+                            t.setSkillLevel(Integer.parseInt(jsonObject.getString("skillLevel" + i)));
+                            t.setWorkHour(jsonObject.getInt("workHour" + i));
+                            t.setSurname(jsonObject.getString("surname" + i));
                             techs.add(t);
                         }
                     }
 
-                    managerDashNumTask.setText("You have "+tasks.size()+" tasks to manage today.");
-                    manageTaskNum.setText(taskNum+"");
-                    manageTechNum.setText(techNum+"");
-
+                    managerDashNumTask.setText("You have " + tasks.size() + " tasks to manage today.");
+                    manageTaskNum.setText(taskNum + "");
+                    manageTechNum.setText(techNum + "");
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }else {
-                Toast.makeText(ManagerDashboard.this,"Cannot find relate information !",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(ManagerDashboard.this, "Cannot find relate information !", Toast.LENGTH_SHORT).show();
             }
         }
     };
 
-    Response.ErrorListener errorListener=new Response.ErrorListener() {
+    Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            Toast.makeText(ManagerDashboard.this,"Database not connected",Toast.LENGTH_SHORT).show();
-            Log.e(TAG,volleyError.getMessage(),volleyError);
+            Toast.makeText(ManagerDashboard.this, "Database not connected", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, volleyError.getMessage(), volleyError);
         }
     };
 }

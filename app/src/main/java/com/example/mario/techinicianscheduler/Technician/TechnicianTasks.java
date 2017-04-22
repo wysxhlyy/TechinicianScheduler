@@ -26,6 +26,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The technician could view the tasks assigned to him.
+ * All the arrangement is decided by his bound manager.
+ * After the technician finish a task, he could swipe it to set the task as finished. But this is only for
+ * looks better, the status of tasks will not be inserted to the database.
+ */
 public class TechnicianTasks extends AppCompatActivity implements View.OnClickListener{
 
     private SwipeMenuListView taskList;

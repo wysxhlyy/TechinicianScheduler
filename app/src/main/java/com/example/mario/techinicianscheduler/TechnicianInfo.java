@@ -4,7 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by mario on 2017/2/1.
+ * Technician class, A technicianInfo object will store all the information related to this technician.
+ * Implements the parcelable in order to make the technicianInfo object could be transmitted between different activity.
  */
 
 public class TechnicianInfo implements Parcelable {
