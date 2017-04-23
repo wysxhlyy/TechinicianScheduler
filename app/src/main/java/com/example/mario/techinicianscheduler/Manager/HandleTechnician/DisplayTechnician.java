@@ -118,6 +118,9 @@ public class DisplayTechnician extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         skillLevel = (EditText) findViewById(R.id.editTechSkill);
         workHour = (EditText) findViewById(R.id.editTechWorkHour);

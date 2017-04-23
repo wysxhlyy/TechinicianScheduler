@@ -104,7 +104,9 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
     }
 
 
-
+    /**
+     * Initial the components.
+     */
     private void initialize(){
         //orderedListShow=(TextView)findViewById(R.id.orderedList);
         route=(ImageButton)findViewById(R.id.googleRoute);

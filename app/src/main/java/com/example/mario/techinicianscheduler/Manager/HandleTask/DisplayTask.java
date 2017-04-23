@@ -55,6 +55,9 @@ public class DisplayTask extends AppCompatActivity {
 
     }
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         displayName=(TextView) findViewById(R.id.displayTaskName);
         displaySkillReq=(TextView) findViewById(R.id.displayTaskSkillReq);

@@ -130,6 +130,9 @@ public class ManageTechnicians extends AppCompatActivity implements View.OnClick
         });
     }
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         techListView = (ListView) findViewById(R.id.techListView);
         addNewTech = (ImageButton) findViewById(R.id.addNewTech);

@@ -135,6 +135,9 @@ public class ManagerSetting extends AppCompatActivity implements View.OnClickLis
     }
 
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         password = (EditText) findViewById(R.id.managerSettingPass);
         email = (EditText) findViewById(R.id.managerSettingEmail);

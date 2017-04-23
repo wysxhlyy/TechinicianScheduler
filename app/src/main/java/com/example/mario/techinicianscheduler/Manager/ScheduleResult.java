@@ -238,7 +238,9 @@ public class ScheduleResult extends AppCompatActivity {
         editScheduleResult.setText(showdata);
     }
 
-
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         chosenTechs = new ArrayList<>();
         chosentasks = new ArrayList<>();

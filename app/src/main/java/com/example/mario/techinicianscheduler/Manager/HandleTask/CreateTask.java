@@ -99,6 +99,9 @@ public class CreateTask extends AppCompatActivity {
 
     }
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         name = (EditText) findViewById(R.id.createTaskName);
         skillReq = (EditText) findViewById(R.id.createTaskSkillReq);
@@ -110,6 +113,9 @@ public class CreateTask extends AppCompatActivity {
         quit = (ImageButton) findViewById(R.id.quitCreateTask);
     }
 
+    /**
+     * Connect with the database.Insert the information of created task.
+     */
     Response.Listener<String> listener = new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {

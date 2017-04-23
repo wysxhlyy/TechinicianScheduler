@@ -88,6 +88,9 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         login = (Button) findViewById(R.id.managerLogIn);
         technician = (TextView) findViewById(R.id.managerGoSignUp);

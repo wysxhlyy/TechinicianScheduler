@@ -130,6 +130,9 @@ public class TechnicianSetting extends AppCompatActivity implements View.OnClick
     }
 
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         password = (EditText) findViewById(R.id.techSettingPass);
         email = (EditText) findViewById(R.id.techSettingEmail);

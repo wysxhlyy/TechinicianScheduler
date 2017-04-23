@@ -82,6 +82,9 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
         goManager.setOnClickListener(this);
     }
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         login = (Button) findViewById(R.id.techLogIn);
         goManager = (ImageButton) findViewById(R.id.goManager);

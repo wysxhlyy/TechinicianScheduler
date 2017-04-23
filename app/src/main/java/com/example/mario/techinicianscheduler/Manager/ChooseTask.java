@@ -59,12 +59,14 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
         quit.setOnClickListener(this);
 
 
-        //根据numOfTasks展示task输入框
 
         next2.setOnClickListener(this);
     }
 
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         tasks = new ArrayList<>();
         chosenTasks = new ArrayList<>();

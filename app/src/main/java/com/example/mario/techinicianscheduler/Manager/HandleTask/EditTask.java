@@ -135,6 +135,9 @@ public class EditTask extends AppCompatActivity {
 
     }
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         editName = (EditText) findViewById(R.id.editTaskName);
         editSkillReq = (EditText) findViewById(R.id.editTaskSkillReq);

@@ -78,6 +78,9 @@ public class ManageTasks extends AppCompatActivity implements View.OnClickListen
 
     }
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         addNewTask = (ImageButton) findViewById(R.id.addNewTask);
         taskListView = (ListView) findViewById(R.id.taskListView);

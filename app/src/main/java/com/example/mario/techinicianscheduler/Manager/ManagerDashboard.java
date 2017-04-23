@@ -163,6 +163,9 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     }
 
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         username = (TextView) findViewById(R.id.loggedManagerUsername);
         managerDashNumTask = (TextView) findViewById(R.id.managerDashNumTask);

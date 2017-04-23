@@ -83,6 +83,9 @@ public class AddTechnician extends AppCompatActivity {
 
     }
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         managerInfo = getIntent().getExtras();
         addTechnicianUsername = (AutoCompleteTextView) findViewById(R.id.addTechUsername);

@@ -217,6 +217,9 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initial the components.
+     */
     public void initialize(){
         username=(EditText)findViewById(R.id.username);
         password=(EditText)findViewById(R.id.password);

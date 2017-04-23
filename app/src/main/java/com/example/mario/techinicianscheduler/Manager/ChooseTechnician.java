@@ -68,6 +68,9 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
 
     }
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         techs = new ArrayList<>();
         chosenTechs = new ArrayList<>();

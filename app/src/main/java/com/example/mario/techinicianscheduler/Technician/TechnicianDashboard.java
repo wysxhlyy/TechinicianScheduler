@@ -301,6 +301,9 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
         requestQueue.add(stringRequest);
     }
 
+    /**
+     * Initial the components.
+     */
     private void initialize() {
         loggedTechUsername=(TextView)findViewById(R.id.loggedTechUsername);
         techInfo=getIntent().getExtras();
