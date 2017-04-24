@@ -58,8 +58,6 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
         availableTask.setDivider(null);
         quit.setOnClickListener(this);
 
-
-
         next2.setOnClickListener(this);
     }
 
@@ -72,8 +70,6 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
         chosenTasks = new ArrayList<>();
         next2 = (ImageButton) findViewById(R.id.next2);
         quit = (ImageButton) findViewById(R.id.quitChooseTask);
-
-
         cbButtonAll = (CheckBox) findViewById(R.id.cb_all_button2);
         isChecked = new SparseBooleanArray();
         availableTask = (ListView) findViewById(R.id.availableTasks);
@@ -82,10 +78,14 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
 
     }
 
+    /**
+     * Handle the click event of buttons.
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.next2:
+            case R.id.next2:    //Go to next activity with the data that the chosen tasks.
                 Intent intent = new Intent(ChooseTask.this, ChooseTechnician.class);
 
                 if (cbButtonAll.isChecked()) {
@@ -104,7 +104,7 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
                 intent.putExtras(managerInfo);
                 startActivity(intent);
                 break;
-            case R.id.quitChooseTask:
+            case R.id.quitChooseTask:   //quit the schedule process
                 Intent intent1 = new Intent(ChooseTask.this, ManagerDashboard.class);
                 intent1.putExtras(managerInfo);
                 startActivity(intent1);
@@ -114,6 +114,10 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
     }
 
 
+    /**
+     * Choose all the tasks using one click.
+     * @param checkall
+     */
     @Override
     public void CheckAll(SparseBooleanArray checkall) {
         if (checkall.indexOfValue(false) < 0) {
@@ -130,6 +134,10 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
         checkedTask = checkall;
     }
 
+    /**
+     * When the tasks are not all checked, then the "All check" button should not be checked.
+     * @param v
+     */
     public void allSelectTask(View v) {
         if (cbButtonAll.isChecked()) {
             flag = true;

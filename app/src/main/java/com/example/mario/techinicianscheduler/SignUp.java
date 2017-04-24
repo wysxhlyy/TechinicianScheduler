@@ -240,6 +240,10 @@ public class SignUp extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
+    /**
+     * Handle the chosen between manager and technician.
+     */
     public void spinnerHandle(){
         String prompt=goSignIn.getText().toString();
         SpannableString spannedString=new SpannableString(prompt);

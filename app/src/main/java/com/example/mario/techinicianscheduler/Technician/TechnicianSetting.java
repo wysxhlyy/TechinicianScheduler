@@ -92,6 +92,9 @@ public class TechnicianSetting extends AppCompatActivity implements View.OnClick
     }
 
 
+    /**
+     * Handle the side menu.
+     */
     private void handleResideMenu() {
         resideMenu = new ResideMenu(this);
         resideMenu.setShadowVisible(true);
@@ -165,6 +168,10 @@ public class TechnicianSetting extends AppCompatActivity implements View.OnClick
         }
     };
 
+    /**
+     * Add the click event for the button in listview.
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

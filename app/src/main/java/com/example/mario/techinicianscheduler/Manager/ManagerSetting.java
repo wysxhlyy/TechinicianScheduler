@@ -57,6 +57,7 @@ public class ManagerSetting extends AppCompatActivity implements View.OnClickLis
         email.setText(managerInfo.getString("managerEmail"));
         phone.setText(managerInfo.getString("managerPhone"));
 
+        //Click the update button can insert all the information into database.
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +65,6 @@ public class ManagerSetting extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(ManagerSetting.this, "Please fill in all the information", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 RequestQueue requestQueue = Volley.newRequestQueue(ManagerSetting.this);
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS + "updateManager.php", listener, errorListener) {
@@ -170,6 +170,10 @@ public class ManagerSetting extends AppCompatActivity implements View.OnClickLis
         }
     };
 
+    /**
+     * Handle the click event of the button in side menu.
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

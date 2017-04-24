@@ -53,7 +53,6 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
         initialize();
 
         managerInfo = getIntent().getExtras();
-
         techs = managerInfo.getParcelableArrayList("availableTechnician");
         Log.d("numOfTechs:", techs.size() + "");
 
@@ -85,10 +84,14 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
         generate = (ImageButton) findViewById(R.id.generate);
     }
 
+    /**
+     * Handle the click event of buttons.
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.generate:
+            case R.id.generate: //Use a dialog to let the user choose the value of unassigned task penalty.
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Please choose your schedule preference when dealing with high-cost task:");
                 builder.setTitle("preference question");
@@ -100,7 +103,7 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
                         Intent intent2 = new Intent(ChooseTechnician.this, ScheduleResult.class);
                         if (cbButtonAll.isChecked()) {
                             for (int i = 0; i < techs.size(); i++) {
-                                chosenTechs.add(techs.get(i));
+                                chosenTechs.add(techs.get(i));  //Transmit all the chosen technicians' data.
                             }
                         } else {
                             for (int i = 0; i < techs.size(); i++) {
@@ -144,7 +147,7 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
                 builder.create().show();
 
                 break;
-            case R.id.quitChooseTech:
+            case R.id.quitChooseTech:  // Quit the schedule process.
                 Intent intent = new Intent(ChooseTechnician.this, ManagerDashboard.class);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
@@ -161,12 +164,12 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
             if (!cbButtonAll.isChecked()) {
                 this.flag = false;
                 cbButtonAll.setChecked(true);
-            }                                   //if all the checkbox is selected, the select all button should be set to true.
+            }                                //if all the checkbox is selected, the select all button should be set to true.
         } else if (checkall.indexOfValue(false) >= 0 && checkall.indexOfValue(true) >= 0) {
             if (cbButtonAll.isChecked()) {
                 this.flag = true;
                 cbButtonAll.setChecked(false);
-            }                                   //if some of the checkbox is true, some is false, the selct all button will be set to false.
+            }                               //if some of the checkbox is true, some is false, the selct all button will be set to false.
         }
         checkedTech = checkall;
     }

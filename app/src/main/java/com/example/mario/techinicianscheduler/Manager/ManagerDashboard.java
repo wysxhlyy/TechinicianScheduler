@@ -84,14 +84,14 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         }
 
 
+        //Use another thread to handle the commnunication with database while it costs long time sometimes.
         ManagerDashboard.CostTimeTask costTimeTask = new ManagerDashboard.CostTimeTask(ManagerDashboard.this);
         costTimeTask.execute();
 
         menu.setOnClickListener(this);
 
-        handleResideMenu();
-
-        handleIndicator();
+        handleResideMenu(); //Handle the side menu.
+        handleIndicator();  //Handle the shuffling figure.
 
     }
 
@@ -123,6 +123,9 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     }
 
 
+    /**
+     * The menu can be seen as some buttons placed in a listview.
+     */
     private void handleResideMenu() {
         resideMenu = new ResideMenu(this);
         resideMenu.setShadowVisible(true);
@@ -188,7 +191,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     private class CostTimeTask extends AsyncTask<String, Integer, String> {
         private ProgressDialog dialog;
 
-
         public CostTimeTask(Context context) {
             dialog = new ProgressDialog(context, 0);
 
@@ -199,6 +201,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         }
 
 
+        //commnucation with database.
         @Override
         protected String doInBackground(String... strings) {
             RequestQueue requestQueue = Volley.newRequestQueue(ManagerDashboard.this);
@@ -214,6 +217,10 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
             return null;
         }
 
+        /**
+         * After the communication over, the dialog will dismiss automatically.
+         * @param s
+         */
         @Override
         protected void onPostExecute(String s) {
             dialog.dismiss();
@@ -222,16 +229,20 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
     }
 
 
+    /**
+     * Handle the button in side menu.
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case 0:
+            case 0: //go home
                 Intent intentt = new Intent(ManagerDashboard.this, ManagerDashboard.class);
                 intentt.putExtras(managerInfo);
                 startActivity(intentt);
                 finish();
                 break;
-            case 1:
+            case 1: //go schedule
                 Intent intent = new Intent(ManagerDashboard.this, ChooseTask.class);
                 Bundle bundle = managerInfo;
                 bundle.putParcelableArrayList("availableTechnician", techs);
@@ -239,7 +250,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case 2:
+            case 2: //go manage task
                 Intent intent1 = new Intent(ManagerDashboard.this, ManageTasks.class);
                 Bundle bundle1 = managerInfo;
                 bundle1.putParcelableArrayList("availableTechnician", techs);
@@ -248,7 +259,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 startActivity(intent1);
                 finish();
                 break;
-            case 3:
+            case 3: //go manage technician
                 Intent intent2 = new Intent(ManagerDashboard.this, ManageTechnicians.class);
                 Bundle bundle2 = managerInfo;
                 bundle2.putParcelableArrayList("availableTechnician", techs);
@@ -257,7 +268,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 startActivity(intent2);
                 finish();
                 break;
-            case 4:
+            case 4: //go setting part
                 Intent intent3 = new Intent(ManagerDashboard.this, ManagerSetting.class);
                 Bundle bundle3 = managerInfo;
                 bundle3.putParcelableArrayList("availableTechnician", techs);
@@ -283,6 +294,10 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    /**
+     * Receive and handle all the information about the manager, including the tasks and technicians he managed.
+     * All the information of tasks and technicians will be collected here and only here.
+     */
     Response.Listener<String> listener = new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {

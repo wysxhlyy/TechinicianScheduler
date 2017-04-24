@@ -88,6 +88,9 @@ public class DisplayTechnician extends AppCompatActivity {
         });
     }
 
+    /**
+     * When click the delete,then use technician's id to unbind him from manager.
+     */
     private void unBindTech() {
         requestQueue = Volley.newRequestQueue(DisplayTechnician.this);
 
@@ -102,6 +105,9 @@ public class DisplayTechnician extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+    /**
+     * Click update button could insert technicians' information into database.
+     */
     private void updateTechInfo() {
         requestQueue = Volley.newRequestQueue(DisplayTechnician.this);
 

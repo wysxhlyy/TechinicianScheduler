@@ -40,6 +40,7 @@ public class DisplayTask extends AppCompatActivity {
         existTasks=techInfo.getParcelableArrayList("arrangedTasks");
         selectedTask=existTasks.get(chosenId-1);
 
+        //each component show the information of the task.
         displayName.setText(selectedTask.getName());
         displaySkillReq.setText(selectedTask.getSkillRequirement()+"");
         displayStationName.setText(selectedTask.getStationName());

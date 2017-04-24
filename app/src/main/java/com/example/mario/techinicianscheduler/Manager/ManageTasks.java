@@ -52,6 +52,7 @@ public class ManageTasks extends AppCompatActivity implements View.OnClickListen
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
 
+        //Store all the task in a map, which will be used to create the listview.
         for (int i = 0; i < existTasks.size(); i++) {
             map = new HashMap<>();
             map.put("name", existTasks.get(i).getName());
@@ -59,6 +60,7 @@ public class ManageTasks extends AppCompatActivity implements View.OnClickListen
             map.put("duration", existTasks.get(i).getDuration() + "");
             list.add(map);
         }
+        //create the listview
         dataAdapter = new SimpleAdapter(this, list, R.layout.manage_task_list, new String[]{"name", "requirement", "duration"}, new int[]{R.id.task_name, R.id.task_skill, R.id.task_duration});
         taskListView.setAdapter(dataAdapter);
 

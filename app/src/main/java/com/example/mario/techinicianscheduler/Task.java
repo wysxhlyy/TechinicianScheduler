@@ -20,6 +20,7 @@ public class Task implements Parcelable {
     private String finished;
     private String name;
     private String description;
+    //All the information need to be set out for a task.
 
 
     protected Task(Parcel in) {

@@ -171,7 +171,7 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Use Volley.
+     * If the manager login successfully, store all the personal information of him.
      */
     Response.Listener<String> listener = new Response.Listener<String>() {
         @Override
@@ -208,6 +208,9 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+    /**
+     * Handle the potential mistake.
+     */
     Response.ErrorListener errorListener = new Response.ErrorListener() {
 
         @Override
@@ -218,7 +221,6 @@ public class ManagerLogin extends AppCompatActivity implements View.OnClickListe
             if (volleyError instanceof ServerError && response != null) {
                 try {
                     String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    // Now you can use any deserializer to make sense of data
                     JSONObject obj = new JSONObject(res);
                 } catch (UnsupportedEncodingException e1) {
                     // Couldn't properly decode data to string

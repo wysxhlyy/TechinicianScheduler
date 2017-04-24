@@ -66,6 +66,7 @@ public class EditTask extends AppCompatActivity {
         existTasks = managerInfo.getParcelableArrayList("availableTask");
         selectedTask = existTasks.get(chosenId - 1);
 
+        //First show the information of task.
         editName.setText(selectedTask.getName());
         Log.d("TEST", selectedTask.getName() + "");
         editSkillReq.setText(selectedTask.getSkillRequirement() + "");
@@ -101,6 +102,9 @@ public class EditTask extends AppCompatActivity {
 
     }
 
+    /**
+     * If the user click the delete,use taskId to delete this task.
+     */
     private void deleteTask() {
         requestQueue = Volley.newRequestQueue(EditTask.this);
 
@@ -115,6 +119,9 @@ public class EditTask extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+    /**
+     * If the user click the update, then insert these information to the database.
+     */
     private void updateTask() {
         requestQueue = Volley.newRequestQueue(EditTask.this);
 
@@ -150,6 +157,9 @@ public class EditTask extends AppCompatActivity {
         quitEditTask = (ImageButton) findViewById(R.id.quitEditTask);
     }
 
+    /**
+     * Used for database communication.
+     */
     Response.Listener<String> listener = new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {

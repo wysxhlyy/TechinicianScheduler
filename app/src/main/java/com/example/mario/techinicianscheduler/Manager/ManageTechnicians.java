@@ -49,6 +49,7 @@ public class ManageTechnicians extends AppCompatActivity implements View.OnClick
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
 
+        //Use listview to show the managed technicians.
         for (int i = 0; i < existTechs.size(); i++) {
             map = new HashMap<>();
             map.put("workHour", existTechs.get(i).getWorkHour());

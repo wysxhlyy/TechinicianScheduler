@@ -287,7 +287,9 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
     }
 
 
-
+    /**
+     * Communicate with database to get the tasks assigned to the technician.
+     */
     private void getWorkArrangement() {
         requestQueue= Volley.newRequestQueue(TechnicianDashboard.this);
 
@@ -360,6 +362,9 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
     }
 
 
+    /**
+     * Get all the tasks information when the technician log in.
+     */
     Response.Listener<String> listener=new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {

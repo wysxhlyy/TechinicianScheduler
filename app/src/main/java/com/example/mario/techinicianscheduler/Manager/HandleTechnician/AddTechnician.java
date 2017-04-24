@@ -36,13 +36,11 @@ public class AddTechnician extends AppCompatActivity {
 
     private AutoCompleteTextView addTechnicianUsername;
     private Button addTech;
-
     private int retCode;
     private int addCode;
     private JSONObject jsonObject;
     private Bundle managerInfo;
     private RequestQueue requestQueue;
-
     private ImageButton quit;
 
 
@@ -54,6 +52,7 @@ public class AddTechnician extends AppCompatActivity {
 
         setAutoComplete();
 
+        //Here, the "add" actually means bind the technician to manager using his username.
         addTech.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,12 +92,18 @@ public class AddTechnician extends AppCompatActivity {
         quit = (ImageButton) findViewById(R.id.quitAddTechnician);
     }
 
+    /**
+     * To autocomplete the user input. The"abcde" should be the name of stations.
+     */
     private void setAutoComplete() {
         String[] availableTechs = new String[]{"abcde", "abcdef", "bcdefg", "efgh", "abcfjiosf"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, availableTechs);
         addTechnicianUsername.setAdapter(adapter);
     }
 
+    /**
+     * If the technician is bound to the manager successfully, then show a prompt.
+     */
     Response.Listener<String> listener = new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {
@@ -111,7 +116,7 @@ public class AddTechnician extends AppCompatActivity {
             }
             if (retCode == 1) {
                 if (addCode == 1) {
-                    Toast.makeText(AddTechnician.this, "Add Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddTechnician.this, "Bind Successfully", Toast.LENGTH_SHORT).show();
 
                 } else {
                     Toast.makeText(AddTechnician.this, "Technician has already been assigned to other Manager", Toast.LENGTH_SHORT).show();

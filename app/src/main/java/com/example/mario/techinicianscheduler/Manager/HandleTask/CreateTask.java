@@ -62,11 +62,14 @@ public class CreateTask extends AppCompatActivity {
                 taskStation = stationName.getText().toString();
                 taskDescrip = description.getText().toString();
                 taskDuration = duration.getText().toString();
+                //enter all the task information
 
                 if (taskName.equals("") || taskSkillReq.equals("") || taskStation.equals("") || taskDescrip.equals("")) {
                     Toast.makeText(CreateTask.this, "Please Enter all the information", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                //Connect with the database.Insert the information of created task.
 
                 requestQueue = Volley.newRequestQueue(CreateTask.this);
 
@@ -113,9 +116,7 @@ public class CreateTask extends AppCompatActivity {
         quit = (ImageButton) findViewById(R.id.quitCreateTask);
     }
 
-    /**
-     * Connect with the database.Insert the information of created task.
-     */
+
     Response.Listener<String> listener = new Response.Listener<String>() {
         @Override
         public void onResponse(String s) {
