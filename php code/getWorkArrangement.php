@@ -16,7 +16,7 @@ $num = mysqli_num_rows($result);
 $response = array();
 
 
-if($num > 0){
+if($num >= 0){
     $response["success"] = 1;
    }else{
     $response["success"] = 0;

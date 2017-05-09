@@ -122,6 +122,7 @@
             android:layout_height="wrap_content"
             android:text="NEED AN TECHNICIAN ACCOUNT? "
             android:textColor="@color/myGray"
+            android:textSize="15dp"
             />
 
         <TextView
@@ -130,6 +131,7 @@
             android:text="SIGN UP"
             android:textColor="@color/myBlack"
             android:id="@+id/goSignUp"
+            android:textSize="15dp"
             />
 
     </LinearLayout>

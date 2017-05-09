@@ -197,7 +197,7 @@ public class TechnicianSetting extends AppCompatActivity implements View.OnClick
                 finish();
                 break;
             case 4:
-                Intent intent3 = new Intent(TechnicianSetting.this, TechnicianLogin.class);
+                Intent intent3 = new Intent(TechnicianSetting.this, TechnicianLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent3);
                 break;
             case R.id.techSettingMenu:

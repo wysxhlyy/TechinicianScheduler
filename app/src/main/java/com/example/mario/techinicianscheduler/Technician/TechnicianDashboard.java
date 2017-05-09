@@ -87,7 +87,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
 
     private ArrayList<Task> arrangedTasks;
     private ArrayList<LatLng> recordPos;
-    private int taskSize;
+    private int taskSize=0;
 
     private ResideMenu resideMenu;
 
@@ -351,7 +351,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
                 startActivity(intent2);
                 break;
             case 4:
-                Intent intent3=new Intent(TechnicianDashboard.this, TechnicianLogin.class);
+                Intent intent3=new Intent(TechnicianDashboard.this, TechnicianLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent3);
                 break;
             case R.id.techStartSideBar:
@@ -378,20 +378,23 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
             if(retCode==1){
                 try {
                     taskSize=Integer.parseInt(jsonObject.getString("taskSize"))-1;
-                    for(int i=1;i<taskSize+1;i++){
-                        Task task=new Task();
-                        task.setName(jsonObject.getString("taskName"+i));
-                        task.setSkillRequirement(Integer.parseInt(jsonObject.getString("skill_level"+i)));
-                        task.setStationId(jsonObject.getString("stationId"+i));
-                        task.setDuration(jsonObject.getInt("duration"+i));
-                        task.setDescription(jsonObject.getString("description"+i));
-                        task.setStationName(jsonObject.getString("stationName"+i));
-                        task.setPosition(new LatLng(jsonObject.getDouble("latitude"+i),jsonObject.getDouble("longitude"+i)));
-                        task.setFinished(jsonObject.getString("status"+i));
-                        recordPos.add(task.getPosition());
-                        arrangedTasks.add(task);
-                        estimateDuration+=task.getDuration();
+                    if(taskSize!=0){
+                        for(int i=1;i<taskSize+1;i++){
+                            Task task=new Task();
+                            task.setName(jsonObject.getString("taskName"+i));
+                            task.setSkillRequirement(Integer.parseInt(jsonObject.getString("skill_level"+i)));
+                            task.setStationId(jsonObject.getString("stationId"+i));
+                            task.setDuration(jsonObject.getInt("duration"+i));
+                            task.setDescription(jsonObject.getString("description"+i));
+                            task.setStationName(jsonObject.getString("stationName"+i));
+                            task.setPosition(new LatLng(jsonObject.getDouble("latitude"+i),jsonObject.getDouble("longitude"+i)));
+                            task.setFinished(jsonObject.getString("status"+i));
+                            recordPos.add(task.getPosition());
+                            arrangedTasks.add(task);
+                            estimateDuration+=task.getDuration();
+                        }
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

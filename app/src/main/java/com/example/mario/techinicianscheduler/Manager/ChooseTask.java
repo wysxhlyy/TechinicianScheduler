@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.Task;
@@ -86,23 +87,29 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.next2:    //Go to next activity with the data that the chosen tasks.
-                Intent intent = new Intent(ChooseTask.this, ChooseTechnician.class);
+                if(chosenTasks.size()==0){
+                    Toast.makeText(this,"Have not chosen any technicians",Toast.LENGTH_SHORT).show();
+                }else{
+                    Intent intent = new Intent(ChooseTask.this, ChooseTechnician.class);
 
-                if (cbButtonAll.isChecked()) {
-                    for (int i = 0; i < tasks.size(); i++) {
-                        chosenTasks.add(tasks.get(i));
-                    }
-                } else {
-                    for (int i = 0; i < tasks.size(); i++) {
-                        if (checkedTask.valueAt(i)) {
+                    if (cbButtonAll.isChecked()) {
+                        for (int i = 0; i < tasks.size(); i++) {
                             chosenTasks.add(tasks.get(i));
                         }
+                    } else {
+                        for (int i = 0; i < tasks.size(); i++) {
+                            if (checkedTask.valueAt(i)) {
+                                chosenTasks.add(tasks.get(i));
+                            }
+                        }
                     }
+
+                    managerInfo.putParcelableArrayList("chosenTask", chosenTasks);
+                    intent.putExtras(managerInfo);
+                    startActivity(intent);
+                    finish();
                 }
 
-                managerInfo.putParcelableArrayList("chosenTask", chosenTasks);
-                intent.putExtras(managerInfo);
-                startActivity(intent);
                 break;
             case R.id.quitChooseTask:   //quit the schedule process
                 Intent intent1 = new Intent(ChooseTask.this, ManagerDashboard.class);

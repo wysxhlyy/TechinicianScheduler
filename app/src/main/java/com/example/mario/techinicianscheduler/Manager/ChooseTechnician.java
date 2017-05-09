@@ -11,14 +11,13 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.mario.techinicianscheduler.MyListAdapter;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.TechnicianInfo;
 
 import java.util.ArrayList;
-
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * The second step of schedule process.
@@ -43,7 +42,6 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
 
     private ArrayList<TechnicianInfo> techs;
     private ArrayList<TechnicianInfo> chosenTechs;
-
     private ArrayList<TechnicianInfo> list;
 
     @Override
@@ -79,8 +77,6 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
         availableTechs = (ListView) findViewById(R.id.availableTechs);
         checkedTech = new SparseBooleanArray();
         quit = (ImageButton) findViewById(R.id.quitChooseTech);
-
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
         generate = (ImageButton) findViewById(R.id.generate);
     }
 
@@ -92,59 +88,64 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.generate: //Use a dialog to let the user choose the value of unassigned task penalty.
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Please choose your schedule preference when dealing with high-cost task:");
-                builder.setTitle("preference question");
-                builder.setPositiveButton("More Task Assigned", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int a) {
-                        dialogInterface.dismiss();
-                        managerInfo.putInt("unassignedPenalty", 6);
-                        Intent intent2 = new Intent(ChooseTechnician.this, ScheduleResult.class);
-                        if (cbButtonAll.isChecked()) {
-                            for (int i = 0; i < techs.size(); i++) {
-                                chosenTechs.add(techs.get(i));  //Transmit all the chosen technicians' data.
-                            }
-                        } else {
-                            for (int i = 0; i < techs.size(); i++) {
-                                if (checkedTech.valueAt(i)) {
-                                    chosenTechs.add(techs.get(i));
+                if(chosenTechs.size()==0){
+                    Toast.makeText(this,"Have not chosen any technicians",Toast.LENGTH_SHORT).show();
+                }else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage("Please choose your schedule preference when dealing with high-cost task:");
+                    builder.setTitle("preference question");
+                    builder.setPositiveButton("More Task Assigned", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int a) {
+                            dialogInterface.dismiss();
+                            managerInfo.putInt("unassignedPenalty", 6);
+                            Intent intent2 = new Intent(ChooseTechnician.this, ScheduleResult.class);
+                            if (cbButtonAll.isChecked()) {
+                                for (int i = 0; i < techs.size(); i++) {
+                                    chosenTechs.add(techs.get(i));  //Transmit all the chosen technicians' data.
+                                }
+                            } else {
+                                for (int i = 0; i < techs.size(); i++) {
+                                    if (checkedTech.valueAt(i)) {
+                                        chosenTechs.add(techs.get(i));
+                                    }
                                 }
                             }
+
+                            managerInfo.putParcelableArrayList("chosenTech", chosenTechs);
+                            intent2.putExtras(managerInfo);
+                            startActivity(intent2);
+                            finish();
+
                         }
-
-                        managerInfo.putParcelableArrayList("chosenTech", chosenTechs);
-                        intent2.putExtras(managerInfo);
-                        startActivity(intent2);
-                        finish();
-
-                    }
-                });
-                builder.setNegativeButton("Lower cost", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int a) {
-                        dialogInterface.dismiss();
-                        managerInfo.putInt("unassignedPenalty", 3);
-                        Intent intent2 = new Intent(ChooseTechnician.this, ScheduleResult.class);
-                        if (cbButtonAll.isChecked()) {
-                            for (int i = 0; i < techs.size(); i++) {
-                                chosenTechs.add(techs.get(i));
-                            }
-                        } else {
-                            for (int i = 0; i < techs.size(); i++) {
-                                if (checkedTech.valueAt(i)) {
+                    });
+                    builder.setNegativeButton("Lower cost", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int a) {
+                            dialogInterface.dismiss();
+                            managerInfo.putInt("unassignedPenalty", 3);
+                            Intent intent2 = new Intent(ChooseTechnician.this, ScheduleResult.class);
+                            if (cbButtonAll.isChecked()) {
+                                for (int i = 0; i < techs.size(); i++) {
                                     chosenTechs.add(techs.get(i));
                                 }
+                            } else {
+                                for (int i = 0; i < techs.size(); i++) {
+                                    if (checkedTech.valueAt(i)) {
+                                        chosenTechs.add(techs.get(i));
+                                    }
+                                }
                             }
-                        }
 
-                        managerInfo.putParcelableArrayList("chosenTech", chosenTechs);
-                        intent2.putExtras(managerInfo);
-                        startActivity(intent2);
-                        finish();
-                    }
-                });
-                builder.create().show();
+                            managerInfo.putParcelableArrayList("chosenTech", chosenTechs);
+                            intent2.putExtras(managerInfo);
+                            startActivity(intent2);
+                            finish();
+                        }
+                    });
+                    builder.create().show();
+
+                }
 
                 break;
             case R.id.quitChooseTech:  // Quit the schedule process.

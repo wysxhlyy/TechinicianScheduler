@@ -23,8 +23,8 @@
 
 
         <ImageButton
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="@drawable/quit"
             android:id="@+id/quitCreateTask"
             />
@@ -34,13 +34,13 @@
             android:layout_height="wrap_content"
             android:textColor="@color/myBlack"
             android:text="Create Tasks"
-            android:textSize="20dp"
+            android:textSize="25dp"
             android:layout_centerInParent="true"
             />
 
         <ImageButton
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:id="@+id/createTaskSubmit"
             android:background="@drawable/tick"
             android:layout_alignParentRight="true"

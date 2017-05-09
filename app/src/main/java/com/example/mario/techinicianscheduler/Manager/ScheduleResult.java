@@ -125,6 +125,7 @@ public class ScheduleResult extends AppCompatActivity {
                 Intent intent = new Intent(ScheduleResult.this, ManagerDashboard.class);
                 intent.putExtras(managerInfo);
                 startActivity(intent);
+                finish();
             }
         });
 

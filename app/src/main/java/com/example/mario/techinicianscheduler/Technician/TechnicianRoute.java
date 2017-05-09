@@ -68,10 +68,13 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
         recordPos=techInfo.getParcelableArrayList("recordPos");
         orderedList=new ArrayList<LatLng>();
 
-        findShortestOrder();
-        routePlan();
+        if(recordPos.size()!=0){
+            findShortestOrder();
+            routePlan();
 
-        minimumDistance=calculateDistance(orderedList);
+            minimumDistance=calculateDistance(orderedList);
+        }
+
         route.setOnClickListener(this);
         menu.setOnClickListener(this);
 
@@ -81,6 +84,9 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
 
     private void improve(){
         routeCount=0;
+        if(orderedList.size()==0){
+            return;
+        }
         kopt(orderedList);
 
 //      mMap.clear();
@@ -208,6 +214,9 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
         float minDistance=10000000;
         int minDistId=0;
 
+        if(waitList.size()==0){
+            return;
+        }
         //calculate the distance between start position to each other position
         for(int i=0;i<waitList.size();i++){
             LatLng latlng=waitList.get(i);
@@ -259,6 +268,7 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
 
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
+
         improve();
 
     }
@@ -328,7 +338,7 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
                 startActivity(intent2);
                 break;
             case 4:
-                Intent intent3=new Intent(TechnicianRoute.this, TechnicianLogin.class);
+                Intent intent3=new Intent(TechnicianRoute.this, TechnicianLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent3);
                 break;
             case R.id.routeMenu:

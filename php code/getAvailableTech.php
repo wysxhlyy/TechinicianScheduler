@@ -11,8 +11,6 @@ $con = mysqli_connect("146.148.28.194","root","wuyusheng","techSchedulerDB");
 $sql = "SELECT * FROM manageTechnician INNER JOIN technician ON manageTechnician.t_id=technician.t_id WHERE m_id='$managerId' ";
 $sql2 = "SELECT * FROM manageTask INNER JOIN task ON manageTask.task_id=task.task_id WHERE m_id='$managerId'";
 
-
-
 $result=mysqli_query($con,$sql);
 $result2=mysqli_query($con,$sql2);
 
@@ -20,9 +18,7 @@ $num = mysqli_num_rows($result);
 
 $response = array();
 
-
-
-if($num > 0){
+if($num >= 0){
     $response["success"] = 1;
    }else{
     $response["success"] = 0;
@@ -42,7 +38,6 @@ while ($row=mysqli_fetch_array($result)) {
 	$response["surname".$i]=$row['surname'];
 
 }
-
 $response["techNum"]=$i;
 
 $j=0;
@@ -57,9 +52,7 @@ while ($row=mysqli_fetch_array($result2)) {
 	$response['taskDescription'.$j]=$row['description'];
 
 }
-
 $response["taskNum"]=$j;
-
 
 for($k=1;$k<$response['taskNum']+1;$k++){
 	$stationId=$response['stationId'.$k];

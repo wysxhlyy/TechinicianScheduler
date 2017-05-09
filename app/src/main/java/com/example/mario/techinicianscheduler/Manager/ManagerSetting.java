@@ -211,9 +211,8 @@ public class ManagerSetting extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case 5:
-                Intent intent4 = new Intent(ManagerSetting.this, TechnicianLogin.class);
+                Intent intent4 = new Intent(ManagerSetting.this, TechnicianLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent4);
-                finish();
                 break;
             case R.id.settingMenu:
                 resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);

@@ -21,8 +21,8 @@
 
 
         <ImageButton
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="@drawable/menu"
             android:id="@+id/workArrangementMenu"
             />
@@ -32,13 +32,13 @@
             android:layout_height="wrap_content"
             android:textColor="@color/myBlack"
             android:text="Work Schedule"
-            android:textSize="20dp"
+            android:textSize="24dp"
             android:layout_centerHorizontal="true"
             />
 
         <ImageButton
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:id="@+id/callManager"
             android:background="@drawable/telephone"
             android:layout_alignParentRight="true"

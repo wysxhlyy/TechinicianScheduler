@@ -208,7 +208,8 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
             StringRequest stringRequest = new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS + "getAvailableTech.php", listener, errorListener) {
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> map = new HashMap<String, String>();
-                    map.put("managerId", getSharedPreferences("managerSession", MODE_PRIVATE).getString("managerId", null));
+                    Log.d("test",managerInfo.getString("managerId"));
+                    map.put("managerId", managerInfo.getString("managerId"));
                     return map;
                 }
             };
@@ -243,12 +244,18 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
             case 1: //go schedule
-                Intent intent = new Intent(ManagerDashboard.this, ChooseTask.class);
-                Bundle bundle = managerInfo;
-                bundle.putParcelableArrayList("availableTechnician", techs);
-                bundle.putParcelableArrayList("availableTask", tasks);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if(techs.size()==0){
+                    Toast.makeText(this,"No available technicains",Toast.LENGTH_SHORT).show();
+                }else if(tasks.size()==0){
+                    Toast.makeText(this,"No available tasks",Toast.LENGTH_SHORT).show();
+                }else{
+                    Intent intent = new Intent(ManagerDashboard.this, ChooseTask.class);
+                    Bundle bundle = managerInfo;
+                    bundle.putParcelableArrayList("availableTechnician", techs);
+                    bundle.putParcelableArrayList("availableTask", tasks);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
                 break;
             case 2: //go manage task
                 Intent intent1 = new Intent(ManagerDashboard.this, ManageTasks.class);
@@ -257,7 +264,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 bundle1.putParcelableArrayList("availableTask", tasks);
                 intent1.putExtras(bundle1);
                 startActivity(intent1);
-                finish();
                 break;
             case 3: //go manage technician
                 Intent intent2 = new Intent(ManagerDashboard.this, ManageTechnicians.class);
@@ -266,7 +272,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 bundle2.putParcelableArrayList("availableTask", tasks);
                 intent2.putExtras(bundle2);
                 startActivity(intent2);
-                finish();
                 break;
             case 4: //go setting part
                 Intent intent3 = new Intent(ManagerDashboard.this, ManagerSetting.class);
@@ -277,9 +282,8 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 startActivityForResult(intent3, ACTIVITY_MANAGER_SETTING);
                 break;
             case 5:
-                Intent intent4 = new Intent(ManagerDashboard.this, ManagerLogin.class);
+                Intent intent4 = new Intent(ManagerDashboard.this, ManagerLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent4);
-                finish();
                 break;
             case R.id.startSideBar:
                 resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
@@ -310,7 +314,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
             if (retCode == 1) {
                 try {
-
                     taskNum = Integer.parseInt(jsonObject.getString("taskNum"));
                     if (taskNum != 0) {
                         for (int i = 1; i < taskNum + 1; i++) {
@@ -328,8 +331,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                             tasks.add(task);
                         }
                     }
-
-
                     techNum = Integer.parseInt(jsonObject.getString("techNum"));
                     if (techNum != 0) {
                         for (int i = 1; i < techNum + 1; i++) {
@@ -346,7 +347,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                     managerDashNumTask.setText("You have " + tasks.size() + " tasks to manage today.");
                     manageTaskNum.setText(taskNum + "");
                     manageTechNum.setText(techNum + "");
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();

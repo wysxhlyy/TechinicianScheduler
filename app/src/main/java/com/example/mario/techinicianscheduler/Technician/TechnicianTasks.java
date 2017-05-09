@@ -220,7 +220,7 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
                 startActivity(intent20);
                 break;
             case 4:
-                Intent intent3=new Intent(TechnicianTasks.this, TechnicianLogin.class);
+                Intent intent3=new Intent(TechnicianTasks.this, TechnicianLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent3);
                 break;
             case R.id.callManager:

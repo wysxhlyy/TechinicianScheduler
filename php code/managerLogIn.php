@@ -28,7 +28,6 @@ if ($result===FALSE) {
 }
 
 while ($row=mysqli_fetch_array($result)) {
-	$count++;
 	$response["username"]=$row['username'];
 	$response["email"]=$row['email'];
 	$response["phone"]=$row['phone'];

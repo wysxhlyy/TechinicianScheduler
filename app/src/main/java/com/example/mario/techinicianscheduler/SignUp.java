@@ -38,7 +38,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -69,8 +68,11 @@ public class SignUp extends AppCompatActivity {
     private int retCode;
     private static final String TAG = ManagerLogin.class.getSimpleName();
 
+    private Bundle techInfo;
+    private Bundle managerInfo;
 
-    private static final String[] m_roles={"Manager","Techinician"};
+
+    private static final String[] m_roles={"Manager","Technician"};
     private ArrayAdapter<String> adapter;
 
     Response.Listener<String> listener=new Response.Listener<String>(){
@@ -86,6 +88,38 @@ public class SignUp extends AppCompatActivity {
 
             if(retCode==1){
                 Toast.makeText(SignUp.this,"Sign up succeed!",Toast.LENGTH_SHORT).show();
+                try {
+                    Log.d("type",jsonObject.getInt("type")+"");
+                    if(jsonObject.getInt("type")==0){
+                        techInfo.putInt("techId",jsonObject.getInt("technicianId"));
+                        Intent intent=new Intent(SignUp.this, TechnicianDashboard.class);
+                        techInfo.putString("technicianName",firstName.getText().toString());
+                        techInfo.putString("username", username.getText().toString());
+                        techInfo.putString("password", password.getText().toString());
+                        techInfo.putString("email", email.getText().toString());
+                        techInfo.putString("phone", phone.getText().toString());
+                        techInfo.putString("firstName", firstName.getText().toString());
+                        techInfo.putString("surname", surname.getText().toString());
+                        techInfo.putString("skillLevel", "1");
+                        techInfo.putString("workHour", "100");
+                        intent.putExtras(techInfo);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        managerInfo.putString("managerId",jsonObject.getInt("managerId")+"");
+                        Intent intent=new Intent(SignUp.this, ManagerDashboard.class);
+                        managerInfo.putString("managerName",firstName.getText().toString());
+                        managerInfo.putString("managerEmail", email.getText().toString());
+                        managerInfo.putString("managerPhone", phone.getText().toString());
+                        managerInfo.putString("managerSurname", surname.getText().toString());
+                        managerInfo.putString("managerPass", password.getText().toString());
+                        intent.putExtras(managerInfo);
+                        startActivity(intent);
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }else {
                 Toast.makeText(SignUp.this,"Sign up not succeed!",Toast.LENGTH_SHORT).show();
             }
@@ -109,6 +143,8 @@ public class SignUp extends AppCompatActivity {
 
         initialize();
         chooseRole();
+        spinnerHandle();
+
 
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,18 +157,12 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
-//        Typeface typeface=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Satellite.ttf");
-//        signUpTitle.setTypeface(typeface);
-
-
         quitSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-
-        spinnerHandle();
 
     }
 
@@ -142,7 +172,7 @@ public class SignUp extends AppCompatActivity {
     private void createNewTechnician() {
         requestQueue=Volley.newRequestQueue(SignUp.this);
 
-        StringRequest stringRequest=new StringRequest(Request.Method.POST,"http://10.132.201.46/technicianScheduler/createTechnician.php",listener,errorListener){
+        StringRequest stringRequest=new StringRequest(Request.Method.POST,DBHelper.DB_ADDRESS+"createTechnician.php",listener,errorListener){
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("username", username.getText().toString());
@@ -156,12 +186,7 @@ public class SignUp extends AppCompatActivity {
         };
         requestQueue.add(stringRequest);
 
-        Intent intent=new Intent(SignUp.this, TechnicianDashboard.class);
-        Bundle bundle=new Bundle();
-        bundle.putString("technicianName",firstName.getText().toString());
-        intent.putExtras(bundle);
-        startActivity(intent);
-        finish();
+
     }
 
 
@@ -185,12 +210,6 @@ public class SignUp extends AppCompatActivity {
         };
         requestQueue.add(stringRequest);
 
-        Intent intent=new Intent(SignUp.this, ManagerDashboard.class);
-        Bundle bundle=new Bundle();
-        bundle.putString("managerName",firstName.getText().toString());
-        intent.putExtras(bundle);
-        startActivity(intent);
-        finish();
     }
 
 
@@ -233,8 +252,9 @@ public class SignUp extends AppCompatActivity {
         quitSignUp=(ImageButton)findViewById(R.id.quitSignUp);
         showRole=(ImageView)findViewById(R.id.showRole);
         signUpTitle=(TextView)findViewById(R.id.signUpTitle);
+        techInfo=new Bundle();
+        managerInfo=new Bundle();
 
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
     }
 
     protected void attachBaseContext(Context newBase) {
