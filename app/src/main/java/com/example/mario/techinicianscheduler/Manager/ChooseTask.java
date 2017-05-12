@@ -87,23 +87,24 @@ public class ChooseTask extends AppCompatActivity implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.next2:    //Go to next activity with the data that the chosen tasks.
-                if(chosenTasks.size()==0){
-                    Toast.makeText(this,"Have not chosen any technicians",Toast.LENGTH_SHORT).show();
-                }else{
-                    Intent intent = new Intent(ChooseTask.this, ChooseTechnician.class);
 
-                    if (cbButtonAll.isChecked()) {
-                        for (int i = 0; i < tasks.size(); i++) {
+                Intent intent = new Intent(ChooseTask.this, ChooseTechnician.class);
+
+                if (cbButtonAll.isChecked()) {
+                    for (int i = 0; i < tasks.size(); i++) {
+                        chosenTasks.add(tasks.get(i));
+                    }
+                } else {
+                    for (int i = 0; i < tasks.size(); i++) {
+                        if (checkedTask.valueAt(i)) {
                             chosenTasks.add(tasks.get(i));
                         }
-                    } else {
-                        for (int i = 0; i < tasks.size(); i++) {
-                            if (checkedTask.valueAt(i)) {
-                                chosenTasks.add(tasks.get(i));
-                            }
-                        }
                     }
+                }
 
+                if(chosenTasks.size()==0){
+                    Toast.makeText(this,"Have not chosen any tasks",Toast.LENGTH_SHORT).show();
+                }else{
                     managerInfo.putParcelableArrayList("chosenTask", chosenTasks);
                     intent.putExtras(managerInfo);
                     startActivity(intent);

@@ -81,7 +81,7 @@ public class CreateTask extends AppCompatActivity {
                         map.put("taskStation", taskStation);
                         map.put("taskDescription", taskDescrip);
                         map.put("taskDuration", taskDuration);
-                        map.put("managerId", getSharedPreferences("managerSession", MODE_PRIVATE).getString("managerId", null));
+                        map.put("managerId", managerInfo.getString("managerId"));
                         return map;
                     }
                 };

@@ -11,6 +11,7 @@ $con = mysqli_connect("146.148.28.194","root","wuyusheng","techSchedulerDB");
  $station= $_POST['taskStation'];
  $duration=$_POST['taskDuration'];
  $description=$_POST['taskDescription'];
+ $status=$_POST['taskStatus'];
 
 $response = array();
 
@@ -26,7 +27,7 @@ $num = mysqli_num_rows($result);
 
 
 if($num>0){
-	$sql="UPDATE task SET name='$name',skill_level='$skill',s_id='$station_id',duration='$duration',description='$description' WHERE task_id='$id' ";
+	$sql="UPDATE task SET name='$name',skill_level='$skill',s_id='$station_id',duration='$duration',description='$description',finished='$status' WHERE task_id='$id' ";
 
 	$editTask=mysqli_query($con,$sql);
 

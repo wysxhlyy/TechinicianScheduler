@@ -115,7 +115,6 @@ public class TaskListAdapter extends BaseAdapter {
                 // TODO Auto-generated method stub
                 //						holderView.cb_button.toggle();
                 if (buttonView.isPressed()) {
-
                     isSelected.put(position, isChecked);
                     mListener.CheckAll(isSelected);
                 }

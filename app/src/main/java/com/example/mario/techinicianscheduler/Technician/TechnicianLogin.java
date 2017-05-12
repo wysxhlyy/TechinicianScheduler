@@ -35,7 +35,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -92,7 +91,6 @@ public class TechnicianLogin extends AppCompatActivity implements View.OnClickLi
         techUsername = (EditText) findViewById(R.id.techUsername);
         techPassword = (EditText) findViewById(R.id.techPassword);
         techInfo = new Bundle();
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
 
     }
 

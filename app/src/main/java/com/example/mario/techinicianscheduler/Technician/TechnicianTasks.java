@@ -5,21 +5,35 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.example.mario.techinicianscheduler.DBHelper;
 import com.example.mario.techinicianscheduler.Manager.HandleTask.DisplayTask;
+import com.example.mario.techinicianscheduler.Manager.ManagerLogin;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.ResideMenu.ResideMenu;
 import com.example.mario.techinicianscheduler.ResideMenu.ResideMenuItem;
 import com.example.mario.techinicianscheduler.Task;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +47,7 @@ import java.util.Map;
  * looks better, the status of tasks will not be inserted to the database.
  */
 public class TechnicianTasks extends AppCompatActivity implements View.OnClickListener{
+    private static final String TAG = ManagerLogin.class.getSimpleName();
 
     private SwipeMenuListView taskList;
     private Bundle techInfo;
@@ -44,6 +59,9 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
     private ResideMenu resideMenu;
 
     private Map<String,Object> map=new HashMap<String,Object>();
+
+    private int retCode;
+    private JSONObject jsonObject;
 
 
     @Override
@@ -89,6 +107,7 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
                 switch (index){
                     case 0:
                         arrangedTasks.get(position).setFinished("true");
+                        setFinishInDB(arrangedTasks.get(position));
                         arrangedTasks.remove(position);
                         setListview();
                         break;
@@ -97,6 +116,50 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
+
+    private void setFinishInDB(final Task task) {
+        RequestQueue requestQueue = Volley.newRequestQueue(TechnicianTasks.this);
+
+        //Create a string request, set the POST method
+        //DB_ADDRESS defines the address of the host,and the php file is used to connect the database.
+        //listener and errorlistener is used to receive the returned result.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DBHelper.DB_ADDRESS + "setFinished.php", listener, errorListener) {
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("taskId", task.getId()+"");
+                map.put("status","true");
+                return map;
+            }
+        };
+        requestQueue.add(stringRequest);
+
+    }
+
+    Response.Listener<String> listener = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String s) {
+            try {
+                jsonObject = new JSONObject(s);
+                retCode = jsonObject.getInt("success");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if (retCode == 1) {
+                Toast.makeText(TechnicianTasks.this, "Task has been set as finished successfully", Toast.LENGTH_SHORT).show();
+            } else {
+            }
+        }
+    };
+
+    //If the database is failed to connect, a prompt will be sent to inform the technician.
+    Response.ErrorListener errorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError volleyError) {
+            Toast.makeText(TechnicianTasks.this, "Database not connected", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, volleyError.getMessage(), volleyError);
+        }
+    };
 
 
     private void displayTask() {
@@ -151,6 +214,8 @@ public class TechnicianTasks extends AppCompatActivity implements View.OnClickLi
         resideMenu.attachToActivity(this);
         resideMenu.setScaleValue(0.6f);
         resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
+        resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_LEFT);
+
 
 
         String titles[]={"Home","Work Arrangement","Route","Settings","Log out"};

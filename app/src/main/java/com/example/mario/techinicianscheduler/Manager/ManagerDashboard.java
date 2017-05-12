@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -180,7 +179,6 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
 
         techs = new ArrayList<>();
         tasks = new ArrayList<>();
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/WorkSans-Light.otf").setFontAttrId(R.attr.fontPath).build());
 
     }
 
@@ -245,14 +243,20 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                 break;
             case 1: //go schedule
                 if(techs.size()==0){
-                    Toast.makeText(this,"No available technicains",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,"No available technicians",Toast.LENGTH_SHORT).show();
                 }else if(tasks.size()==0){
                     Toast.makeText(this,"No available tasks",Toast.LENGTH_SHORT).show();
                 }else{
                     Intent intent = new Intent(ManagerDashboard.this, ChooseTask.class);
                     Bundle bundle = managerInfo;
+                    ArrayList<Task> unfinishedTasks=new ArrayList<>();
+                    for(int i=0;i<tasks.size();i++){
+                        if(tasks.get(i).getFinished().equals("false")){
+                            unfinishedTasks.add(tasks.get(i));
+                        }
+                    }
                     bundle.putParcelableArrayList("availableTechnician", techs);
-                    bundle.putParcelableArrayList("availableTask", tasks);
+                    bundle.putParcelableArrayList("availableTask", unfinishedTasks);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
@@ -315,6 +319,7 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
             if (retCode == 1) {
                 try {
                     taskNum = Integer.parseInt(jsonObject.getString("taskNum"));
+                    int unfinishedTask=0;
                     if (taskNum != 0) {
                         for (int i = 1; i < taskNum + 1; i++) {
                             Task task = new Task();
@@ -326,9 +331,10 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                             task.setFinished(jsonObject.getString("taskStatus" + i));
                             task.setStationName(jsonObject.getString("stationName" + i));
                             task.setPosition(new LatLng(Double.parseDouble(jsonObject.getString("stationLat" + i)), Double.parseDouble(jsonObject.getString("stationLong" + i))));
-
-                            Log.d("task Name", task.getStationName());
                             tasks.add(task);
+                            if(task.getFinished().equals("false")){
+                                unfinishedTask++;
+                            }
                         }
                     }
                     techNum = Integer.parseInt(jsonObject.getString("techNum"));
@@ -344,8 +350,9 @@ public class ManagerDashboard extends AppCompatActivity implements View.OnClickL
                         }
                     }
 
+                    taskNum=tasks.size();
                     managerDashNumTask.setText("You have " + tasks.size() + " tasks to manage today.");
-                    manageTaskNum.setText(taskNum + "");
+                    manageTaskNum.setText(unfinishedTask + "");
                     manageTechNum.setText(techNum + "");
 
                 } catch (JSONException e) {

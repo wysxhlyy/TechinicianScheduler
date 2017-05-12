@@ -381,6 +381,7 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
                     if(taskSize!=0){
                         for(int i=1;i<taskSize+1;i++){
                             Task task=new Task();
+                            task.setId(jsonObject.getInt("taskId"+i));
                             task.setName(jsonObject.getString("taskName"+i));
                             task.setSkillRequirement(Integer.parseInt(jsonObject.getString("skill_level"+i)));
                             task.setStationId(jsonObject.getString("stationId"+i));
@@ -389,17 +390,19 @@ public class TechnicianDashboard extends AppCompatActivity implements View.OnCli
                             task.setStationName(jsonObject.getString("stationName"+i));
                             task.setPosition(new LatLng(jsonObject.getDouble("latitude"+i),jsonObject.getDouble("longitude"+i)));
                             task.setFinished(jsonObject.getString("status"+i));
-                            recordPos.add(task.getPosition());
-                            arrangedTasks.add(task);
-                            estimateDuration+=task.getDuration();
+                            if(task.getFinished().equals("false")){
+                                estimateDuration+=task.getDuration();
+                                recordPos.add(task.getPosition());
+                                arrangedTasks.add(task);
+                            }
                         }
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                techTaskNum.setText(taskSize+"");
+                taskSize=arrangedTasks.size();
+                techTaskNum.setText(arrangedTasks.size()+"");
                 techWorkHour.setText(techInfo.getString("workHour"));
                 estimateDuration=estimateDuration/Integer.parseInt(techInfo.getString("skillLevel"));
                 taskEstimateTime.setText(estimateDuration+"");

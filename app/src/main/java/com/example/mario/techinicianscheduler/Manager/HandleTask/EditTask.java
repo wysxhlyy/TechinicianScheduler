@@ -41,6 +41,7 @@ public class EditTask extends AppCompatActivity {
     private EditText editStationName;
     private EditText editDuration;
     private EditText editDescription;
+    private EditText editStatus;
     private ImageButton update;
     private Button delete;
     private ImageButton quitEditTask;
@@ -73,6 +74,7 @@ public class EditTask extends AppCompatActivity {
         editStationName.setText(selectedTask.getStationName());
         editDuration.setText(selectedTask.getDuration() + "");
         editDescription.setText(selectedTask.getDescription());
+        editStatus.setText(selectedTask.getFinished());
 
 
         update.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +136,7 @@ public class EditTask extends AppCompatActivity {
                 map.put("taskDuration", editDuration.getText().toString());
                 map.put("taskDescription", editDescription.getText().toString());
                 map.put("taskId", selectedTask.getId() + "");
+                map.put("taskStatus",editStatus.getText().toString());
                 return map;
             }
         };
@@ -155,6 +158,7 @@ public class EditTask extends AppCompatActivity {
         update = (ImageButton) findViewById(R.id.editTaskSubmit);
         delete = (Button) findViewById(R.id.deleteTask);
         quitEditTask = (ImageButton) findViewById(R.id.quitEditTask);
+        editStatus= (EditText)findViewById(R.id.editTaskStatus);
     }
 
     /**

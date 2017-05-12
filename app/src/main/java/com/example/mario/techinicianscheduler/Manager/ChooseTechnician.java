@@ -88,9 +88,6 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.generate: //Use a dialog to let the user choose the value of unassigned task penalty.
-                if(chosenTechs.size()==0){
-                    Toast.makeText(this,"Have not chosen any technicians",Toast.LENGTH_SHORT).show();
-                }else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage("Please choose your schedule preference when dealing with high-cost task:");
                     builder.setTitle("preference question");
@@ -112,10 +109,15 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
                                 }
                             }
 
-                            managerInfo.putParcelableArrayList("chosenTech", chosenTechs);
-                            intent2.putExtras(managerInfo);
-                            startActivity(intent2);
-                            finish();
+                            if(chosenTechs.size()==0){
+                                Toast.makeText(ChooseTechnician.this,"Have not chosen any technicians",Toast.LENGTH_SHORT).show();
+                            }else {
+                                managerInfo.putParcelableArrayList("chosenTech", chosenTechs);
+                                intent2.putExtras(managerInfo);
+                                startActivity(intent2);
+                                finish();
+                            }
+
 
                         }
                     });
@@ -137,15 +139,18 @@ public class ChooseTechnician extends AppCompatActivity implements View.OnClickL
                                 }
                             }
 
-                            managerInfo.putParcelableArrayList("chosenTech", chosenTechs);
-                            intent2.putExtras(managerInfo);
-                            startActivity(intent2);
-                            finish();
+                            if(chosenTechs.size()==0){
+                                Toast.makeText(ChooseTechnician.this,"Have not chosen any technicians",Toast.LENGTH_SHORT).show();
+                            }else {
+                                managerInfo.putParcelableArrayList("chosenTech", chosenTechs);
+                                intent2.putExtras(managerInfo);
+                                startActivity(intent2);
+                                finish();
+                            }
                         }
                     });
                     builder.create().show();
 
-                }
 
                 break;
             case R.id.quitChooseTech:  // Quit the schedule process.

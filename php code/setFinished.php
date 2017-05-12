@@ -4,33 +4,26 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 $con = mysqli_connect("146.148.28.194","root","wuyusheng","techSchedulerDB");
 
-$judge=0;
 
-$scheduleSize=$_POST['scheduleSize'];
+ $id=$_POST['taskId'];
+ $status=$_POST['status'];
 
-for($i=0;$i<$scheduleSize;$i++){
-	$taskId=$_POST['taskId'.$i];
-	$techId=$_POST['techId'.$i];
-	$sql = "INSERT INTO taskSchedule (m_id,task_id,t_id) VALUES('$taskId','$techId') ";
-	$result=mysqli_query($con,$sql);
-	if(!$result){
-		$judge=1;
-	}
-}
 
 $response = array();
 
+$sql = "UPDATE task SET setFinished='$status' WHERE task_id='$id' ";
 
-if($judge==0){
+$editTask=mysqli_query($con,$sql);
+
+if($editTask){
     $response["success"] = 1;
-   }else{
+}else{
     $response["success"] = 0;
 }
 
 if ($result===FALSE) {
     echo mysql_error();
 }
-
 
 echo json_encode($response);
 //以json的形式返回给客户端

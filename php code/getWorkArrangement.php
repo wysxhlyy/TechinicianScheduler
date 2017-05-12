@@ -28,6 +28,7 @@ if ($result===FALSE) {
 
 $i=1;
 while ($row=mysqli_fetch_array($result)) {
+	$response["taskId".$i]=$row['task_id'];
 	$response["taskName".$i]=$row['name'];
 	$response["skill_level".$i]=$row['skill_level'];
 	$response["stationId".$i]=$row['s_id'];
@@ -36,13 +37,13 @@ while ($row=mysqli_fetch_array($result)) {
 	$response["stationName".$i]=$row['stationName'];
 	$response["latitude".$i]=$row['latitude'];
 	$response["longitude".$i]=$row['longitude'];
+	$response["status".$i]=$row['finished'];
 	$i=$i+1;
 }
 
 $response["taskSize"]=$i;
 
 echo json_encode($response);
-//以json的形式返回给客户端
 
 mysqli_close($con);
 ?>

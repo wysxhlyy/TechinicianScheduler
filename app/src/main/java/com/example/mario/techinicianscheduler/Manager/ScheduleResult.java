@@ -101,6 +101,7 @@ public class ScheduleResult extends AppCompatActivity {
 
         initialize();
         layout.removeView(editedResultList);
+        layout.removeView(confirmResult);
 
 
         managerInfo = getIntent().getExtras();
@@ -178,16 +179,19 @@ public class ScheduleResult extends AppCompatActivity {
                         ArrayList<TechnicianInfo> techs = new ArrayList<>();
                         techs.addAll(finalResult.values());
 
+                        Log.d("test",finalResult.size()+"");
+
                         map.put("scheduleSize", finalResult.size() + "");
                         for (int i = 0; i < finalResult.size(); i++) {
+                            Log.d("test",tasks.get(i).getId()+","+techs.get(i).getId());
                             map.put("taskId" + i, tasks.get(i).getId() + "");
                             map.put("techId" + i, techs.get(i).getId() + "");
                         }
                         return map;
                     }
                 };
-
                 requestQueue.add(stringRequest);
+
                 finish();
             }
         });
@@ -460,6 +464,9 @@ public class ScheduleResult extends AppCompatActivity {
         techs.addAll(originSchedule.values());
 
         Boolean find = false;
+        if(originSchedule.size()<=1){
+            return null;
+        }
 
         for (int k = 0; k < findNeighborIteration; k++) {
 
@@ -500,6 +507,9 @@ public class ScheduleResult extends AppCompatActivity {
         techs.addAll(sortedTech);
 
         Boolean find = false;
+        if(originSchedule.size()<=1){
+            return null;
+        }
 
         for (int k = 0; k < findNeighborIteration; k++) {
             int i = (int) Math.round(Math.random() * (originSchedule.size() - 1));
@@ -545,6 +555,9 @@ public class ScheduleResult extends AppCompatActivity {
             unassignedTask.remove(tasks.get(i));
         }
         Boolean find = false;
+        if(originSchedule.size()<=1){
+            return null;
+        }
 
         for (int k = 0; k < findNeighborIteration; k++) {
             int i = (int) Math.round(Math.random() * (unassignedTask.size() - 1));
@@ -860,8 +873,6 @@ public class ScheduleResult extends AppCompatActivity {
         }
         //Double finalCost=calculateCost(GLSresult);
         //showData+="cost: "+minimumCost.shortValue()+"\n";
-        Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Black.ttf");
-        editScheduleResult.setTypeface(tf);
         editScheduleResult.setText(showData);
     }
 
