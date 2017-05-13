@@ -149,10 +149,15 @@ public class SignUp extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(chosenJob.equals("Manager")){
-                    createNewManager();
+                if(username.getText().toString().equals("")||password.getText().toString().equals("")||!email.getText().toString().matches("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$")||!phone.getText().toString().matches("\\d+")||firstName.getText().toString().equals("")||surname.getText().toString().equals("")){
+                    Toast.makeText(SignUp.this, "Please input valid information", Toast.LENGTH_SHORT).show();
+                    return;
                 }else {
-                    createNewTechnician();
+                    if(chosenJob.equals("Manager")){
+                        createNewManager();
+                    }else {
+                        createNewTechnician();
+                    }
                 }
             }
         });

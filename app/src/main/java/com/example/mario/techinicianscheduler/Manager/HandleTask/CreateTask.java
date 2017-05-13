@@ -64,8 +64,8 @@ public class CreateTask extends AppCompatActivity {
                 taskDuration = duration.getText().toString();
                 //enter all the task information
 
-                if (taskName.equals("") || taskSkillReq.equals("") || taskStation.equals("") || taskDescrip.equals("")) {
-                    Toast.makeText(CreateTask.this, "Please Enter all the information", Toast.LENGTH_SHORT).show();
+                if (taskName.equals("") || !taskSkillReq.matches("\\d+") || taskStation.equals("") || taskDescrip.equals("")||!taskDuration.matches("\\d+")) {
+                    Toast.makeText(CreateTask.this, "Please input valid information", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

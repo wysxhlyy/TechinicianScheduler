@@ -69,6 +69,10 @@ public class DisplayTechnician extends AppCompatActivity {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!skillLevel.getText().toString().matches("\\d+")||!workHour.getText().toString().matches("\\d+")){
+                    Toast.makeText(DisplayTechnician.this, "Please input valid information", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 updateTechInfo();
             }
         });

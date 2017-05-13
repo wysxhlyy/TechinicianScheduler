@@ -62,8 +62,8 @@ public class TechnicianSetting extends AppCompatActivity implements View.OnClick
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (password.equals("") || email.equals("") || phone.equals("")) {
-                    Toast.makeText(TechnicianSetting.this, "Please fill in all the information", Toast.LENGTH_SHORT).show();
+                if (password.getText().toString().equals("") || !email.getText().toString().matches("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$") || !phone.getText().toString().matches("\\d+")) {
+                    Toast.makeText(TechnicianSetting.this, "Please input valid information", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

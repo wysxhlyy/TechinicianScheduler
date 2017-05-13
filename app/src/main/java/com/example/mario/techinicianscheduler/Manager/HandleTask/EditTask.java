@@ -80,11 +80,16 @@ public class EditTask extends AppCompatActivity {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateTask();
-                Intent intent = new Intent(EditTask.this, ManagerDashboard.class);
-                intent.putExtras(managerInfo);
-                startActivity(intent);
-                finish();
+                if(editName.getText().toString().equals("")||!editSkillReq.getText().toString().matches("\\d+")||editStationName.getText().toString().equals("")||!editDuration.getText().toString().matches("\\d+")||editDescription.getText().toString().equals("")||!editStatus.getText().toString().matches("^true|false$")){
+                    Toast.makeText(EditTask.this, "Please input valid information", Toast.LENGTH_SHORT).show();
+                    return;
+                }else {
+                    updateTask();
+                    Intent intent = new Intent(EditTask.this, ManagerDashboard.class);
+                    intent.putExtras(managerInfo);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
