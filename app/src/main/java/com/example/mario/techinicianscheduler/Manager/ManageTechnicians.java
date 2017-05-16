@@ -182,7 +182,7 @@ public class ManageTechnicians extends AppCompatActivity implements View.OnClick
                 finish();
                 break;
             case 5:
-                Intent intent4 = new Intent(ManageTechnicians.this, TechnicianLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent4 = new Intent(ManageTechnicians.this, ManagerLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent4);
                 break;
             case R.id.manageTechMenu:

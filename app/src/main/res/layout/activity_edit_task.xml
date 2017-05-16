@@ -142,7 +142,9 @@
             android:id="@+id/editTaskStation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/myBlack" />
+            android:textColor="@color/myBlack"
+            android:completionThreshold="1"
+            />
 
     </LinearLayout>
 

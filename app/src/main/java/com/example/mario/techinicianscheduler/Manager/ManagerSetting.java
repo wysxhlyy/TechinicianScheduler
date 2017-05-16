@@ -21,7 +21,6 @@ import com.example.mario.techinicianscheduler.DBHelper;
 import com.example.mario.techinicianscheduler.R;
 import com.example.mario.techinicianscheduler.ResideMenu.ResideMenu;
 import com.example.mario.techinicianscheduler.ResideMenu.ResideMenuItem;
-import com.example.mario.techinicianscheduler.Technician.TechnicianLogin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -211,7 +210,7 @@ public class ManagerSetting extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case 5:
-                Intent intent4 = new Intent(ManagerSetting.this, TechnicianLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent4 = new Intent(ManagerSetting.this, ManagerLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent4);
                 break;
             case R.id.settingMenu:

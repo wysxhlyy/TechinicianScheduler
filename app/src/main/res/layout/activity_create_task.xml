@@ -164,6 +164,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/createTaskStation"
             android:textColor="@color/myBlack"
+            android:completionThreshold="1"
             />
 
     </LinearLayout>

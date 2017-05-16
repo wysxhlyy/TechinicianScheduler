@@ -187,7 +187,7 @@ public class ManageTasks extends AppCompatActivity implements View.OnClickListen
                 finish();
                 break;
             case 5:
-                Intent intent4 = new Intent(ManageTasks.this, TechnicianLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent4 = new Intent(ManageTasks.this, ManagerLogin.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent4);
                 break;
             case R.id.manageTaskMenu:

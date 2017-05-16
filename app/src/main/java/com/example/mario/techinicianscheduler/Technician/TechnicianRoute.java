@@ -126,6 +126,7 @@ public class TechnicianRoute extends FragmentActivity implements OnMapReadyCallb
         resideMenu.attachToActivity(this);
         resideMenu.setScaleValue(0.6f);
         resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
+        resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_LEFT);
 
         String titles[]={"Home","Work Arrangement","Route","Settings","Log out"};
         int icon[]={R.drawable.home,R.drawable.schedule,R.drawable.route,R.drawable.settings,R.drawable.logout};

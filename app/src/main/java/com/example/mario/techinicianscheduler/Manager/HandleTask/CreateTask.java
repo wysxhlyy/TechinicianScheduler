@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -53,6 +54,7 @@ public class CreateTask extends AppCompatActivity {
         setContentView(R.layout.activity_create_task);
         initialize();
 
+        setAutoComplete();
         addTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,6 +116,80 @@ public class CreateTask extends AppCompatActivity {
         duration = (EditText) findViewById(R.id.createTaskDuration);
         managerInfo = getIntent().getExtras();
         quit = (ImageButton) findViewById(R.id.quitCreateTask);
+    }
+
+    private void setAutoComplete() {
+        String[] stations = new String[]{
+                "San Jose Diridon Caltrain Station",
+                "San Jose Civic Center",
+                "Santa Clara at Almaden",
+                "Adobe on Almaden",
+                "San Pedro Square",
+                "Paseo de San Antonio",
+                "San Salvador at 1st",
+                "Japantown,37.348742",
+                "San Jose City Hall,37.337391",
+                "MLK Library",
+                "SJSU 4th at San Carlos",
+                "St James Park",
+                "Arena Green / SAP Center",
+                "SJSU - San Salvador at 9th",
+                "Santa Clara County Civic Center",
+                "Ryland Park",
+                "S. Market st at Park Ave",
+                "5th S. at E. San Salvador St",
+                "Clay at Battery",
+                "Davis at Jackson",
+                "Commercial at Montgomery",
+                "Washington at Kearney",
+                "Post at Kearney",
+                "Embarcadero at Vallejo",
+                "Spear at Folsom",
+                "Harry Bridges Plaza (Ferry Building)",
+                "Embarcadero at Folsom",
+                "Powell Street BART",
+                "Embarcadero at Bryant",
+                "Temporary Transbay Terminal (Howard at Beale)",
+                "Beale at Market",
+                "5th at Howard",
+                "San Francisco City Hall",
+                "Golden Gate at Polk",
+                "Embarcadero at Sansome",
+                "2nd at Townsend",
+                "2nd at Folsom",
+                "Howard at 2nd",
+                "2nd at South Par",
+                "Townsend at 7th",
+                "South Van Ness at Market",
+                "Market at 10th",
+                "Yerba Buena Center of the Arts (3rd @ Howard)",
+                "San Francisco Caltrain 2 (330 Townsend)",
+                "San Francisco Caltrain (Townsend at 4th)",
+                "Powell at Post (Union Square)",
+                "Civic Center BART (7th at Market)",
+                "Grant Avenue at Columbus Avenue",
+                "Steuart at Market",
+                "Mechanics Plaza (Market at Battery)",
+                "Market at 4th",
+                "Market at Sansome",
+                "Broadway St at Battery St",
+                "5th St at Folsom St",
+                "Cyril Magnin St at Ellis St",
+                "Palo Alto Caltrain Station",
+                "University and Emerson",
+                "California Ave Caltrain Station",
+                "Cowper at University",
+                "Park at Olive",
+                "Mountain View City Hall",
+                "Mountain View Caltrain Station",
+                "San Antonio Caltrain Station",
+                "Middlefield Light Rail Station",
+                "San Antonio Shopping Center",
+                "Castro Street and El Camino Real",
+                "Charleston Park/ North Bayshore Area"
+        };
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, stations);
+        stationName.setAdapter(adapter);
     }
 
 

@@ -10,10 +10,8 @@ android:orientation="vertical"
     android:layout_height="60dp"
     android:orientation="horizontal"
     android:layout_marginTop="20dp"
-    android:layout_gravity="left"
-    android:layout_marginLeft="20dp"
-
-
+    android:layout_gravity="start"
+    android:layout_marginLeft="15dp"
     >
 
     <CheckBox
@@ -24,6 +22,10 @@ android:orientation="vertical"
         android:button="@drawable/checkbox_selector"
         android:clickable="true"
         android:focusable="false"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
         />
 
 
@@ -31,7 +33,7 @@ android:orientation="vertical"
         android:layout_width="200dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="15dp"
         android:focusable="false"
         >
 
@@ -84,10 +86,5 @@ android:orientation="vertical"
     android:layout_height="1px"
     android:background="@color/myLightGray"
     />
-
-
-
-
-
 
 </LinearLayout>

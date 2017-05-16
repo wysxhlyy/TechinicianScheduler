@@ -150,7 +150,6 @@ public class ScheduleResult extends AppCompatActivity {
                     layout.removeView(editedResultList);
                     layout.removeView(confirmResult);
                     layout.addView(editScheduleResult);
-                    layout.addView(confirmResult);
                     switchView.setBackgroundResource(R.drawable.list);
 
 
@@ -851,7 +850,8 @@ public class ScheduleResult extends AppCompatActivity {
             }
             if (retCode == 1) {
                 Toast.makeText(ScheduleResult.this, "Distribute the tasks successfully!", Toast.LENGTH_SHORT).show();
-
+            }else{
+                Toast.makeText(ScheduleResult.this,"Succeed! But there exists tasks already assigned.",Toast.LENGTH_SHORT).show();
             }
         }
     };

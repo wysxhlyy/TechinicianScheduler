@@ -54,7 +54,7 @@
     
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:textColor="@color/myBlack"
         android:textSize="25dp"
         android:layout_marginTop="20dp"
@@ -76,7 +76,6 @@
         android:layout_above="@+id/confirmResult"
         android:layout_below="@id/rl_schedule_head"
         >
-
     </ListView>
 
 
